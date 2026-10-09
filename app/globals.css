@@ -1,0 +1,384 @@
+/* Maroon and white. Colours are named by role so components never use raw hex. */
+:root {
+  --maroon: #6b1026;
+  --maroon-deep: #4a0a1a;
+  --on-maroon: #ffffff;
+  --on-maroon-soft: #ecd3d8;
+  --maroon-rule: #8d3a4d;
+  --paper: #ffffff;
+  --blush: #faf1f3;
+  --ink: #21151a;
+  --ink-soft: #66545a;
+  --rule: #e7d8dc;
+
+  --font-display: var(--font-crimson), Georgia, serif;
+  --font-body: var(--font-atkinson), system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+
+h1,
+h2,
+p,
+dl,
+dd,
+ol {
+  margin: 0;
+}
+
+:focus-visible {
+  outline: 3px solid var(--maroon);
+  outline-offset: 3px;
+}
+
+/* ---- Page: maroon panel beside a white work area ---- */
+
+.page {
+  min-height: 100dvh;
+}
+
+.panel {
+  background: var(--maroon);
+  color: var(--on-maroon);
+  padding: 2.5rem 1.25rem 2rem;
+}
+
+.panel h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.25rem, 1.4rem + 3.2vw, 3.75rem);
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.panel-lede {
+  margin-top: 1.25rem;
+  max-width: 34ch;
+  color: var(--on-maroon-soft);
+}
+
+.unclear {
+  margin-top: 2.5rem;
+  max-width: 26rem;
+}
+
+.unclear h2 {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.unclear dl {
+  margin-top: 0.75rem;
+  border-top: 1px solid var(--maroon-rule);
+}
+
+.unclear div {
+  display: grid;
+  grid-template-columns: 8.5rem 1fr;
+  gap: 1rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--maroon-rule);
+}
+
+.unclear dt {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.1875rem;
+  line-height: 1.3;
+}
+
+.unclear dd {
+  color: var(--on-maroon-soft);
+  font-size: 0.9375rem;
+}
+
+.work {
+  padding: 2rem 1.25rem 4rem;
+}
+
+.work-inner {
+  max-width: 40rem;
+}
+
+@media (min-width: 900px) {
+  .page {
+    display: grid;
+    grid-template-columns: minmax(22rem, 5fr) 7fr;
+  }
+
+  .panel {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    overflow-y: auto;
+    padding: 4rem 3rem 3rem;
+  }
+
+  .work {
+    padding: 4rem 3.5rem 6rem;
+  }
+}
+
+/* ---- Upload form ---- */
+
+.form h2,
+.results h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.75rem;
+  line-height: 1.15;
+}
+
+.field {
+  margin-top: 1.5rem;
+}
+
+.field label {
+  display: block;
+  font-weight: 700;
+}
+
+.hint {
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+}
+
+.field input {
+  margin-top: 0.5rem;
+  width: 100%;
+  min-height: 3rem;
+  font: inherit;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1.5px solid var(--ink-soft);
+  border-radius: 6px;
+  padding: 0.55rem 0.75rem;
+}
+
+.field input[type="file"] {
+  padding: 0.9rem;
+  border-style: dashed;
+  border-color: var(--maroon);
+  background: var(--blush);
+  cursor: pointer;
+}
+
+.field input::file-selector-button {
+  font: inherit;
+  font-weight: 700;
+  color: var(--maroon);
+  background: var(--paper);
+  border: 1.5px solid var(--maroon);
+  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  margin-right: 0.9rem;
+  cursor: pointer;
+}
+
+.dates {
+  display: grid;
+  gap: 0 1.25rem;
+}
+
+@media (min-width: 520px) {
+  .dates {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.submit {
+  margin-top: 2rem;
+  min-height: 3.25rem;
+  padding: 0.75rem 1.75rem;
+  font: inherit;
+  font-weight: 700;
+  color: var(--on-maroon);
+  background: var(--maroon);
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.submit:hover {
+  background: var(--maroon-deep);
+}
+
+.submit:disabled {
+  background: var(--ink-soft);
+  cursor: progress;
+}
+
+/* ---- Status messages ---- */
+
+.status {
+  margin-top: 1.25rem;
+  min-height: 1.6rem;
+}
+
+.status-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--ink-soft);
+}
+
+.spinner {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  border: 2.5px solid var(--rule);
+  border-top-color: var(--maroon);
+  border-radius: 50%;
+  animation: spin 900ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+
+  .submit {
+    transition: none;
+  }
+}
+
+.status-error {
+  padding: 0.9rem 1rem;
+  border: 1.5px solid var(--maroon);
+  border-radius: 6px;
+  background: var(--blush);
+}
+
+.status-error strong {
+  display: block;
+  color: var(--maroon);
+}
+
+.results-failed {
+  margin-top: 1.25rem;
+}
+
+.results-failed ul {
+  margin: 0.4rem 0 0.6rem;
+  padding-left: 1.2rem;
+  overflow-wrap: anywhere;
+}
+
+/* ---- Results ---- */
+
+.results {
+  margin-top: 3.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--rule);
+}
+
+.results-summary {
+  margin-top: 0.4rem;
+  color: var(--ink-soft);
+}
+
+.events {
+  list-style: none;
+  padding: 0;
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+
+.event {
+  display: grid;
+  gap: 0.25rem 1.5rem;
+  padding: 1.1rem 0 1.1rem 1rem;
+  border-bottom: 1px solid var(--rule);
+  border-left: 4px solid transparent;
+}
+
+.event-flagged {
+  border-left-color: var(--maroon);
+  background: var(--blush);
+  padding-right: 1rem;
+}
+
+@media (min-width: 520px) {
+  .event {
+    grid-template-columns: 8.5rem 1fr;
+  }
+}
+
+.event-when {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.event-when span {
+  display: block;
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
+.event-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.375rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.event-meta {
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+}
+
+.event-check {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  color: var(--maroon);
+  font-weight: 700;
+}
+
+.event-check svg {
+  flex: none;
+  margin-top: 0.2rem;
+}
+
+.event-check span {
+  font-weight: 400;
+  color: var(--ink);
+}
+
+/* Italic serif marks words copied from the student's own outline. */
+.event-quote {
+  margin: 0.6rem 0 0;
+  padding-left: 0.85rem;
+  border-left: 2px solid var(--rule);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.125rem;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  overflow-wrap: anywhere;
+}
+
+.event-flagged .event-quote {
+  border-left-color: var(--maroon-rule);
+}

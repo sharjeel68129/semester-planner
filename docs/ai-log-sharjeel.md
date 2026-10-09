@@ -35,6 +35,38 @@ Only with made-up test files (one each of `.txt`, `.pdf`, `.docx`), uploaded to 
 - A hand-built PDF with a broken index parsed fine in plain Node but failed inside Next.js. A normal PDF printed from a browser worked. Slightly damaged real PDFs may be rejected.
 - Rule 4 in CLAUDE.md (follow-up questions when information is missing) is not implemented; it changes the API contract and needs agreeing first.
 
+## 2026-10-09: Gemini errors diagnosed, maroon and white page design
+
+**Tool:** Claude Code (Opus 5.5), with the `frontend-design` and `ui-ux-pro-max` skills.
+
+**What I asked**
+
+1. "Review the code base. Tell me why gemini gives me an error."
+2. "use /frontend-design and /ui-ux-pro-max to make a maroon and white background design"
+
+**What it found (errors)**
+
+- The key and model name were fine. Calling the API directly, `gemini-3.8-flash` returned 503 "high demand" on 2 of 4 calls, then 4 of 6 (three 503, one 429). In the same run `gemini-3.5-flash` answered 6 of 6. Small sample from one moment.
+- Switched with `GEMINI_MODEL=gemini-3.5-flash` in `.env.local` (no code change). **Accuracy on the new model is not yet re-checked.**
+- Fixed later the same day, on request ("fix the retry and the one failed file issue"):
+  - `withRetry` now waits 2s, 5s, 10s, 20s (five attempts, about 37s of waiting) instead of 2s, 5s. **Not seen working against a real 503**; none occurred during the check. A busy spell now means a wait of up to a minute or more per file before the error shows.
+  - `route.js` catches errors per file. The response is now `{ events, failed: [{ file, error }] }`; it is a 500 only when every file fails. **This adds a field to the API response**, so the team should know. The page lists skipped files above the results.
+  - Checked by uploading one good `.txt` with one broken `.pdf`: 200, two events, the PDF listed in `failed`. The broken PDF alone: 500 with the same message as before.
+
+**What it built (design)**
+
+- `app/globals.css` (new), `app/layout.js`, `app/page.js`. Maroon panel beside a white work area (stacked on phones), Crimson Pro and Atkinson Hyperlegible through `next/font` (no new dependency).
+- The raw JSON dump is replaced by a read-only event list. Rows that `needsReview()` flags get a maroon bar, a "Check this" line with the note, and the source quote. The editable table and `.ics` button are still TODO for their owners.
+- 503/429 now show "The AI service is busy right now. Wait a minute, then press the button again." instead of "Gemini request failed (503)".
+
+**What the AI got wrong, and what was changed**
+
+- The `ui-ux-pro-max` dataset recommended a blue and green palette and a marketing-page layout with a product video. Both were ignored: the brief was maroon and white, and this is a tool page, not a landing page. Only its font pairing and flat style were used.
+
+**How it was checked**
+
+In the browser at desktop and 375px widths, with the API response faked (three made-up events), so no Gemini call was made. No horizontal scroll, no console errors. **The loading and error states were not viewed, and it was not checked with a real upload.**
+
 **Still to do (me)**
 
 - Put a real outline in `data/samples/`, hand-write the truth list, upload it, and record misses and wrong dates here.

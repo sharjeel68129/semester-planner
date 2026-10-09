@@ -23,14 +23,19 @@ export async function POST(request) {
     loaded.push({ name: file.name, buffer });
   }
 
+  // One bad file must not discard the events already extracted from the others.
   const events = [];
-  try {
-    for (const { name, buffer } of loaded) {
+  const failed = [];
+  for (const { name, buffer } of loaded) {
+    try {
       const text = await readFileText(name, buffer);
       events.push(...(await extractEvents(text, start, end)));
+    } catch (err) {
+      failed.push({ file: name, error: String(err.message || err) });
     }
-  } catch (err) {
-    return Response.json({ error: String(err.message || err) }, { status: 500 });
   }
-  return Response.json({ events });
+  if (failed.length === loaded.length) {
+    return Response.json({ error: failed[0].error, failed }, { status: 500 });
+  }
+  return Response.json({ events, failed });
 }
