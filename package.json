@@ -1,0 +1,19 @@
+{
+  "name": "ai-semester-planner",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "ics": "^3.8.1",
+    "mammoth": "^1.8.0",
+    "next": "^14.2.15",
+    "pdf-parse": "^1.1.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}
