@@ -185,3 +185,31 @@ There is no Supabase project yet, so it was checked against a small fake of Supa
 - **Nothing has run against real Supabase.** `schema.sql` has never been executed, so the security rules are untested; the fake did not enforce them the way Postgres does.
 - Email confirmation, password reset and "forgot password" are not built. If confirmation is on in Supabase, a new user must click the emailed link before signing in.
 - `npm install` reported 5 known vulnerabilities in the dependency tree (1 critical); not looked into.
+
+## 2026-10-09: dependency vulnerabilities
+
+**Tool:** Claude Code (Opus 5.5). Branch `feature/stubs`.
+
+**What I asked**
+
+"fix vulnerabilities. commit."
+
+**What it did**
+
+- `npm audit` listed 5 problems: Next.js (critical, many advisories, including remote code execution on Windows-hosted servers), PostCSS inside Next (high), and `sprintf-js` reached through `mammoth` (3 moderate).
+- Every Next.js version below 16.4.0 was affected, so it upgraded Next 14 to 16.4.0 and React 18 to 19. That cleared the critical and high ones.
+- Two code changes were needed: `cookies()` must now be awaited (`lib/account-server.js`), and `experimental.serverComponentsExternalPackages` is now `serverExternalPackages` (`next.config.mjs`).
+
+**Not fixed**
+
+- The 3 moderate `sprintf-js` findings remain. npm's only offered fix is downgrading `mammoth` to a version from years ago. `sprintf-js` is used by `argparse`, which only mammoth's command-line tool uses; our code calls mammoth as a library, so that path is not reached. This is the AI's reading of the package, not a security review.
+
+**How it was checked**
+
+- `next build` succeeded. The built app was run on a spare port: the page loaded, and uploading one good `.txt` with one broken `.pdf` returned two events plus the PDF in `failed` (a real Gemini call, and proof that PDF parsing still loads under Next 16).
+- **Not re-checked after the upgrade:** the sign-in and saving flow, the editable rows, and `npm run dev`.
+
+**Side effects**
+
+- The upgrade stopped the running dev server; it needs `npm run dev` again.
+- Next 16 created an `AGENTS.md` file telling AI coding tools to read Next's bundled docs. Left uncommitted for the team to decide.

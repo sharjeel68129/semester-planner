@@ -14,7 +14,7 @@ npm run build
 There is no test runner yet. Verify with `lib/evaluate.js` against samples in `data/samples/` (gitignored), and by running the app.
 
 ## Stack
-Next.js 14 (App Router), plain JavaScript, `@/` alias to repo root. Libraries: `@google/generative-ai`, `pdf-parse`, `mammoth`, `ics`, `@supabase/supabase-js`, `@supabase/ssr`.
+Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Libraries: `@google/generative-ai`, `pdf-parse`, `mammoth`, `ics`, `@supabase/supabase-js`, `@supabase/ssr`.
 
 ## Module map
 | File | Job | Status |
