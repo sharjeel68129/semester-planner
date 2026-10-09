@@ -22,7 +22,7 @@ Next.js 14 (App Router), plain JavaScript, `@/` alias to repo root. Libraries: `
 | `lib/schema.js` | `Event` shape + `makeEvent` | done |
 | `lib/validate.js` | upload check: extension, magic bytes, size/count caps | done |
 | `app/api/extract/route.js` | holds the API key, validates, extracts per file | done (no follow-up flow yet) |
-| `lib/extract.js` | `readFileText`, `extractEvents` | **stub** |
+| `lib/extract.js` | `readFileText`, `extractEvents` (Gemini call + output checks) | done (not yet scored on a real outline) |
 | `lib/calendar.js` | `toIcs(events, remindMinutes)` | **stub** |
 | `lib/review.js` | `needsReview` done, `mergeEvents` | **stub** |
 | `lib/evaluate.js` | `score(predicted, truth)` | **stub** |
