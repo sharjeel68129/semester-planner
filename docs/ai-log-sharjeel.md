@@ -38,3 +38,32 @@ Only with made-up test files (one each of `.txt`, `.pdf`, `.docx`), uploaded to 
 **Still to do (me)**
 
 - Put a real outline in `data/samples/`, hand-write the truth list, upload it, and record misses and wrong dates here.
+
+## 2026-10-09: first real outline (DSAI1202 LEC01), and three fixes
+
+**What I did**
+
+Uploaded `LEC01-compressed.pdf` (semester 19 Aug 2026 to 20 Jan 2027). It returned 14 events. I pasted the output to Claude Code and asked what was wrong, then told it to "make these three" fixes.
+
+**What the AI got wrong on the real outline**
+
+1. **The four graded items had no date.** "Week 7 SAT 11:59pm" (two items), "Week 5 – 13" and "Week 13, lecture time" all came back `date: null`. No date was invented, but the outline does tie weeks to dates elsewhere ("Week 6, Tue (Oct 06)"), and the first prompt banned using that.
+2. **All 14 events were flagged**, so the flag told a reviewer nothing. The eight IC visits were flagged only because the year was assumed, even though the stated weekdays match 2026.
+3. **False alarm on the two lectures:** "Source quote was not found word-for-word". The model had joined separate table cells into one quote, so the exact-match check failed on a real event.
+4. **Both sections and both groups were listed** (LEC007/LEC008, Group A/B). A student attends two of the eight visits. Not fixed; needs a section/group choice in the product.
+5. **Weightings add up to 95%** (4 + 6 + 25 + 60). Either an item worth 5% was missed or the outline does not total 100. Still to check against my truth list.
+
+**What was changed**
+
+- **Suggested dates:** when the outline itself gives a week-to-date anchor, the date stays `null` and flagged, but the note says e.g. `Likely 2026-10-17 (Sat), worked out from "Week 7, Wed (Oct 14)"`. The suggestion is the model's arithmetic, so it stays a note for the human, not a date.
+- **Quote check** now matches line by line, so a quote stitched from table cells passes if every line is in the outline.
+- **Weekday check** (done in code, not by the model): the model reports the weekday the outline states and whether it assumed the year. If the weekday matches the date, the event is not flagged for the year. If it does not match, the event is flagged ("Outline says Thu but 2026-10-14 is a Wed"). An assumed year with no weekday is still flagged.
+
+**How it was checked**
+
+A made-up outline copying the real one's layout: 9 of 9 events behaved as intended, including a planted wrong weekday that was caught. **The real PDF has not been re-run yet**; before and after numbers to add here.
+
+**Still open**
+
+- "Week 13, lecture time" got no suggested date, because the outline does not write a weekday next to it.
+- A mistake made by the AI during this session: it ran `npm run build` while `npm run dev` was running, which broke the dev server until it was restarted.
