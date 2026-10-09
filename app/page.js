@@ -10,8 +10,6 @@ export default function Home() {
   const [events, setEvents] = useState(null);
   // undefined = still checking, null = signed out.
   const [user, setUser] = useState(undefined);
-  // Without Supabase configured there is no login; the visitor can still open the planner, unsaved.
-  const [guest, setGuest] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [loadError, setLoadError] = useState("");
   const [saveState, setSaveState] = useState("saved");
@@ -64,40 +62,34 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, [events, userId, loaded, retry]);
 
-  if (!accountsEnabled && !guest) {
+  // No way into the planner without an account, so a server with no account service shows only this.
+  if (!accountsEnabled) {
     return (
       <Landing>
         <div className="form">
-          <h2>Open the planner</h2>
+          <h2>Sign-in is not set up yet</h2>
           <p className="hint form-intro">
-            Accounts are not set up on this server, so there is no sign-in and your events are lost when you close the
-            page.
+            This server has no account service, so the planner cannot be opened. If you run this site, add the Supabase
+            values listed in .env.example and restart it.
           </p>
-          <button type="button" className="button" onClick={() => setGuest(true)}>
-            Open the planner
-          </button>
         </div>
       </Landing>
     );
   }
-  if (accountsEnabled && !user) {
+  if (!user) {
     return <Landing>{user === undefined ? <p className="hint">Checking your account.</p> : <AuthForm />}</Landing>;
   }
 
-  const account = user ? (
+  const account = (
     <>
       <span>{user.email}</span>
       <button type="button" className="link" onClick={() => supabase().auth.signOut()}>
         Sign out
       </button>
     </>
-  ) : (
-    <button type="button" className="link" onClick={() => setGuest(false)}>
-      Back to the start
-    </button>
   );
 
-  if (user && !loaded) {
+  if (!loaded) {
     return (
       <div className="app">
         <header className="topbar">
@@ -118,7 +110,7 @@ export default function Home() {
     );
   }
 
-  const saveLine = user ? (
+  const saveLine = (
     <div className="save-state" aria-live="polite">
       {saveState === "saved" && "Saved to your account."}
       {saveState === "saving" && "Saving."}
@@ -133,8 +125,6 @@ export default function Home() {
         </p>
       )}
     </div>
-  ) : (
-    <p className="save-state">Not saved: accounts are not set up on this server.</p>
   );
 
   return <Planner events={events} setEvents={setEvents} account={account} saveLine={saveLine} />;

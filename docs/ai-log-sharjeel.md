@@ -248,3 +248,30 @@ There is no Supabase project yet, so it was checked against a small fake of Supa
 - No real outline was uploaded through the new screens.
 - The Month view at phone width was only checked for overflow, not looked at; seven columns on a phone will be cramped.
 - Keyboard-only use and a screen reader were not tried.
+
+## 2026-10-09: one file per request, sign-in required, 4 MB limit
+
+**Tool:** Claude Code (Opus 5.5). Branch `feature/stubs`, not committed.
+
+**What I asked**
+
+"make it a file at a time", "i saw that i can access planner without signing up. fix that", "limit file size to 4 MB".
+
+**What changed**
+
+- The page now sends each outline in its own request and shows "Reading 2 of 3: name". Events from all files are merged once at the end, so two outlines for one course are not treated as an old and a new version. A file that fails is listed on its own.
+- The "Open the planner" button for servers with no account service is gone. Without the Supabase values the site shows only the landing page and a "Sign-in is not set up yet" note, and `/api/extract` answers 503. **This means the app cannot be used locally until Supabase is set up.**
+- Files over 4 MB are refused, in the browser before upload and again on the server (`lib/validate.js`).
+
+**What the AI got wrong**
+
+- The earlier design let anyone into the planner when accounts were not configured. It had described this as a decision for the team; I had not agreed to it.
+
+**How it was checked**
+
+- Three files through the real app with live Gemini calls (before sign-in was made compulsory): three separate requests, the broken PDF skipped alone, events from the other two shown.
+- With the fake Supabase: signed out shows no planner and no way in; create account opens it; a 5 MB file was skipped without being sent, and the server also refused it with "larger than 4 MB"; sign out returns to the landing page.
+
+**Not checked**
+
+- Real Supabase, and the deployed site.

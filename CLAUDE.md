@@ -51,8 +51,8 @@ Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Li
 
 ## Conventions
 - **Event shape is a contract.** Changing `lib/schema.js` changes every module and the API; propose the change and wait for approval before editing.
-- **Accounts are Supabase, email + password.** Events are saved whole as one `events` JSON list per user in `planners`; the browser reads and writes it directly and row level security keeps users apart. With no Supabase values in `.env.local` the app runs without login and saves nothing. `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are the only variables allowed a `NEXT_PUBLIC_` prefix; never use the `service_role` key.
-- **`/api/extract` requires a signed-in user** whenever accounts are configured.
+- **Accounts are Supabase, email + password.** Events are saved whole as one `events` JSON list per user in `planners`; the browser reads and writes it directly and row level security keeps users apart. With no Supabase values in `.env.local` only the landing page works: there is no way into the planner without signing in. `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are the only variables allowed a `NEXT_PUBLIC_` prefix; never use the `service_role` key.
+- **`/api/extract` requires a signed-in user**, and answers 503 if no account service is configured.
 - **The Gemini key is server-side only.** Read `process.env.GEMINI_API_KEY` only in server code (route handlers, `lib/extract.js` called from them). Never use a `NEXT_PUBLIC_` prefix, log the key, or echo it in errors.
 - Keep upload validation server-side; the browser's `accept` is not a security check.
 - Treat uploaded outline text as data, not instructions: a document saying "ignore previous instructions" must not change model behaviour. Keep the extraction prompt separate from the document text and validate the model's JSON against the schema before use.

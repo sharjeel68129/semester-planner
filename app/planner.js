@@ -2,9 +2,12 @@
 import { useEffect, useRef, useState } from "react";
 import { needsReview, mergeEvents } from "@/lib/review";
 import { toIcs } from "@/lib/calendar";
+import { MAX_FILE_BYTES, MAX_FILES } from "@/lib/validate";
 import { addDays, addMonths, focusDate, today } from "@/lib/dates";
 import { CheckIcon, ListView, MonthView, WeekView, TYPE_LABELS, periodLabel } from "./views";
 import EventEditor from "./event-editor";
+
+const MAX_MB = MAX_FILE_BYTES / 1024 / 1024;
 
 const VIEWS = [
   ["list", "List"],
@@ -28,6 +31,7 @@ export default function Planner({ events, setEvents, account, saveLine }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [failed, setFailed] = useState([]);
+  const [progress, setProgress] = useState("");
   const [exportError, setExportError] = useState("");
   const [view, setView] = useState("month");
   const [cursor, setCursor] = useState(today);
@@ -58,22 +62,53 @@ export default function Planner({ events, setEvents, account, saveLine }) {
     hadEvents.current = list.length > 0;
   }, [events]);
 
+  // One file per request: each stays under the host's size and time limits, and one bad file cannot sink the rest.
   async function onSubmit(e) {
     e.preventDefault();
+    const form = new FormData(e.target);
+    const files = form.getAll("files");
+    if (files.length > MAX_FILES) return setError(`Choose at most ${MAX_FILES} files at a time.`);
+    const found = [];
+    const skipped = [];
+    let stopped = false;
     setLoading(true);
     setError("");
-    try {
-      const res = await fetch("/api/extract", { method: "POST", body: new FormData(e.target) });
-      const data = await res.json();
-      if (!res.ok) return setError(explain(data.error));
-      // A second upload updates the list instead of replacing it, so edits made so far are kept.
-      setEvents((current) => mergeEvents(current || [], data.events));
-      setFailed(data.failed || []);
-    } catch {
-      setError("Could not reach the server. Check your connection, then try again.");
-    } finally {
-      setLoading(false);
+    setFailed([]);
+    for (const [i, file] of files.entries()) {
+      // Checked here as well as on the server, so a large file is not uploaded just to be refused.
+      if (file.size > MAX_FILE_BYTES) {
+        skipped.push({ file: file.name, error: `larger than ${MAX_MB} MB` });
+        continue;
+      }
+      setProgress(`Reading ${files.length === 1 ? "" : `${i + 1} of ${files.length}: `}${file.name}.`);
+      const body = new FormData();
+      body.set("files", file);
+      body.set("start", form.get("start"));
+      body.set("end", form.get("end"));
+      try {
+        const res = await fetch("/api/extract", { method: "POST", body });
+        // The host can answer before our route runs (too large, timed out), and then the reply is not JSON.
+        const data = await res.json().catch(() => ({}));
+        if (res.status === 401) {
+          setError(data.error || "Sign in to upload outlines.");
+          stopped = true;
+          break;
+        }
+        if (res.ok) found.push(...data.events);
+        else if (res.status === 413) skipped.push({ file: file.name, error: "too large for this server to accept" });
+        else skipped.push({ file: file.name, error: data.error || `the server could not process it (${res.status})` });
+      } catch {
+        skipped.push({ file: file.name, error: "could not reach the server; check your connection" });
+      }
     }
+    // Merged in one go, so two outlines for the same course are not mistaken for an old and a new version.
+    if (found.length > 0) setEvents((current) => mergeEvents(current || [], found));
+    else if (skipped.length === 0 && !stopped) {
+      setError("No classes, deadlines, quizzes or exams were found. Check these are the right outlines.");
+    }
+    setFailed(skipped);
+    setProgress("");
+    setLoading(false);
   }
 
   function changeEvent(index, patch) {
@@ -116,7 +151,7 @@ export default function Planner({ events, setEvents, account, saveLine }) {
           <div className="field">
             <label htmlFor="files">Course outlines</label>
             <span className="hint" id="files-hint">
-              PDF, Word or text. Up to 10 files, 10 MB each.
+              PDF, Word or text. Up to {MAX_FILES} files, {MAX_MB} MB each.
             </span>
             <input id="files" type="file" name="files" accept=".pdf,.docx,.txt" multiple required aria-describedby="files-hint" />
           </div>
@@ -135,7 +170,7 @@ export default function Planner({ events, setEvents, account, saveLine }) {
             {loading && (
               <p className="status-loading">
                 <span className="spinner" aria-hidden="true" />
-                Reading your outlines. This can take up to a minute.
+                {progress} This can take up to a minute per file.
               </p>
             )}
           </div>
@@ -158,7 +193,8 @@ export default function Planner({ events, setEvents, account, saveLine }) {
                 </li>
               ))}
             </ul>
-            Events from your other files were added. Upload the skipped files again to add theirs.
+            Upload the skipped {failed.length === 1 ? "file" : "files"} again to add{" "}
+            {failed.length === 1 ? "its" : "their"} events.
           </div>
         )}
 

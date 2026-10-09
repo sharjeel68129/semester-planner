@@ -10,8 +10,8 @@ copy .env.example .env.local     # then put the shared Gemini key in .env.local 
 npm run dev                      # http://localhost:3000
 ```
 
-### Accounts (optional locally)
-Without Supabase values in `.env.local` the app runs with no login and saves nothing. To turn accounts on, follow the three steps in `.env.example` (create a Supabase project, run `supabase/schema.sql`, paste two values), then restart `npm run dev`.
+### Accounts (required)
+Without Supabase values in `.env.local` only the landing page works: nobody can sign in or open the planner. Follow the three steps in `.env.example` (create a Supabase project, run `supabase/schema.sql`, paste two values), then restart `npm run dev`.
 
 ## Files
 | File | Job |

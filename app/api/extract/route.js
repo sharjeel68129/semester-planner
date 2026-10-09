@@ -9,8 +9,11 @@ export async function POST(request) {
   if (!process.env.GEMINI_API_KEY) {
     return Response.json({ error: "Server is missing GEMINI_API_KEY" }, { status: 500 });
   }
-  // Once accounts are set up, only signed-in students may spend the shared Gemini key.
-  if (accountsEnabled && !(await getUser())) {
+  // Only signed-in students may spend the shared Gemini key. With no account service nobody can be, so refuse.
+  if (!accountsEnabled) {
+    return Response.json({ error: "Sign-in is not set up on this server." }, { status: 503 });
+  }
+  if (!(await getUser())) {
     return Response.json({ error: "Sign in to upload outlines." }, { status: 401 });
   }
   const form = await request.formData();
