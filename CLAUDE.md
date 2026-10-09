@@ -26,7 +26,12 @@ Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Li
 | `lib/calendar.js` | `toIcs(events, remindMinutes)` | done (not yet imported into a real calendar app) |
 | `lib/review.js` | `needsReview`, `mergeEvents(old, new)` | done |
 | `lib/evaluate.js` | `score(predicted, truth)` | done (no truth file or runner script yet) |
-| `app/page.js` | upload form, editable review list, `.ics` download, loads and saves events | done |
+| `app/page.js` | picks the screen (landing or planner), loads and saves the signed-in student's events | done |
+| `app/landing.js` | signed-out page: headline, how it works, then sign-in below | done |
+| `app/planner.js` | signed-in screen: outlines and download on the left, calendar in the middle | done |
+| `app/views.js` | `ListView` (tasks by date), `MonthView`, `WeekView` (hour grid) | done |
+| `app/event-editor.js` | pop-up to fix one event's date, time or type and mark it as checked | done |
+| `lib/dates.js` | date helpers for the views (ISO strings in UTC, weeks start Monday) | done |
 | `app/auth-form.js` | sign in / create account (email + password) | done (not yet run against a real Supabase project) |
 | `lib/account.js` | browser Supabase client, `loadEvents`, `saveEvents` | done (same caveat) |
 | `lib/account-server.js` | `getUser()` for route handlers | done (same caveat) |

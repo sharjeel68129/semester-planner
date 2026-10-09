@@ -17,5 +17,10 @@
     "pdf-parse": "^1.1.1",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
+  },
+  "overrides": {
+    "mammoth": {
+      "argparse": "^2.0.1"
+    }
   }
 }

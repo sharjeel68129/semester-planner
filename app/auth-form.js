@@ -58,14 +58,14 @@ export default function AuthForm() {
           required
         />
       </div>
-      <button className="submit" type="submit" disabled={busy}>
+      <button className="button" type="submit" disabled={busy}>
         {creating ? "Create account" : "Sign in"}
       </button>
       <div className="status" aria-live="polite">
         {notice}
       </div>
       {error && (
-        <p className="status-error" role="alert">
+        <p className="alert" role="alert">
           <strong>{creating ? "Account not created" : "Not signed in"}</strong>
           {error}
         </p>

@@ -213,3 +213,38 @@ There is no Supabase project yet, so it was checked against a small fake of Supa
 
 - The upgrade stopped the running dev server; it needs `npm run dev` again.
 - Next 16 created an `AGENTS.md` file telling AI coding tools to read Next's bundled docs. Left uncommitted for the team to decide.
+
+## 2026-10-09: landing page, calendar views, remaining vulnerabilities
+
+**Tool:** Claude Code (Opus 5.5). Branch `feature/stubs`. Not committed until I approve.
+
+**What I asked**
+
+"make it as a landing page with the headline and stuff. then the login and sign up below it. after login, take them to a place where the left sidebar is for input of info, the middle is a calendar that can be toggled into task list by date, calendar monthly format, or a outlook-calendar weekly style. fix the vulnerabilities. show me the output. when i approve, commit"
+
+**What it built**
+
+- Signed out: a landing page (headline, "When an outline is unclear", "How it works"), with sign in / create account below it.
+- Signed in: a top bar, a left sidebar (upload form, calendar file download, save status) and the calendar in the middle with a List / Month / Week switch. Week is an hour grid with an all-day row; overlapping events sit side by side.
+- Selecting an event in any view opens a pop-up to change its date, time or type and mark it as checked. This replaced the long list of editable rows.
+- Events with no date cannot be drawn on a calendar, so Month and Week say how many there are and link to the list, where they are grouped under "No date yet".
+- `npm audit` now reports 0 problems. The last three came from `sprintf-js`, used only by `argparse` inside mammoth's command-line tool; `package.json` now overrides mammoth's `argparse` to version 2, which does not use it.
+
+**Decisions the team should know about (made by the AI, not agreed)**
+
+- With no Supabase values, the landing page shows "Open the planner" instead of the sign-in form, and nothing is saved.
+- The chosen view (List / Month / Week) is remembered in the browser, per device.
+- The `argparse` override would break mammoth's command-line tool. We do not use it; the library call we do use was re-tested on a `.docx`.
+- A recurring class ("Lectures Mon 10:00") is still one undated event, so it does not appear on the Month or Week view.
+
+**How it was checked**
+
+- With the fake Supabase from before and a made-up set of 12 events: landing page, create account, upload (extraction faked), Month view with a "2 more" day, Week view with overlapping and all-day events, List view grouped by date, the pop-up (mark as checked raised the download count from 8 to 9; adding a date to an undated quiz moved it into the calendar), and the save after each.
+- No sideways page scroll at phone width in any view.
+
+**Not checked**
+
+- Nothing has run against real Supabase yet.
+- No real outline was uploaded through the new screens.
+- The Month view at phone width was only checked for overflow, not looked at; seven columns on a phone will be cramped.
+- Keyboard-only use and a screen reader were not tried.
