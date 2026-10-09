@@ -320,19 +320,49 @@ ol {
 
 @media (min-width: 520px) {
   .event {
-    grid-template-columns: 8.5rem 1fr;
+    grid-template-columns: 10.5rem 1fr;
   }
 }
 
+/* On a phone the title comes first; beside it on wider screens. */
 .event-when {
-  font-variant-numeric: tabular-nums;
-  font-weight: 700;
+  order: 2;
+  margin-top: 0.75rem;
 }
 
-.event-when span {
+@media (min-width: 520px) {
+  .event-when {
+    order: 0;
+    margin-top: 0;
+  }
+}
+
+.event-when label,
+.event-meta label {
   display: block;
-  font-weight: 400;
+  font-size: 0.875rem;
+  font-weight: 700;
   color: var(--ink-soft);
+}
+
+.event-when input,
+.event-meta select {
+  width: 100%;
+  min-height: 2.75rem;
+  margin: 0.15rem 0 0.25rem;
+  padding: 0.35rem 0.5rem;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1.5px solid var(--ink-soft);
+  border-radius: 6px;
+}
+
+.event-weekday {
+  display: block;
+  margin-bottom: 0.6rem;
+  font-weight: 700;
 }
 
 .event-title {
@@ -344,8 +374,61 @@ ol {
 }
 
 .event-meta {
+  margin-top: 0.5rem;
   color: var(--ink-soft);
   font-size: 0.9375rem;
+}
+
+.event-meta select {
+  width: auto;
+  min-width: 9rem;
+  margin-right: 0.75rem;
+  cursor: pointer;
+}
+
+.event-confirm {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.9rem;
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+}
+
+.event-confirm button {
+  min-height: 2.75rem;
+  padding: 0.4rem 1rem;
+  font: inherit;
+  font-weight: 700;
+  color: var(--maroon);
+  background: var(--paper);
+  border: 1.5px solid var(--maroon);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.event-confirm button:hover:enabled {
+  color: var(--on-maroon);
+  background: var(--maroon);
+}
+
+.event-confirm button:disabled {
+  color: var(--ink-soft);
+  border-color: var(--ink-soft);
+  cursor: not-allowed;
+}
+
+.export {
+  margin-top: 0.5rem;
+}
+
+.export .hint {
+  margin-top: 0.75rem;
+}
+
+.export .submit:disabled {
+  cursor: not-allowed;
 }
 
 .event-check {
@@ -381,4 +464,49 @@ ol {
 
 .event-flagged .event-quote {
   border-left-color: var(--maroon-rule);
+}
+
+/* ---- Account ---- */
+
+.account {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+  overflow-wrap: anywhere;
+}
+
+.link {
+  padding: 0;
+  font: inherit;
+  font-weight: 700;
+  color: var(--maroon);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.link:hover {
+  color: var(--maroon-deep);
+}
+
+.form-intro {
+  margin-top: 0.4rem;
+}
+
+.switch {
+  margin-top: 1.5rem;
+}
+
+.save-state {
+  margin-top: 0.4rem;
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
 }

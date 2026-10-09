@@ -99,3 +99,89 @@ A made-up outline copying the real one's layout: 9 of 9 events behaved as intend
 
 - "Week 13, lecture time" got no suggested date, because the outline does not write a weekday next to it.
 - A mistake made by the AI during this session: it ran `npm run build` while `npm run dev` was running, which broke the dev server until it was restarted.
+
+## 2026-10-09: stubs completed (calendar, merge, scoring, review rows)
+
+**Tool:** Claude Code (Opus 5.5). Branch `feature/stubs`, not committed.
+
+**What I asked**
+
+"complete all stubs. but before that. commit this to main on github"
+
+**What it did first**
+
+Committed the design and failed-file work on `feature/extraction`, fast-forwarded `main` to it and pushed. This put the three earlier `feature/extraction` commits on `main` too, and goes against the "never commit to main" working agreement; it was done because I asked for it directly.
+
+**What it built**
+
+- `lib/calendar.js` `toIcs`: skips undated events, one alarm per reminder value, times written as wall-clock time. No time in the outline gives an all-day entry. The id comes from course and title, so exporting again after a date change reuses the same entry.
+- `lib/review.js` `mergeEvents`: matches a re-upload to existing events by course and title. Same date: nothing changes. Outline still undated: the student's date is kept. Outline now has a date: it fills the gap. Dates disagree: the old date is kept and the event is flagged with both in the note. An item missing from a new outline for the same course is kept and flagged.
+- `lib/evaluate.js` `score`: pairs events by shared title words (at least half), correct only when date and time are identical, null included. Returns precision, recall, missed, wrong.
+- `app/page.js`: each row has editable date, time and type, and flagged rows have "Mark as checked". The download button exports only events that no longer need review and says how many are left out.
+
+**Decisions the team should know about (made by the AI, not agreed)**
+
+- Title and course cannot be edited, because they are how a re-upload finds the same event.
+- "Mark as checked" sets `ambiguous: false` and `confidence: 1`; there is no separate "confirmed" field, so the Event shape is unchanged.
+- Events still needing review are left out of the `.ics` file, not exported with a warning.
+- The Event shape has no end time, so timed events are assumed to last 1 hour and deadlines are a 15-minute block starting at the due time.
+- All-day events get their reminders counted back from midnight, so "1 hour before" fires at 23:00 the previous day.
+
+**What the AI got wrong, and what was changed**
+
+- The first `toIcs` gave deadlines a zero-length duration, and the `ics` package wrote that as `DURATION:PT`, which is invalid. Caught by printing the file in a test; changed to 15 minutes.
+
+**How it was checked**
+
+- 26 checks in a throwaway Node script with made-up events (not kept in the repo; there is no test runner).
+- In the browser with the API faked: marked an event as checked, the download count went from 1 to 2 and the file contained those 2 events; typed a date into an undated quiz; a faked second upload flagged a moved midterm with both dates and kept the typed date.
+
+**Not checked / still open**
+
+- The `.ics` file has not been imported into Google Calendar, Outlook or Apple Calendar, so reminders and the "same entry is updated" behaviour are unconfirmed.
+- `score` has not been run on a real outline: there is no truth file and no script that runs extraction and scoring together.
+- Events are held in the page only and are lost on reload (accounts and storage are not built).
+- If the AI words a title differently on a re-upload ("Assignment 1" then "Assignment 1: Essay"), the merge shows both and flags the old one.
+
+## 2026-10-09: accounts and storage
+
+**Tool:** Claude Code (Opus 5.5). Branch `feature/stubs`, not committed.
+
+**What I asked**
+
+"build accounts and storage". It asked two questions first; I chose Supabase and email + password.
+
+**What it built**
+
+- `supabase/schema.sql`: a `planners` table with one row per user holding the whole `Event[]` as JSON, and row level security so a user can only read and write their own row.
+- `lib/account.js`, `lib/account-server.js`, `app/auth-form.js`: sign in, create account, sign out, load and save events.
+- `app/page.js`: signed-out visitors see the sign-in form. Signing in loads saved events; every change saves half a second later and shows "Saved to your account." A failed save says so and offers "save again". Added "Remove all events".
+- `/api/extract` returns 401 unless signed in, so only account holders can spend the shared Gemini key.
+- New dependencies: `@supabase/supabase-js`, `@supabase/ssr`.
+
+**Decisions the team should know about (made by the AI, not agreed)**
+
+- Events are stored as one JSON list per user, not one database row per event. A save replaces the list in one step. The email-reminder job will have to unpack the list to find events by date.
+- With no Supabase values in `.env.local` the app still runs, with no login and nothing saved. This keeps teammates without the keys working, but a deployment that forgets the values is open to anyone.
+- Two tabs open on the same account: the last one to save wins.
+- A change made in the last half second before closing the tab may not be saved.
+
+**What the AI got wrong, and what was changed**
+
+- Its first test setup (a copy of the app on another drive, linked to the project's packages) would not compile. It moved the copy inside the project folder and deleted it afterwards.
+
+**How it was checked**
+
+There is no Supabase project yet, so it was checked against a small fake of Supabase written for the test, running on this machine, with made-up accounts:
+
+- Wrong password shows "Invalid login credentials". Creating an account signs in.
+- An upload (extraction faked) was saved; "Mark as checked" was saved; a reload brought the events back.
+- With saves made to fail, the page said the changes were not saved and the stored copy stayed unchanged; "save again" then saved them.
+- A second account saw no events; signing back into the first showed its events.
+- `/api/extract` answered 401 signed out and got past the check signed in.
+
+**Not checked / still open**
+
+- **Nothing has run against real Supabase.** `schema.sql` has never been executed, so the security rules are untested; the fake did not enforce them the way Postgres does.
+- Email confirmation, password reset and "forgot password" are not built. If confirmation is on in Supabase, a new user must click the emailed link before signing in.
+- `npm install` reported 5 known vulnerabilities in the dependency tree (1 critical); not looked into.

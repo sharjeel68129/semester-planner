@@ -1,5 +1,6 @@
 import { readFileText, extractEvents } from "@/lib/extract";
 import { validateUpload, MAX_FILES } from "@/lib/validate";
+import { accountsEnabled, getUser } from "@/lib/account-server";
 
 export const runtime = "nodejs";
 
@@ -7,6 +8,10 @@ export const runtime = "nodejs";
 export async function POST(request) {
   if (!process.env.GEMINI_API_KEY) {
     return Response.json({ error: "Server is missing GEMINI_API_KEY" }, { status: 500 });
+  }
+  // Once accounts are set up, only signed-in students may spend the shared Gemini key.
+  if (accountsEnabled && !(await getUser())) {
+    return Response.json({ error: "Sign in to upload outlines." }, { status: 401 });
   }
   const form = await request.formData();
   const start = form.get("start");

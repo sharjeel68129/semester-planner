@@ -10,6 +10,9 @@ copy .env.example .env.local     # then put the shared Gemini key in .env.local 
 npm run dev                      # http://localhost:3000
 ```
 
+### Accounts (optional locally)
+Without Supabase values in `.env.local` the app runs with no login and saves nothing. To turn accounts on, follow the three steps in `.env.example` (create a Supabase project, run `supabase/schema.sql`, paste two values), then restart `npm run dev`.
+
 ## Files
 | File | Job |
 |---|---|
@@ -18,7 +21,9 @@ npm run dev                      # http://localhost:3000
 | `lib/calendar.js` | `.ics` export with reminders |
 | `lib/review.js` | flag ambiguous events, merge re-uploads |
 | `lib/evaluate.js` | score extraction against hand-labelled dates |
-| `app/page.js` | the web page |
+| `lib/account.js`, `lib/account-server.js` | login and saved events (Supabase) |
+| `supabase/schema.sql` | the database table and its access rules |
+| `app/page.js`, `app/auth-form.js` | the web page and the sign-in form |
 | `app/api/extract/route.js` | server endpoint that holds the API key |
 
 ## Working in git (summary)

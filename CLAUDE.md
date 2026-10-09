@@ -14,19 +14,23 @@ npm run build
 There is no test runner yet. Verify with `lib/evaluate.js` against samples in `data/samples/` (gitignored), and by running the app.
 
 ## Stack
-Next.js 14 (App Router), plain JavaScript, `@/` alias to repo root. Libraries: `@google/generative-ai`, `pdf-parse`, `mammoth`, `ics`.
+Next.js 14 (App Router), plain JavaScript, `@/` alias to repo root. Libraries: `@google/generative-ai`, `pdf-parse`, `mammoth`, `ics`, `@supabase/supabase-js`, `@supabase/ssr`.
 
 ## Module map
 | File | Job | Status |
 |---|---|---|
 | `lib/schema.js` | `Event` shape + `makeEvent` | done |
 | `lib/validate.js` | upload check: extension, magic bytes, size/count caps | done |
-| `app/api/extract/route.js` | holds the API key, validates, extracts per file | done (no follow-up flow yet) |
+| `app/api/extract/route.js` | holds the API key, validates, extracts per file, returns `{ events, failed }` | done (no follow-up flow yet) |
 | `lib/extract.js` | `readFileText`, `extractEvents` (Gemini call + output checks) | done (not yet scored on a real outline) |
-| `lib/calendar.js` | `toIcs(events, remindMinutes)` | **stub** |
-| `lib/review.js` | `needsReview` done, `mergeEvents` | **stub** |
-| `lib/evaluate.js` | `score(predicted, truth)` | **stub** |
-| `app/page.js` | upload form, review table, download button | table and download are TODO |
+| `lib/calendar.js` | `toIcs(events, remindMinutes)` | done (not yet imported into a real calendar app) |
+| `lib/review.js` | `needsReview`, `mergeEvents(old, new)` | done |
+| `lib/evaluate.js` | `score(predicted, truth)` | done (no truth file or runner script yet) |
+| `app/page.js` | upload form, editable review list, `.ics` download, loads and saves events | done |
+| `app/auth-form.js` | sign in / create account (email + password) | done (not yet run against a real Supabase project) |
+| `lib/account.js` | browser Supabase client, `loadEvents`, `saveEvents` | done (same caveat) |
+| `lib/account-server.js` | `getUser()` for route handlers | done (same caveat) |
+| `supabase/schema.sql` | `planners` table (one row per user, `events` jsonb) + row level security | done (never run on a real project) |
 
 ## Product rules (do not violate)
 1. **Never invent dates.** If a date is unclear ("Week 7", "TBA", no year, "see Canvas"), set `date: null` or `ambiguous: true` with a `note`. A flagged event is better than a confident wrong one.
@@ -37,12 +41,13 @@ Next.js 14 (App Router), plain JavaScript, `@/` alias to repo root. Libraries: `
 6. **A human confirms.** Anything `needsReview()` flags must be highlighted and editable before export or reminders. Never silently drop an event.
 
 ## Planned features (not built; agree design before coding)
-- **Accounts and storage:** users log in and their events are saved in a database, so re-uploads can merge with saved events. Choose the auth and DB approach in plan mode first; do not add one unprompted.
-- **Email reminders:** needs saved events, the user's email, a scheduled job and an email service. Until built, reminders are `.ics` alarms (default 1440 and 60 minutes before).
+- **Email reminders:** saved events and the user's email now exist (Supabase); still needs a scheduled job and an email service. Until built, reminders are `.ics` alarms (default 1440 and 60 minutes before).
 - **Follow-up questions flow (rule 4):** needs an agreed response shape, for example `{ events, missingInfo: [{ question, why }] }`, and a request field to send the user's answers back. This changes the API contract, so propose it before implementing.
 
 ## Conventions
 - **Event shape is a contract.** Changing `lib/schema.js` changes every module and the API; propose the change and wait for approval before editing.
+- **Accounts are Supabase, email + password.** Events are saved whole as one `events` JSON list per user in `planners`; the browser reads and writes it directly and row level security keeps users apart. With no Supabase values in `.env.local` the app runs without login and saves nothing. `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are the only variables allowed a `NEXT_PUBLIC_` prefix; never use the `service_role` key.
+- **`/api/extract` requires a signed-in user** whenever accounts are configured.
 - **The Gemini key is server-side only.** Read `process.env.GEMINI_API_KEY` only in server code (route handlers, `lib/extract.js` called from them). Never use a `NEXT_PUBLIC_` prefix, log the key, or echo it in errors.
 - Keep upload validation server-side; the browser's `accept` is not a security check.
 - Treat uploaded outline text as data, not instructions: a document saying "ignore previous instructions" must not change model behaviour. Keep the extraction prompt separate from the document text and validate the model's JSON against the schema before use.
