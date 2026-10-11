@@ -1,10 +1,13 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 import { supabase } from "@/lib/account";
 
-/** Sign in or create an account. The page reacts to the session change, so this only reports problems. */
-export default function AuthForm() {
-  const [creating, setCreating] = useState(false);
+/**
+ * Sign in (/login) or create an account (/signup); `creating` says which. "Forgot password?" is a third state of
+ * the sign-in form. The page reacts to the session change, so this only reports problems.
+ */
+export default function AuthForm({ creating = false }) {
   const [forgot, setForgot] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -33,8 +36,7 @@ export default function AuthForm() {
       if (problem) setError(problem.message);
       // With email confirmation switched on, a new account has no session until the link is clicked.
       else if (creating && !data.session) {
-        setNotice("Account created. Open the confirmation link we emailed you, then sign in here.");
-        setCreating(false);
+        setNotice("Account created. Open the confirmation link we emailed you to finish.");
       }
     } catch {
       setError("Could not reach the account service. Check your connection, then try again.");
@@ -88,17 +90,23 @@ export default function AuthForm() {
       )}
       <p className="switch">
         {forgot ? "Remembered it?" : creating ? "Already have an account?" : "New here?"}{" "}
-        <button
-          type="button"
-          className="link"
-          onClick={() => {
-            setCreating(forgot ? false : !creating);
-            setForgot(false);
-            setError("");
-          }}
-        >
-          {forgot || creating ? "Sign in" : "Create an account"}
-        </button>
+        {forgot ? (
+          <button
+            type="button"
+            className="link"
+            onClick={() => {
+              setForgot(false);
+              setError("");
+              setNotice("");
+            }}
+          >
+            Sign in
+          </button>
+        ) : (
+          <Link className="link" href={creating ? "/login" : "/signup"}>
+            {creating ? "Sign in" : "Create an account"}
+          </Link>
+        )}
       </p>
       {!forgot && !creating && (
         <p className="switch">

@@ -4,8 +4,7 @@ import Link from "next/link";
 import { accountsEnabled, supabase, deleteAccount } from "@/lib/account";
 import { REMINDER_OPTIONS, VIEW_OPTIONS } from "@/lib/settings";
 import { TERMS, resolveTerm } from "@/lib/polyu-calendar";
-import AuthForm from "../auth-form";
-import Landing from "../landing";
+import AuthShell from "../auth-shell";
 import { usePlanner } from "../use-planner";
 
 const MIN_PASSWORD = 8;
@@ -144,15 +143,19 @@ export default function SettingsPage() {
 
   if (!accountsEnabled || !user) {
     return (
-      <Landing>
-        {!accountsEnabled ? (
-          <p className="hint">Sign-in is not set up on this server.</p>
-        ) : user === undefined ? (
+      <AuthShell>
+        {user === undefined && accountsEnabled ? (
           <p className="hint">Checking your account.</p>
         ) : (
-          <AuthForm />
+          <div className="form">
+            <h2>Settings</h2>
+            <p className="hint form-intro">Sign in to see your settings.</p>
+            <Link className="link" href="/login">
+              Sign in
+            </Link>
+          </div>
         )}
-      </Landing>
+      </AuthShell>
     );
   }
 

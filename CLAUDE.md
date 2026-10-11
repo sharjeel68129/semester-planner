@@ -34,7 +34,9 @@ Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Li
 | `app/settings/page.js` | `/settings`: reminders, semester, calendar display, email, password, remove all events, delete account | done (account actions only run against a local stand-in for Supabase) |
 | `app/reset-password/page.js` | where the password-reset email leads | done (same caveat) |
 | `lib/settings.js` | `Settings` shape + `makeSettings`, reminder and view options | done |
-| `app/landing.js` | signed-out page: headline, how it works, then sign-in below | done |
+| `app/landing.js` | signed-out page: headline, how it works, and buttons to `/signup` and `/login` (no form on it) | done |
+| `app/login/page.js`, `app/signup/page.js` | the sign-in and sign-up pages; both render `app/auth-screen.js`, which sends a signed-in student to `/` | done (the redirect after a real sign-in is untested) |
+| `app/auth-shell.js` | the plain page around the sign-in, sign-up, reset-password and signed-out settings screens | done |
 | `app/planner.js` | signed-in screen: outlines and download on the left, calendar in the middle | done |
 | `app/views.js` | `ListView` (tasks by date), `MonthView`, `WeekView` (hour grid) | done |
 | `app/event-editor.js` | pop-up to fix one event's date, time or type, accept a suggested date, add weekly classes, remove it, or mark it as checked | done |

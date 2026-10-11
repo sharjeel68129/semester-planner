@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { accountsEnabled, supabase } from "@/lib/account";
-import Landing from "../landing";
+import AuthShell from "../auth-shell";
 
 const MIN_PASSWORD = 8;
 
@@ -46,13 +46,13 @@ export default function ResetPassword() {
 
   if (!accountsEnabled) {
     return (
-      <Landing>
+      <AuthShell>
         <p className="hint">Sign-in is not set up on this server.</p>
-      </Landing>
+      </AuthShell>
     );
   }
   return (
-    <Landing>
+    <AuthShell>
       {done ? (
         <div className="form">
           <h2>Password changed</h2>
@@ -85,12 +85,12 @@ export default function ResetPassword() {
             </p>
           )}
           <p className="switch">
-            <Link className="link" href="/">
+            <Link className="link" href="/login">
               Back to sign in
             </Link>
           </p>
         </form>
       )}
-    </Landing>
+    </AuthShell>
   );
 }

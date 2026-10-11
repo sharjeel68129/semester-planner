@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
-import { accountsEnabled, supabase } from "@/lib/account";
-import AuthForm from "./auth-form";
+import { supabase } from "@/lib/account";
 import Landing from "./landing";
 import Planner from "./planner";
 import { usePlanner } from "./use-planner";
@@ -10,23 +9,9 @@ import { usePlanner } from "./use-planner";
 export default function Home() {
   const { user, events, setEvents, settings, loaded, loadError, saveState, retrySave } = usePlanner();
 
-  // No way into the planner without an account, so a server with no account service shows only this.
-  if (!accountsEnabled) {
-    return (
-      <Landing>
-        <div className="form">
-          <h2>Sign-in is not set up yet</h2>
-          <p className="hint form-intro">
-            This server has no account service, so the planner cannot be opened. If you run this site, add the Supabase
-            values listed in .env.example and restart it.
-          </p>
-        </div>
-      </Landing>
-    );
-  }
-  if (!user) {
-    return <Landing>{user === undefined ? <p className="hint">Checking your account.</p> : <AuthForm />}</Landing>;
-  }
+  // No way into the planner without an account: signed out (or still checking) shows only the landing page.
+  // Its buttons lead to /login and /signup, which also explain when no account service is set up.
+  if (!user) return <Landing />;
 
   const account = (
     <>

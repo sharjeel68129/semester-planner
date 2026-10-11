@@ -396,3 +396,27 @@ Against a small stand-in for Supabase that I wrote and ran locally, in the brows
 - Real emails (reset and email change), the reset email template change, and redirect URLs.
 - Supabase's built-in email sender allows only a few emails an hour.
 - Whether saving settings on a real database leaves events untouched (it relies on an upsert updating only the columns sent).
+
+## 2026-10-11: sign-in and sign-up on their own pages
+
+**Tool:** Claude Code (Opus 5.5). Branch `feature/login-page`, not committed.
+
+**What I asked**
+
+"change the landing page. sign up or login buttons redirects to sign up login page".
+
+**What changed**
+
+- The landing page has no form now. "Create an account" goes to `/signup` and "Sign in" goes to `/login`, in the header and again at the bottom.
+- `/login` and `/signup` are plain pages with the form. "Forgot password?" is on `/login`. Once signed in, either page sends you to the planner.
+- The reset-password page and the signed-out settings page use the same plain layout.
+- Landing page wording for "Week 7" updated: it now gets a suggested date.
+
+**How it was checked**
+
+- In the browser, signed out: the landing page has no form and four links with the right addresses; `/login` and `/signup` show the right form and link to each other; `/settings` asks you to sign in; `/reset-password` shows its form. `next build` passes.
+
+**Not checked**
+
+- **Signing in or creating an account on the new pages**, and the redirect to the planner afterwards. That needs a real account, which the AI does not enter.
+- The email-confirmation link after sign-up, which returns to the home page.

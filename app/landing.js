@@ -1,5 +1,21 @@
-/** The signed-out page: what the planner does, then (as children) the way in. */
-export default function Landing({ children }) {
+import Link from "next/link";
+
+/** The two ways in. They lead to their own pages (/signup and /login); the landing page has no form. */
+function WaysIn({ className }) {
+  return (
+    <div className={className}>
+      <Link className="hero-cta" href="/signup">
+        Create an account
+      </Link>
+      <Link className="hero-cta hero-cta-quiet" href="/login">
+        Sign in
+      </Link>
+    </div>
+  );
+}
+
+/** The signed-out page: what the planner does, and buttons to the sign-up and sign-in pages. */
+export default function Landing() {
   return (
     <div className="landing">
       <header className="hero">
@@ -12,16 +28,14 @@ export default function Landing({ children }) {
                 Upload your outlines and the planner lists each class, deadline, quiz and exam it finds. It never
                 guesses a date.
               </p>
-              <a className="hero-cta" href="#account">
-                Sign in or create an account
-              </a>
+              <WaysIn className="ways-in" />
             </div>
             <section className="unclear" aria-labelledby="unclear-heading">
               <h2 id="unclear-heading">When an outline is unclear</h2>
               <dl>
                 <div>
                   <dt>&ldquo;Week 7&rdquo;</dt>
-                  <dd>Listed with no date, for you to fill in.</dd>
+                  <dd>Listed with a suggested date, for you to accept or change.</dd>
                 </div>
                 <div>
                   <dt>&ldquo;TBA&rdquo;</dt>
@@ -56,8 +70,10 @@ export default function Landing({ children }) {
           </ol>
         </section>
 
-        <section className="account-section" id="account">
-          {children}
+        <section className="account-section closing" aria-labelledby="closing-heading">
+          <h2 id="closing-heading">Start with one outline</h2>
+          <p className="hint">Your events are saved to your account, so they are still here next time.</p>
+          <WaysIn className="ways-in ways-in-light" />
         </section>
       </main>
     </div>

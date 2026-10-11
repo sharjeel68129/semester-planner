@@ -302,6 +302,64 @@ blockquote {
   text-decoration: none;
 }
 
+.ways-in {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.ways-in .hero-cta {
+  margin-top: 0;
+}
+
+/* The second choice: outlined, so "Create an account" stays the main one. */
+.hero-cta-quiet {
+  color: var(--on-maroon);
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--on-maroon);
+}
+
+.hero-cta-quiet:hover {
+  color: var(--maroon);
+}
+
+/* The same pair on the white closing section. */
+.ways-in-light .hero-cta {
+  color: var(--on-maroon);
+  background: var(--maroon);
+}
+
+.ways-in-light .hero-cta:hover {
+  background: var(--maroon-deep);
+}
+
+.ways-in-light .hero-cta-quiet {
+  color: var(--maroon);
+  background: var(--paper);
+  box-shadow: inset 0 0 0 1.5px var(--maroon);
+}
+
+.ways-in-light .hero-cta-quiet:hover {
+  color: var(--on-maroon);
+  background: var(--maroon);
+}
+
+.ways-in-light .hero-cta:focus-visible {
+  outline-color: var(--maroon);
+}
+
+.closing h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 2rem;
+  line-height: 1.15;
+}
+
+.closing .hint {
+  margin-top: 0.4rem;
+}
+
 .hero-cta:hover {
   background: var(--blush-strong);
 }
@@ -1129,4 +1187,24 @@ blockquote {
 .field-name {
   display: block;
   font-weight: 700;
+}
+
+/* ---- Sign-in, sign-up and reset-password pages ---- */
+
+.auth-page {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.auth-page .brand {
+  color: var(--on-maroon);
+  text-decoration: none;
+}
+
+.auth-main {
+  width: 100%;
+  max-width: 26rem;
+  margin: 0 auto;
+  padding: 3.5rem 1.25rem;
 }
