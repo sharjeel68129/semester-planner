@@ -420,3 +420,46 @@ Against a small stand-in for Supabase that I wrote and ran locally, in the brows
 
 - **Signing in or creating an account on the new pages**, and the redirect to the planner afterwards. That needs a real account, which the AI does not enter.
 - The email-confirmation link after sign-up, which returns to the home page.
+
+## 2026-10-11: the "20 things that make a site real" checklist
+
+**Tool:** Claude Code (Opus 5.5). Branch `feature/site-basics`, not committed.
+
+**What I asked**
+
+I sent a screenshot of a 20-item checklist for finished websites and chose: build everything on it, use Vercel Analytics, and I will give a contact email. Mid-way I asked "no operator name needed?".
+
+**What changed**
+
+- Custom 404 page; a title and description for every page; share image; favicon and phone icon; `robots.txt`; `sitemap.xml`.
+- Privacy, Terms and Contact pages, and a footer linking to them from every public page. They name the operator as "DSAI1202 Group 3, a student project at The Hong Kong Polytechnic University" and say it is not an official PolyU service.
+- A "Check your email" screen after sign-up; a line under the sign-up button agreeing to the Terms and Privacy pages.
+- A cookie notice; a sign-up bar that sticks to the bottom of the landing page on phones.
+- Vercel Analytics (one new package, `@vercel/analytics`).
+
+**What the AI said that is worth keeping**
+
+- Of the 20 items, 4 were already done and 1 (alt text) had nothing to apply to because the site has no images. It recommended skipping 6 as marketing-site habits; I chose to build them anyway.
+- **The cookie banner is a notice, not a consent form.** The site sets no tracking cookies, so there is nothing to consent to and the banner adds no legal protection.
+- The privacy and terms pages describe what the code does. They were written by an AI and students, not a lawyer.
+
+**What the AI got wrong**
+
+- It left out who operates the site until I asked. A privacy page that does not say who holds the data is missing its most basic fact.
+- The cookie notice was 129px tall on a phone at first (the button wrapped under the text). Fixed to sit beside it.
+
+**How it was checked**
+
+- `next build` lists all the new routes. Fetched each page for its title and description, a made-up address for the 404 (status 404), `robots.txt`, `sitemap.xml`, the share image (PNG, 1200 by 630) and both icons.
+- In the browser: the share image looked at; cookie notice appears, "OK" hides it and it stays hidden after reload.
+- At phone width (375px): landing page, sign-up, the "Check your email" screen and the planner looked at, none overflow; the sign-up bar appears only after the header buttons scroll away, and the cookie notice sits above it.
+- "Check your email" was reached through a local stand-in for Supabase with email confirmation on.
+
+**Not checked / open**
+
+- **No contact email yet.** The pages show "[Contact email to be added before this site is shared.]". Not to be pushed as final until it is filled in (`lib/site.js`).
+- **Item 20 of the checklist** was cut off in the screenshot; unknown.
+- **Whether Google keeps outline text sent on the free Gemini tier.** The privacy page says Google "may keep it or use it to improve its services". Someone should confirm this against Google's current terms.
+- How the share image looks when the link is pasted into a chat app, and whether analytics counts arrive: both need the live site, and analytics must be switched on in Vercel.
+- The Month view on a phone fits, but seven 50px columns leave little room for event names. Not changed.
+- On short pages the cookie notice covers the footer links until it is dismissed.

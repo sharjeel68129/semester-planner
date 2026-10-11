@@ -12,6 +12,8 @@ export default function AuthForm({ creating = false }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
+  // The address a confirmation link was sent to; set once an account is created but not yet confirmed.
+  const [sentTo, setSentTo] = useState("");
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -35,14 +37,40 @@ export default function AuthForm({ creating = false }) {
         : await supabase().auth.signInWithPassword(credentials);
       if (problem) setError(problem.message);
       // With email confirmation switched on, a new account has no session until the link is clicked.
-      else if (creating && !data.session) {
-        setNotice("Account created. Open the confirmation link we emailed you to finish.");
-      }
+      else if (creating && !data.session) setSentTo(credentials.email);
     } catch {
       setError("Could not reach the account service. Check your connection, then try again.");
     } finally {
       setBusy(false);
     }
+  }
+
+  // The page after signing up. It stays on /signup so the email address is never put in a web address.
+  if (sentTo) {
+    return (
+      <div className="form" role="status">
+        <h2>Check your email</h2>
+        <p className="form-intro">
+          Thank you for signing up. We sent a confirmation link to <strong>{sentTo}</strong>.
+        </p>
+        <ol className="next-steps">
+          <li>Open the email and press the link. It can take a minute to arrive; look in spam if it does not.</li>
+          <li>Open the link in this browser, and your planner opens.</li>
+          <li>Then upload your first course outline.</li>
+        </ol>
+        <p className="switch">
+          Already confirmed?{" "}
+          <Link className="link" href="/login">
+            Sign in
+          </Link>
+        </p>
+        <p className="switch">
+          <button type="button" className="link" onClick={() => setSentTo("")}>
+            Use a different email
+          </button>
+        </p>
+      </div>
+    );
   }
 
   return (
@@ -79,6 +107,19 @@ export default function AuthForm({ creating = false }) {
       <button className="button" type="submit" disabled={busy}>
         {forgot ? "Email me a reset link" : creating ? "Create account" : "Sign in"}
       </button>
+      {creating && (
+        <p className="hint agree">
+          By creating an account you agree to the{" "}
+          <Link className="link" href="/terms">
+            Terms
+          </Link>{" "}
+          and{" "}
+          <Link className="link" href="/privacy">
+            Privacy
+          </Link>{" "}
+          pages.
+        </p>
+      )}
       <div className="status" aria-live="polite">
         {notice}
       </div>

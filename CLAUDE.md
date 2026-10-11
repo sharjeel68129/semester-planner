@@ -14,7 +14,7 @@ npm run build
 There is no test runner yet. Verify with `lib/evaluate.js` against samples in `data/samples/` (gitignored), and by running the app.
 
 ## Stack
-Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Libraries: `@google/generative-ai`, `pdf-parse`, `mammoth`, `ics`, `@supabase/supabase-js`, `@supabase/ssr`.
+Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Libraries: `@google/generative-ai`, `pdf-parse`, `mammoth`, `ics`, `@supabase/supabase-js`, `@supabase/ssr`, `@vercel/analytics`.
 
 ## Module map
 | File | Job | Status |
@@ -36,7 +36,12 @@ Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Li
 | `lib/settings.js` | `Settings` shape + `makeSettings`, reminder and view options | done |
 | `app/landing.js` | signed-out page: headline, how it works, and buttons to `/signup` and `/login` (no form on it) | done |
 | `app/login/page.js`, `app/signup/page.js` | the sign-in and sign-up pages; both render `app/auth-screen.js`, which sends a signed-in student to `/` | done (the redirect after a real sign-in is untested) |
-| `app/auth-shell.js` | the plain page around the sign-in, sign-up, reset-password and signed-out settings screens | done |
+| `app/auth-shell.js` | the plain page around the sign-in, sign-up, reset-password and signed-out settings screens, and (with `wide`) the pages of text | done |
+| `lib/site.js` | the site's name, description, address, operator, **contact email** and repo link, used by the public pages and metadata | done; `CONTACT_EMAIL` is empty until the team chooses one |
+| `app/privacy/`, `app/terms/`, `app/contact/` | public pages of text, written from what the code does; **update the privacy page in the same commit as any change to what is stored or where it is sent** | done (written by students, not legally reviewed) |
+| `app/not-found.js` | the 404 page | done |
+| `app/site-footer.js`, `app/cookie-notice.js`, `app/sticky-cta.js` | footer of public pages; the cookie notice (a notice, not consent: there are no tracking cookies); the phone-only sign-up bar on the landing page | done |
+| `app/layout.js`, `app/robots.js`, `app/sitemap.js`, `app/opengraph-image.js`, `app/icon.svg`, `app/apple-icon.js` | site-wide metadata, robots.txt, sitemap.xml, share image, icons, and Vercel Analytics | done (share preview and analytics only checkable on the live site) |
 | `app/planner.js` | signed-in screen: outlines and download on the left, calendar in the middle | done |
 | `app/views.js` | `ListView` (tasks by date), `MonthView`, `WeekView` (hour grid) | done |
 | `app/event-editor.js` | pop-up to fix one event's date, time or type, accept a suggested date, add weekly classes, remove it, or mark it as checked | done |

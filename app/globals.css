@@ -1158,7 +1158,7 @@ blockquote {
 .auth-page {
   min-height: 100dvh;
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto 1fr auto;
 }
 
 .auth-page .brand {
@@ -1171,4 +1171,135 @@ blockquote {
   max-width: 26rem;
   margin: 0 auto;
   padding: 3.5rem 1.25rem;
+}
+
+.agree {
+  margin-top: 0.9rem;
+}
+
+.next-steps {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1rem 0 0;
+  padding-left: 1.25rem;
+}
+
+/* ---- Pages of text: privacy, terms, contact ---- */
+
+.auth-main-wide {
+  max-width: 42rem;
+}
+
+.prose h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 2.5rem;
+  line-height: 1.1;
+}
+
+.prose h2 {
+  margin-top: 2.25rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.prose p,
+.prose ul {
+  margin-top: 0.75rem;
+}
+
+.prose ul {
+  display: grid;
+  gap: 0.4rem;
+  padding-left: 1.25rem;
+}
+
+/* ---- Footer of the public pages ---- */
+
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem;
+  border-top: 1px solid var(--rule);
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+}
+
+.site-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+}
+
+/* Links here are targets on a phone, so give them height. */
+.site-footer .link {
+  display: inline-block;
+  padding: 0.6rem 0;
+}
+
+/* ---- Cookie notice and the phone-only sign-up bar, both fixed to the bottom ---- */
+
+.cookie-notice {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 0.8rem 1.25rem;
+  background: var(--paper);
+  border-top: 1.5px solid var(--maroon);
+  font-size: 0.9375rem;
+}
+
+/* The text takes the room and the button keeps its size, so the bar stays short on a phone. */
+.cookie-notice p {
+  flex: 0 1 44rem;
+}
+
+.cookie-notice .button {
+  flex: none;
+}
+
+.sticky-cta {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  padding: 0.7rem 1.25rem;
+  background: var(--paper);
+  border-top: 1px solid var(--rule);
+}
+
+.sticky-cta .button {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+}
+
+@media (min-width: 800px) {
+  .sticky-cta {
+    display: none;
+  }
+}
+
+/* On a phone the notice sits on top of the sign-up bar, not over it, and the page ends clear of the bar. */
+@media (max-width: 799.98px) {
+  .has-sticky-cta .cookie-notice {
+    bottom: 4.4rem;
+  }
+
+  .landing {
+    padding-bottom: 4.4rem;
+  }
 }

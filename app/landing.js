@@ -1,4 +1,6 @@
 import Link from "next/link";
+import SiteFooter from "./site-footer";
+import StickyCta from "./sticky-cta";
 
 /** The signed-out page: what the planner does, and buttons to the sign-up and sign-in pages. */
 export default function Landing() {
@@ -65,6 +67,8 @@ export default function Landing() {
         </section>
 
       </main>
+      <SiteFooter />
+      <StickyCta watch=".ways-in" />
     </div>
   );
 }
