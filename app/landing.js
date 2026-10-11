@@ -1,19 +1,5 @@
 import Link from "next/link";
 
-/** The two ways in. They lead to their own pages (/signup and /login); the landing page has no form. */
-function WaysIn({ className }) {
-  return (
-    <div className={className}>
-      <Link className="hero-cta" href="/signup">
-        Create an account
-      </Link>
-      <Link className="hero-cta hero-cta-quiet" href="/login">
-        Sign in
-      </Link>
-    </div>
-  );
-}
-
 /** The signed-out page: what the planner does, and buttons to the sign-up and sign-in pages. */
 export default function Landing() {
   return (
@@ -28,7 +14,15 @@ export default function Landing() {
                 Upload your outlines and the planner lists each class, deadline, quiz and exam it finds. It never
                 guesses a date.
               </p>
-              <WaysIn className="ways-in" />
+              {/* The two ways in lead to their own pages; the landing page has no form. */}
+              <div className="ways-in">
+                <Link className="hero-cta" href="/signup">
+                  Create an account
+                </Link>
+                <Link className="hero-cta hero-cta-quiet" href="/login">
+                  Sign in
+                </Link>
+              </div>
             </div>
             <section className="unclear" aria-labelledby="unclear-heading">
               <h2 id="unclear-heading">When an outline is unclear</h2>
@@ -70,11 +64,6 @@ export default function Landing() {
           </ol>
         </section>
 
-        <section className="account-section closing" aria-labelledby="closing-heading">
-          <h2 id="closing-heading">Start with one outline</h2>
-          <p className="hint">Your events are saved to your account, so they are still here next time.</p>
-          <WaysIn className="ways-in ways-in-light" />
-        </section>
       </main>
     </div>
   );

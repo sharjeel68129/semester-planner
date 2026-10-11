@@ -324,42 +324,6 @@ blockquote {
   color: var(--maroon);
 }
 
-/* The same pair on the white closing section. */
-.ways-in-light .hero-cta {
-  color: var(--on-maroon);
-  background: var(--maroon);
-}
-
-.ways-in-light .hero-cta:hover {
-  background: var(--maroon-deep);
-}
-
-.ways-in-light .hero-cta-quiet {
-  color: var(--maroon);
-  background: var(--paper);
-  box-shadow: inset 0 0 0 1.5px var(--maroon);
-}
-
-.ways-in-light .hero-cta-quiet:hover {
-  color: var(--on-maroon);
-  background: var(--maroon);
-}
-
-.ways-in-light .hero-cta:focus-visible {
-  outline-color: var(--maroon);
-}
-
-.closing h2 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 2rem;
-  line-height: 1.15;
-}
-
-.closing .hint {
-  margin-top: 0.4rem;
-}
-
 .hero-cta:hover {
   background: var(--blush-strong);
 }
