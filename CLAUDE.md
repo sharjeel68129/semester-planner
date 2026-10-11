@@ -29,16 +29,20 @@ Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Li
 | `lib/calendar.js` | `toIcs(events, remindMinutes)` | done (not yet imported into a real calendar app) |
 | `lib/review.js` | `needsReview`, `canExport`, `mergeEvents(old, new)`, `expandWeekly`, `openChoices`, `chooseSection` | done |
 | `lib/evaluate.js` | `score(predicted, truth)` | done (no truth file or runner script yet) |
-| `app/page.js` | picks the screen (landing or planner), loads and saves the signed-in student's events | done |
+| `app/page.js` | picks the screen (landing or planner) | done |
+| `app/use-planner.js` | `usePlanner()`: who is signed in, with their events and settings loaded and saved; shared by both pages | done |
+| `app/settings/page.js` | `/settings`: reminders, semester, calendar display, email, password, remove all events, delete account | done (account actions only run against a local stand-in for Supabase) |
+| `app/reset-password/page.js` | where the password-reset email leads | done (same caveat) |
+| `lib/settings.js` | `Settings` shape + `makeSettings`, reminder and view options | done |
 | `app/landing.js` | signed-out page: headline, how it works, then sign-in below | done |
 | `app/planner.js` | signed-in screen: outlines and download on the left, calendar in the middle | done |
 | `app/views.js` | `ListView` (tasks by date), `MonthView`, `WeekView` (hour grid) | done |
 | `app/event-editor.js` | pop-up to fix one event's date, time or type, accept a suggested date, add weekly classes, remove it, or mark it as checked | done |
 | `lib/dates.js` | date helpers for the views (ISO strings in UTC, weeks start Monday) | done |
-| `app/auth-form.js` | sign in / create account (email + password) | done (not yet run against a real Supabase project) |
-| `lib/account.js` | browser Supabase client, `loadEvents`, `saveEvents` | done (same caveat) |
+| `app/auth-form.js` | sign in / create account / forgot password (email + password) | done |
+| `lib/account.js` | browser Supabase client, `loadPlanner`, `saveEvents`, `saveSettings`, `deleteAccount` | done |
 | `lib/account-server.js` | `getUser()` for route handlers | done (same caveat) |
-| `supabase/schema.sql` | `planners` table (one row per user, `events` jsonb) + row level security | done (never run on a real project) |
+| `supabase/schema.sql` | `planners` table (one row per user, `events` and `settings` jsonb) + row level security + `delete_my_account(password)` | the settings column and the delete function have **never been run on a real project** |
 
 ## Product rules (do not violate)
 1. **Never invent dates.** If a date is unclear ("Week 7", "TBA", "see Canvas"), set `date: null` with a `note`; the event is listed as "no date yet". The model never calculates a date. Code may work one out from a week number (`lib/suggest.js`), but only into `suggestedDates`: it reaches `date` only when the student accepts it. `ambiguous: true` is for things that look wrong (quote not found, weekday and date disagree, sources conflict), not for a missing date. A flagged event is better than a confident wrong one.
@@ -56,6 +60,8 @@ Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Li
 ## Conventions
 - **Event shape is a contract.** Changing `lib/schema.js` changes every module and the API; propose the change and wait for approval before editing.
 - **Accounts are Supabase, email + password.** Events are saved whole as one `events` JSON list per user in `planners`; the browser reads and writes it directly and row level security keeps users apart. With no Supabase values in `.env.local` only the landing page works: there is no way into the planner without signing in. `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are the only variables allowed a `NEXT_PUBLIC_` prefix; never use the `service_role` key.
+- **Settings are one `settings` JSON value per user** in the same row, written on its own so saving settings can never overwrite events. A database without the column still loads events and uses default settings.
+- **Deleting an account goes through `delete_my_account(password)`**, a database function that checks the password itself and can only delete the caller. Do not replace it with the `service_role` key or a check done only in the browser.
 - **`/api/extract` requires a signed-in user**, and answers 503 if no account service is configured.
 - **The Gemini key is server-side only.** Read `process.env.GEMINI_API_KEY` only in server code (route handlers, `lib/extract.js` called from them). Never use a `NEXT_PUBLIC_` prefix, log the key, or echo it in errors.
 - Keep upload validation server-side; the browser's `accept` is not a security check.

@@ -1,20 +1,16 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { canExport, chooseSection, expandWeekly, mergeEvents, needsReview, openChoices } from "@/lib/review";
 import { toIcs } from "@/lib/calendar";
 import { MAX_FILE_BYTES, MAX_FILES } from "@/lib/validate";
 import { addDays, addMonths, focusDate, formatDate, today } from "@/lib/dates";
-import { TERMS, termRange } from "@/lib/polyu-calendar";
+import { TERMS, resolveTerm, termRange } from "@/lib/polyu-calendar";
+import { VIEW_OPTIONS, describeReminders } from "@/lib/settings";
 import { CheckIcon, ListView, MonthView, WeekView, TYPE_LABELS, periodLabel } from "./views";
 import EventEditor from "./event-editor";
 
 const MAX_MB = MAX_FILE_BYTES / 1024 / 1024;
-
-const VIEWS = [
-  ["list", "List"],
-  ["month", "Month"],
-  ["week", "Week"],
-];
 
 /** Turn a server error into something a student can act on. */
 function explain(message) {
@@ -42,18 +38,20 @@ function checkLine({ total, rows }) {
 
 /**
  * The signed-in screen: outlines go in on the left, the calendar is in the middle.
- * `events` is the saved list (null when empty); `account` is the bar's right-hand side.
+ * `events` is the saved list (null when empty); `settings` is from lib/settings.js; `account` is the bar's right-hand side.
  */
-export default function Planner({ events, setEvents, account, saveLine }) {
+export default function Planner({ events, setEvents, settings, account, saveLine }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [failed, setFailed] = useState([]);
   const [progress, setProgress] = useState("");
   const [exportError, setExportError] = useState("");
   const [checks, setChecks] = useState([]);
-  // The term running now, or the next one; "other" once the built-in calendar has run out.
-  const [semester, setSemester] = useState(() => TERMS.find((term) => today() <= termRange(term).end)?.id || "other");
-  const [view, setView] = useState("month");
+  // The semester from Settings; if none is chosen there, the term running now or the next one.
+  const semester = settings.semester || TERMS.find((item) => today() <= termRange(item).end)?.id || "other";
+  const term = resolveTerm(semester, settings.weekOneMonday);
+  // Starts in the view chosen in Settings; switching here lasts until the page is left.
+  const [view, setView] = useState(settings.defaultView);
   const [cursor, setCursor] = useState(today);
   const [open, setOpen] = useState(null);
 
@@ -61,20 +59,6 @@ export default function Planner({ events, setEvents, account, saveLine }) {
   const ready = list.filter(canExport);
   const toCheck = list.filter((event) => needsReview(event)).length;
   const undated = list.filter((event) => !event.date && !needsReview(event)).length;
-
-  // Remember the chosen view on this device. Storage can be blocked; the default view then stays.
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem("planner-view");
-      if (VIEWS.some(([key]) => key === saved)) setView(saved);
-    } catch {}
-  }, []);
-  function chooseView(next) {
-    setView(next);
-    try {
-      localStorage.setItem("planner-view", next);
-    } catch {}
-  }
 
   // When events first appear, open the calendar where they are, not on an empty month.
   const hadEvents = useRef(false);
@@ -107,7 +91,7 @@ export default function Planner({ events, setEvents, account, saveLine }) {
       const body = new FormData();
       body.set("files", file);
       body.set("semester", semester);
-      body.set("weekOne", form.get("weekOne") || "");
+      body.set("weekOne", settings.weekOneMonday || "");
       try {
         const res = await fetch("/api/extract", { method: "POST", body });
         // The host can answer before our route runs (too large, timed out), and then the reply is not JSON.
@@ -157,17 +141,10 @@ export default function Planner({ events, setEvents, account, saveLine }) {
     });
   }
 
-  function removeAll() {
-    if (!window.confirm("Remove all your events? This cannot be undone.")) return;
-    setOpen(null);
-    setFailed([]);
-    setEvents(null);
-  }
-
   function downloadCalendar() {
     setExportError("");
     try {
-      const url = URL.createObjectURL(new Blob([toIcs(ready)], { type: "text/calendar" }));
+      const url = URL.createObjectURL(new Blob([toIcs(ready, settings.reminders)], { type: "text/calendar" }));
       const link = document.createElement("a");
       link.href = url;
       link.download = "semester-planner.ics";
@@ -198,29 +175,15 @@ export default function Planner({ events, setEvents, account, saveLine }) {
             <input id="files" type="file" name="files" accept=".pdf,.docx,.txt" multiple required aria-describedby="files-hint" />
           </div>
           <div className="field">
-            <label htmlFor="semester">Semester</label>
-            <span className="hint" id="semester-hint">
-              PolyU teaching weeks, used to suggest a date for items like &ldquo;Week 7, Tue&rdquo;.
+            <span className="field-name">Semester</span>
+            <span className="hint">
+              {term ? `${term.label}. ` : "Not set yet: give the Monday of week 1 in Settings. "}
+              <Link className="link" href="/settings#semester">
+                Change
+              </Link>
             </span>
-            <select id="semester" value={semester} onChange={(e) => setSemester(e.target.value)} aria-describedby="semester-hint">
-              {TERMS.map((term) => (
-                <option key={term.id} value={term.id}>
-                  {term.label}
-                </option>
-              ))}
-              <option value="other">Other</option>
-            </select>
           </div>
-          {semester === "other" && (
-            <div className="field">
-              <label htmlFor="weekOne">Monday of week 1</label>
-              <span className="hint" id="weekone-hint">
-                13 teaching weeks are counted from here. Breaks and holidays are not known.
-              </span>
-              <input id="weekOne" type="date" name="weekOne" required aria-describedby="weekone-hint" />
-            </div>
-          )}
-          <button className="button button-wide" type="submit" disabled={loading}>
+          <button className="button button-wide" type="submit" disabled={loading || !term}>
             {loading ? "Finding deadlines" : "Find my deadlines"}
           </button>
           <div className="status" aria-live="polite">
@@ -274,7 +237,13 @@ export default function Planner({ events, setEvents, account, saveLine }) {
             {toCheck > 0 &&
               `${toCheck} still to check ${toCheck === 1 ? "is" : "are"} left out until you mark ${toCheck === 1 ? "it" : "them"} as checked. `}
             {undated > 0 && `${undated} with no date yet ${undated === 1 ? "is" : "are"} left out until you add one. `}
-            Each event reminds you 1 day and 1 hour before. Open the file to add it to your own calendar.
+            {settings.reminders.length > 0
+              ? `Each event reminds you ${describeReminders(settings.reminders)}. `
+              : "Events have no reminders. "}
+            <Link className="link" href="/settings">
+              Change reminders
+            </Link>
+            . Open the file to add it to your own calendar.
           </p>
           {exportError && (
             <p className="alert" role="alert">
@@ -286,18 +255,13 @@ export default function Planner({ events, setEvents, account, saveLine }) {
 
         <div className="sidebar-foot">
           {saveLine}
-          {list.length > 0 && (
-            <button type="button" className="link" onClick={removeAll}>
-              Remove all events
-            </button>
-          )}
         </div>
       </aside>
 
       <main className="main">
         <div className="toolbar">
           <div className="toolbar-period">
-            <h1 aria-live="polite">{periodLabel(view, cursor, list.length)}</h1>
+            <h1 aria-live="polite">{periodLabel(view, cursor, list.length, settings.weekStart)}</h1>
             {view !== "list" && (
               <div className="toolbar-nav">
                 <button type="button" className="button button-quiet" onClick={() => step(-1)}>
@@ -315,8 +279,8 @@ export default function Planner({ events, setEvents, account, saveLine }) {
             )}
           </div>
           <div className="segmented" role="group" aria-label="Calendar view">
-            {VIEWS.map(([key, label]) => (
-              <button key={key} type="button" aria-pressed={view === key} onClick={() => chooseView(key)}>
+            {VIEW_OPTIONS.map(([key, label]) => (
+              <button key={key} type="button" aria-pressed={view === key} onClick={() => setView(key)}>
                 {label}
               </button>
             ))}
@@ -365,19 +329,20 @@ export default function Planner({ events, setEvents, account, saveLine }) {
           <MonthView
             events={list}
             cursor={cursor}
+            weekStart={settings.weekStart}
             onOpen={setOpen}
             onShowWeek={(day) => {
               setCursor(day);
-              chooseView("week");
+              setView("week");
             }}
           />
         )}
-        {view === "week" && <WeekView events={list} cursor={cursor} onOpen={setOpen} />}
+        {view === "week" && <WeekView events={list} cursor={cursor} weekStart={settings.weekStart} onOpen={setOpen} />}
 
         {view !== "list" && list.some((event) => !event.date) && (
           <p className="notice">
             {list.filter((event) => !event.date).length} with no date yet cannot be shown here.{" "}
-            <button type="button" className="link" onClick={() => chooseView("list")}>
+            <button type="button" className="link" onClick={() => setView("list")}>
               See them in the list
             </button>
           </p>

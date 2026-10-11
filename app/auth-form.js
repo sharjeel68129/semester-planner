@@ -5,6 +5,7 @@ import { supabase } from "@/lib/account";
 /** Sign in or create an account. The page reacts to the session change, so this only reports problems. */
 export default function AuthForm() {
   const [creating, setCreating] = useState(false);
+  const [forgot, setForgot] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
@@ -17,6 +18,15 @@ export default function AuthForm() {
     setError("");
     setNotice("");
     try {
+      if (forgot) {
+        const { error: problem } = await supabase().auth.resetPasswordForEmail(credentials.email, {
+          redirectTo: `${window.location.origin}/reset-password`,
+        });
+        if (problem) setError(problem.message);
+        // The same words whether or not the address has an account, so this form cannot be used to find out who has one.
+        else setNotice(`If ${credentials.email} has an account, we have emailed it a link to choose a new password.`);
+        return;
+      }
       const { data, error: problem } = creating
         ? await supabase().auth.signUp(credentials)
         : await supabase().auth.signInWithPassword(credentials);
@@ -35,12 +45,17 @@ export default function AuthForm() {
 
   return (
     <form className="form" onSubmit={onSubmit} aria-busy={busy}>
-      <h2>{creating ? "Create your account" : "Sign in"}</h2>
-      <p className="hint form-intro">Your events are saved to your account, so they are still here next time.</p>
+      <h2>{forgot ? "Forgot your password?" : creating ? "Create your account" : "Sign in"}</h2>
+      <p className="hint form-intro">
+        {forgot
+          ? "Enter your email and we will send you a link to choose a new one."
+          : "Your events are saved to your account, so they are still here next time."}
+      </p>
       <div className="field">
         <label htmlFor="email">Email</label>
         <input id="email" type="email" name="email" autoComplete="email" required />
       </div>
+      {!forgot && (
       <div className="field">
         <label htmlFor="password">Password</label>
         {creating && (
@@ -58,31 +73,48 @@ export default function AuthForm() {
           required
         />
       </div>
+      )}
       <button className="button" type="submit" disabled={busy}>
-        {creating ? "Create account" : "Sign in"}
+        {forgot ? "Email me a reset link" : creating ? "Create account" : "Sign in"}
       </button>
       <div className="status" aria-live="polite">
         {notice}
       </div>
       {error && (
         <p className="alert" role="alert">
-          <strong>{creating ? "Account not created" : "Not signed in"}</strong>
+          <strong>{forgot ? "Reset link not sent" : creating ? "Account not created" : "Not signed in"}</strong>
           {error}
         </p>
       )}
       <p className="switch">
-        {creating ? "Already have an account?" : "New here?"}{" "}
+        {forgot ? "Remembered it?" : creating ? "Already have an account?" : "New here?"}{" "}
         <button
           type="button"
           className="link"
           onClick={() => {
-            setCreating(!creating);
+            setCreating(forgot ? false : !creating);
+            setForgot(false);
             setError("");
           }}
         >
-          {creating ? "Sign in" : "Create an account"}
+          {forgot || creating ? "Sign in" : "Create an account"}
         </button>
       </p>
+      {!forgot && !creating && (
+        <p className="switch">
+          <button
+            type="button"
+            className="link"
+            onClick={() => {
+              setForgot(true);
+              setError("");
+              setNotice("");
+            }}
+          >
+            Forgot password?
+          </button>
+        </p>
+      )}
     </form>
   );
 }

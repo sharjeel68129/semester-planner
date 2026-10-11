@@ -5,7 +5,6 @@ import { formatDate, monthGrid, today, weekDays } from "@/lib/dates";
 
 export const TYPE_LABELS = { class: "Class", deadline: "Deadline", quiz: "Quiz", exam: "Exam" };
 
-const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const HOUR_PX = 48;
 const MAX_PER_DAY = 3;
 
@@ -110,18 +109,19 @@ export function ListView({ events, onOpen }) {
 
 // ---- Month ----
 
-export function MonthView({ events, cursor, onOpen, onShowWeek }) {
+export function MonthView({ events, cursor, weekStart, onOpen, onShowWeek }) {
   const days = groupByDate(events);
+  const grid = monthGrid(cursor, weekStart);
   const month = cursor.slice(0, 7);
   const now = today();
   return (
     <div className="month">
-      {WEEKDAYS.map((name) => (
-        <div key={name} className="month-weekday">
-          {name}
+      {grid.slice(0, 7).map((day) => (
+        <div key={day} className="month-weekday">
+          {formatDate(day, { weekday: "short" })}
         </div>
       ))}
-      {monthGrid(cursor).map((day) => {
+      {grid.map((day) => {
         const items = days.get(day) || [];
         const classes = ["month-cell", day.slice(0, 7) !== month && "month-outside", day === now && "is-today"];
         return (
@@ -181,10 +181,10 @@ function layOut(items) {
   return placed;
 }
 
-export function WeekView({ events, cursor, onOpen }) {
+export function WeekView({ events, cursor, weekStart, onOpen }) {
   const scroller = useRef(null);
   const days = groupByDate(events);
-  const week = weekDays(cursor);
+  const week = weekDays(cursor, weekStart);
   const now = today();
 
   // Open on the working day, not midnight.
@@ -255,10 +255,10 @@ export function WeekView({ events, cursor, onOpen }) {
 }
 
 /** The label above the calendar: which month or week is showing. */
-export function periodLabel(view, cursor, count) {
+export function periodLabel(view, cursor, count, weekStart) {
   if (view === "month") return formatDate(cursor, { month: "long", year: "numeric" });
   if (view === "week") {
-    const week = weekDays(cursor);
+    const week = weekDays(cursor, weekStart);
     return `${formatDate(week[0], { day: "numeric", month: "short" })} to ${formatDate(week[6], { day: "numeric", month: "short", year: "numeric" })}`;
   }
   return count === 1 ? "1 event" : `${count} events`;

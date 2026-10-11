@@ -1058,3 +1058,75 @@ blockquote {
     transition: none;
   }
 }
+
+/* ---- Settings page ---- */
+
+.settings {
+  width: 100%;
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+.settings h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 2.25rem;
+  line-height: 1.15;
+}
+
+.settings section {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+
+.settings h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.settings h3 {
+  margin-top: 1.75rem;
+  font-size: 1.0625rem;
+}
+
+.settings .button {
+  margin-top: 1rem;
+}
+
+.ticks {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.ticks label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  cursor: pointer;
+}
+
+.ticks input {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--maroon);
+}
+
+/* Set apart from the other account actions: it cannot be undone. */
+.danger {
+  margin-top: 2.5rem;
+  padding: 0 1rem 1.25rem;
+  border: 1.5px solid var(--maroon);
+  border-radius: 6px;
+  background: var(--blush);
+}
+
+.field-name {
+  display: block;
+  font-weight: 700;
+}

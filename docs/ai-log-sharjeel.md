@@ -355,3 +355,44 @@ After a real COMP1010 outline came back as 13 events, all undated and all flagge
 - Make-up classes and one-off room or time changes are not known.
 - Only the list of no-class days I typed from the calendar is skipped; it has not been checked by a second person.
 - Still not run on a real outline, and still not checked signed in end to end.
+
+## 2026-10-11: stage 3 (settings page, forgot password, email change, account deletion)
+
+**Tool:** Claude Code (Opus 5.5). Branch `feature/settings`, on top of stage 2 (`42a32ef`), not committed.
+
+**What I asked**
+
+"make the settings page" (all four groups, saved with the account), then "add email change and forgot password and account deletion", then "deletion of account must ask for password".
+
+**What changed**
+
+- `/settings`: reminders (six tick boxes), semester, default view, week starting Monday or Sunday, change email, change password, remove all events, delete account.
+- Settings are saved in a new `settings` column, separately from events.
+- "Forgot password?" on the sign-in form, and a `/reset-password` page for the emailed link.
+- Deleting an account needs the password, and **the database checks it**, not only the page (`delete_my_account` in `supabase/schema.sql`).
+- The upload form shows the semester from Settings with a "Change" link. "Remove all events" moved to Settings. The chosen view is no longer remembered per browser; the default is a setting.
+
+**What the AI got wrong**
+
+- The settings page was first squeezed into the 21rem sidebar column, because the page layout is a two-column grid. Seen in a screenshot and fixed.
+- The first design of the reset page would have used the one-time code as soon as the page opened. Email scanners open links before the person does, which would spend the code. It is now only used when the form is submitted.
+- If the live database does not have the new column, the first version would have failed to load anyone's events. It now falls back to loading events alone and says settings cannot be saved.
+
+**How it was checked**
+
+Against a small stand-in for Supabase that I wrote and ran locally, in the browser:
+
+- changed every setting, reloaded, all kept; the planner opened in Week view starting Sunday with the new reminders and semester shown;
+- password change with mismatched entries refused; with matching entries accepted; the old password then refused at sign-in;
+- email change shows "confirmation link sent" and keeps the old address;
+- forgot password: link requested, code not used on page load, new password set, code spent;
+- delete with a wrong password: "Nothing was deleted", account still there; with the right password: account and saved row gone, back at the landing page, sign-in refused;
+- a database without the settings column: planner loads, changing a setting reports it could not be saved.
+
+**Not checked: everything about real Supabase**
+
+- **The stand-in behaves the way I believe Supabase does. It proves the screens, not the service.**
+- **The `delete_my_account` SQL has never been run.** It assumes Supabase keeps passwords as bcrypt hashes that `extensions.crypt()` can check. If that is wrong, the likely failure is that the right password is refused, not that an account is deleted without one. The first live test must try a wrong password first.
+- Real emails (reset and email change), the reset email template change, and redirect URLs.
+- Supabase's built-in email sender allows only a few emails an hour.
+- Whether saving settings on a real database leaves events untouched (it relies on an upsert updating only the columns sent).
