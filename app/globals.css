@@ -217,6 +217,28 @@ blockquote {
   padding-left: 1.1rem;
 }
 
+/* The 100% check after an upload: plain when it adds up, outlined when something is missing. */
+.checks {
+  margin: 0.9rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9375rem;
+  overflow-wrap: anywhere;
+}
+
+.checks li {
+  margin-top: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  border-left: 4px solid var(--rule);
+  color: var(--ink-soft);
+}
+
+.checks .check-gap {
+  border-left-color: var(--maroon);
+  background: var(--blush);
+  color: inherit;
+}
+
 .check-icon {
   flex: none;
   vertical-align: -0.1em;
@@ -741,6 +763,12 @@ blockquote {
   white-space: nowrap;
 }
 
+.task-tag {
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+  white-space: nowrap;
+}
+
 /* ---- Month view ---- */
 
 .month {
@@ -950,6 +978,21 @@ blockquote {
 
 .editor-check strong {
   color: var(--maroon);
+}
+
+.editor-info {
+  margin-top: 1rem;
+  padding: 0.75rem 0.9rem;
+  border-left: 4px solid var(--rule);
+  color: var(--ink-soft);
+}
+
+.editor-suggest {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.9rem;
 }
 
 .editor-label {

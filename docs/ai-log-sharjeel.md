@@ -275,3 +275,48 @@ There is no Supabase project yet, so it was checked against a small fake of Supa
 **Not checked**
 
 - Real Supabase, and the deployed site.
+
+## 2026-10-11: stage 1 of the extraction rework (100% check, date suggestions, model chain)
+
+**Tool:** Claude Code (Opus 5.5). Branch `feature/suggested-dates`, not committed.
+
+**What I asked**
+
+After a real COMP1010 outline came back as 13 events, all undated and all flagged: go back to planning. Then, in order: suggest dates but let me confirm them; build the PolyU calendar in (13 teaching weeks, Monday to Sunday); use `gemini-3.8-flash` with Gemini-only fallbacks; and "make it so gemini checks assessments and completes the 100% instead of flagging everything".
+
+**What changed**
+
+- **The Event shape changed (contract change, approved in the plan).** Three optional fields: `suggestedDates`, `choice` (not used until stage 2) and `weight`. Old saved events load unchanged.
+- **100% check.** Gemini copies the outline's grade breakdown; code adds it up (`lib/assess.js`). If it is not 100 or a row has no event, Gemini is asked once more, then the gap is shown to the student. Nothing is invented to reach 100.
+- **Flagging rule.** A missing date no longer flags an event. Flags are for things that look wrong. Undated events show as "No date yet" and stay out of the calendar file until they have a date.
+- **Date suggestions.** For "Week 7, Tue" the model copies the week and weekday; `lib/suggest.js` works out the date from `lib/polyu-calendar.js` (2026/27 only, typed in by hand). The date is a button in the editor and only becomes the event's date when pressed.
+- **Model chain.** `GEMINI_MODELS` replaces `GEMINI_MODEL`: 3.8, 3.7, 3.6, 3.5 flash in order.
+- The upload form asks for a semester, not two dates. `/api/extract` now returns `assessmentChecks` as well.
+
+**What the AI got wrong**
+
+- **No time limit on a model call.** The first live run hung for over six minutes with no output. Added a 40 second limit per model.
+- **The chain as planned was too slow.** With the limit in place, one outline still took about four and a half minutes on a bad day (3.8 and 3.7 timed out twice each before 3.5 answered). The plan said a busy model "comes back in about a second"; that was true on 9 Oct and false today. Added an overall limit per outline (150 s for the first answer, 210 s in all), and a model that fails is skipped for five minutes.
+- **"Lab participation 10%" was typed as a class**, and my check refused to let a class cover a breakdown row, so a correct result was reported as incomplete. Removed that restriction and told the model to emit such a row as an undated deadline.
+- **A network error ("fetch failed") failed the whole file** without trying the next model. It now moves on.
+- Notes from the model and from the code ran together without a full stop.
+- Accepting a suggested date does **not** clear an unrelated flag, which differs from the plan ("marks the event checked"). An event flagged for another reason still needs "Mark as checked".
+
+**How it was checked**
+
+- 34 checks on the pure code: the three terms' week dates, week 13 against the calendar's "teaching ends", suggestions across the Lunar New Year break, missing weekday, an outline date that disagrees with the calendar, the 100% arithmetic, and re-upload merging.
+- Four made-up outlines through the real Gemini call:
+  - breakdown with "Continuous Assessment 40%" and "Examination 60%" headings: 100%, no heading events, four suggestions, nothing flagged (answered once by 3.8, once by 3.6);
+  - an item only in the breakdown (participation): 100% after the fix above;
+  - a breakdown adding to 90: reported as 90, nothing invented, second look made;
+  - no breakdown, written dates: dates kept, "no grade breakdown" reported.
+- Screens looked at in the browser through a temporary page with sample events and a canned server reply (since deleted): "Date suggested" and "No date yet" labels, the "Use Tue, 22 Sept 2026" button, the download count going from 1 to 2 after accepting, the three kinds of 100% line, the "Other" semester field. `next build` passes.
+
+**Not checked**
+
+- **The real COMP1010 outline.** Every result above is from outlines I wrote myself, which are far tidier than a real one.
+- The signed-in path end to end (sign in, upload, real Gemini, save). The screens were checked without signing in.
+- The model that answers varied between runs (3.8, 3.7, 3.6, 3.5), and one of them missed a weekday another caught. Scores from different runs are not comparable unless the log line naming the model is recorded.
+- Whether Vercel allows the 300 second limit the route now asks for on our plan.
+- `score` on a hand-labelled truth file: still not done.
+- The calendar dates in `lib/polyu-calendar.js` have not been checked by a second person against the PDF.

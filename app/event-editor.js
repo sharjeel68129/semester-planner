@@ -29,7 +29,9 @@ export default function EventEditor({ event, onChange, onClose }) {
     >
       <div className="editor-box">
         <h2 id={`${id}-title`}>{event.title}</h2>
-        {event.course && <p className="hint">{event.course}</p>}
+        {(event.course || event.weight !== null) && (
+          <p className="hint">{[event.course, event.weight !== null && `${event.weight}% of the grade`].filter(Boolean).join(", ")}</p>
+        )}
 
         {flagged && (
           <p className="editor-check">
@@ -37,6 +39,20 @@ export default function EventEditor({ event, onChange, onClose }) {
             <span>
               <strong>Check this.</strong> {event.note || "The AI was not confident about this one."}
             </span>
+          </p>
+        )}
+        {!flagged && !event.date && (
+          <p className="editor-info">
+            <strong>No date yet.</strong> {event.note || "The outline gives no date for this."}
+          </p>
+        )}
+        {/* Worked out by code from a week number, so it only becomes the date when the student presses it. */}
+        {!event.date && event.suggestedDates.length === 1 && (
+          <p className="editor-suggest">
+            <button type="button" className="button" onClick={() => onChange({ date: event.suggestedDates[0] })}>
+              Use {formatDate(event.suggestedDates[0], { weekday: "short", day: "numeric", month: "short", year: "numeric" })}
+            </button>
+            <span className="hint">Check it against your outline first.</span>
           </p>
         )}
         {event.sourceQuote && (
@@ -95,7 +111,11 @@ export default function EventEditor({ event, onChange, onClose }) {
             Close
           </button>
           {flagged && !event.date && <span className="hint">Add a date before marking it as checked.</span>}
-          {!flagged && <span className="hint">This event will be in your calendar file.</span>}
+          {!flagged && (
+            <span className="hint">
+              {event.date ? "This event will be in your calendar file." : "Add a date to put it in your calendar file."}
+            </span>
+          )}
         </div>
       </div>
     </dialog>

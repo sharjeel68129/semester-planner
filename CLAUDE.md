@@ -21,10 +21,13 @@ Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Li
 |---|---|---|
 | `lib/schema.js` | `Event` shape + `makeEvent` | done |
 | `lib/validate.js` | upload check: extension, magic bytes, size/count caps | done |
-| `app/api/extract/route.js` | holds the API key, validates, extracts per file, returns `{ events, failed }` | done (no follow-up flow yet) |
-| `lib/extract.js` | `readFileText`, `extractEvents` (Gemini call + output checks) | done (not yet scored on a real outline) |
+| `app/api/extract/route.js` | holds the API key, validates, extracts per file, returns `{ events, assessmentChecks, failed }` | done (no follow-up flow yet) |
+| `lib/extract.js` | `readFileText`, `extractEvents(text, term)` -> `{ events, checks }` (Gemini model chain + output checks) | done (not yet scored on a real outline) |
+| `lib/polyu-calendar.js` | PolyU teaching weeks typed in by hand: `TERMS`, `weekMondays`, `termRange`, `resolveTerm` | done for 2026/27 only; **update by hand each academic year** |
+| `lib/suggest.js` | works out a suggested date from a week number and weekday (`suggestForWeek`) | done (single dates; weekly classes not yet) |
+| `lib/assess.js` | `checkAssessments(rows, events)`: do the assessments found add up to the outline's 100%? | done |
 | `lib/calendar.js` | `toIcs(events, remindMinutes)` | done (not yet imported into a real calendar app) |
-| `lib/review.js` | `needsReview`, `mergeEvents(old, new)` | done |
+| `lib/review.js` | `needsReview`, `canExport`, `mergeEvents(old, new)` | done |
 | `lib/evaluate.js` | `score(predicted, truth)` | done (no truth file or runner script yet) |
 | `app/page.js` | picks the screen (landing or planner), loads and saves the signed-in student's events | done |
 | `app/landing.js` | signed-out page: headline, how it works, then sign-in below | done |
@@ -38,12 +41,13 @@ Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Li
 | `supabase/schema.sql` | `planners` table (one row per user, `events` jsonb) + row level security | done (never run on a real project) |
 
 ## Product rules (do not violate)
-1. **Never invent dates.** If a date is unclear ("Week 7", "TBA", no year, "see Canvas"), set `date: null` or `ambiguous: true` with a `note`. A flagged event is better than a confident wrong one.
+1. **Never invent dates.** If a date is unclear ("Week 7", "TBA", "see Canvas"), set `date: null` with a `note`; the event is listed as "no date yet". The model never calculates a date. Code may work one out from a week number (`lib/suggest.js`), but only into `suggestedDates`: it reaches `date` only when the student accepts it. `ambiguous: true` is for things that look wrong (quote not found, weekday and date disagree, sources conflict), not for a missing date. A flagged event is better than a confident wrong one.
 2. **Every event carries `sourceQuote`**: the exact outline text that justifies it, so the reviewer can check it.
 3. **Inputs are messy.** Files are only `.pdf`, `.docx` or `.txt`, but the content inside may be badly formatted, out of order, or partly missing. Parse defensively; do not assume tables or clean headings.
 4. **Ask for more context when information is incomplete.** If the outline does not contain the full course picture (for example no assessment dates, no weekly schedule, no semester dates, unclear weighting, or a mentioned item with no date), the API must not guess to fill the gap. It returns what it found plus a list of specific follow-up questions, and the UI re-prompts the user to supply that context, then re-runs extraction with it. Prefer asking over assuming.
 5. **Mid-semester changes.** Re-uploads and tentative schedules must merge without duplicates (`mergeEvents`), keeping user edits.
-6. **A human confirms.** Anything `needsReview()` flags must be highlighted and editable before export or reminders. Never silently drop an event.
+6. **A human confirms.** Anything `needsReview()` flags must be highlighted and editable before export or reminders. Only `canExport()` events (dated and not flagged) go in the calendar file. Never silently drop an event.
+7. **Assessments are checked against 100%.** The model copies the outline's grade breakdown; code adds it up (`lib/assess.js`). If it does not reach 100 or a row has no event, the model is asked once to re-read, and whatever is still missing is reported to the student. Nothing is invented to fill the gap. 100% shows every graded component was found, not every item inside one.
 
 ## Planned features (not built; agree design before coding)
 - **Email reminders:** saved events and the user's email now exist (Supabase); still needs a scheduled job and an email service. Until built, reminders are `.ics` alarms (default 1440 and 60 minutes before).
