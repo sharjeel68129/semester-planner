@@ -320,3 +320,38 @@ After a real COMP1010 outline came back as 13 events, all undated and all flagge
 - Whether Vercel allows the 300 second limit the route now asks for on our plan.
 - `score` on a hand-labelled truth file: still not done.
 - The calendar dates in `lib/polyu-calendar.js` have not been checked by a second person against the PDF.
+
+## 2026-10-11: stage 2 (weekly classes, choosing a section, removing an event)
+
+**Tool:** Claude Code (Opus 5.5). Branch `feature/suggested-dates`, on top of stage 1 (`09c5577`), not committed.
+
+**What I asked**
+
+"approve. commit and start stage 2".
+
+**What changed**
+
+- **Weekly classes.** A class like "Lab S02 Thu 12:30" gets every Thursday in the teaching weeks as suggested dates, with holidays left out and named in the note. "Add 12 weekly classes" in the editor turns the one undated event into 12 dated ones.
+- **Sections.** Gemini gives alternative sections of one class a shared `choice` label. A box above the calendar asks which one is yours; the others are removed. "Keep them all" is there for a student in none or several.
+- **Remove this event** in the editor, behind a confirmation.
+- Re-uploading an outline does not bring back the sections you did not choose, and does not flag the expanded weekly classes as "not found".
+
+**What the AI got wrong**
+
+- My first version cleared the section label when a weekly class was expanded. Expanding before choosing would have left the other sections with no question to answer. Caught by a check I wrote before running it; the label is now kept until the student chooses.
+- Without a change to `mergeEvents`, a re-upload would have re-added the dropped sections and flagged 11 of 12 expanded classes as missing. Found by reasoning through the merge, then covered with checks.
+
+**How it was checked**
+
+- 47 checks on the pure code (13 new): Monday classes in Semester 1 skip 19 Oct, Semester 2 Mondays skip the Lunar New Year week and two holidays, expanding, choosing, "keep them all", and re-upload after choosing.
+- The made-up COMP1010 outline through real Gemini (answered by `gemini-3.7-flash`): two lectures labelled "COMP1010 Lecture", three labs labelled "COMP1010 Lab", 12 or 13 weekly dates each, assessments unchanged at 100%.
+- In the browser through a temporary page (since deleted): both choice boxes; choosing Lab S02 removed S01 and S03; "Add 12 weekly classes" made 12 dated rows and the download count went from 1 to 13; removing one class made it 12.
+
+**Known limits**
+
+- **A removed event comes back if the same outline is uploaded again.** The app does not remember removals. The confirmation says so.
+- Removing all sections of a group and re-uploading brings them all back and asks again.
+- Each expanded class carries the same note about the whole series.
+- Make-up classes and one-off room or time changes are not known.
+- Only the list of no-class days I typed from the calendar is skipped; it has not been checked by a second person.
+- Still not run on a real outline, and still not checked signed in end to end.

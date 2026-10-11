@@ -9,7 +9,7 @@ import { CheckIcon, TYPE_LABELS } from "./views";
  * The pop-up for one event: fix its date, time or type, and mark it as checked.
  * Title and course are fixed, because they are how a re-uploaded outline finds this event again.
  */
-export default function EventEditor({ event, onChange, onClose }) {
+export default function EventEditor({ event, onChange, onExpand, onRemove, onClose }) {
   const id = useId();
   const dialog = useRef(null);
   const flagged = needsReview(event);
@@ -53,6 +53,17 @@ export default function EventEditor({ event, onChange, onClose }) {
               Use {formatDate(event.suggestedDates[0], { weekday: "short", day: "numeric", month: "short", year: "numeric" })}
             </button>
             <span className="hint">Check it against your outline first.</span>
+          </p>
+        )}
+        {!event.date && event.suggestedDates.length > 1 && (
+          <p className="editor-suggest">
+            <button type="button" className="button" onClick={onExpand}>
+              Add {event.suggestedDates.length} weekly classes
+            </button>
+            <span className="hint">
+              {formatDate(event.suggestedDates[0], { weekday: "long" })}s, {formatDate(event.suggestedDates[0], { day: "numeric", month: "short" })} to{" "}
+              {formatDate(event.suggestedDates.at(-1), { day: "numeric", month: "short", year: "numeric" })}. You can remove single classes afterwards.
+            </span>
           </p>
         )}
         {event.sourceQuote && (
@@ -109,6 +120,9 @@ export default function EventEditor({ event, onChange, onClose }) {
           )}
           <button type="button" className="button button-quiet" onClick={() => dialog.current.close()}>
             Close
+          </button>
+          <button type="button" className="link" onClick={onRemove}>
+            Remove this event
           </button>
           {flagged && !event.date && <span className="hint">Add a date before marking it as checked.</span>}
           {!flagged && (

@@ -617,6 +617,28 @@ blockquote {
   color: var(--maroon);
 }
 
+/* A question above the calendar: which of several sections is the student's. */
+.choice {
+  margin: 1rem 0;
+  padding: 0.8rem 0.9rem;
+  border: 1.5px solid var(--maroon);
+  border-radius: 6px;
+  background: var(--blush);
+  font-size: 0.9375rem;
+}
+
+.choice strong {
+  color: var(--maroon);
+}
+
+.choice-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+}
+
 /* ---- Event chips: fill shows the type, the triangle shows "needs checking" ---- */
 
 .chip {

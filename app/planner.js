@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { canExport, needsReview, mergeEvents } from "@/lib/review";
+import { canExport, chooseSection, expandWeekly, mergeEvents, needsReview, openChoices } from "@/lib/review";
 import { toIcs } from "@/lib/calendar";
 import { MAX_FILE_BYTES, MAX_FILES } from "@/lib/validate";
-import { addDays, addMonths, focusDate, today } from "@/lib/dates";
+import { addDays, addMonths, focusDate, formatDate, today } from "@/lib/dates";
 import { TERMS, termRange } from "@/lib/polyu-calendar";
 import { CheckIcon, ListView, MonthView, WeekView, TYPE_LABELS, periodLabel } from "./views";
 import EventEditor from "./event-editor";
@@ -140,6 +140,21 @@ export default function Planner({ events, setEvents, account, saveLine }) {
 
   function changeEvent(index, patch) {
     setEvents((current) => current.map((event, i) => (i === index ? { ...event, ...patch } : event)));
+  }
+
+  // The editor is closed first in both, because the positions in the list change.
+  function expandEvent(index) {
+    setOpen(null);
+    setEvents((current) => expandWeekly(current, index));
+  }
+
+  function removeEvent(index) {
+    if (!window.confirm("Remove this event? If you upload the same outline again it will come back.")) return;
+    setOpen(null);
+    setEvents((current) => {
+      const next = current.filter((_, i) => i !== index);
+      return next.length > 0 ? next : null;
+    });
   }
 
   function removeAll() {
@@ -324,6 +339,27 @@ export default function Planner({ events, setEvents, account, saveLine }) {
           </p>
         )}
 
+        {openChoices(list).map(({ choice, options }) => (
+          <div key={choice} className="choice" role="group" aria-label={`Choose your ${choice} section`}>
+            <p>
+              <strong>
+                This outline lists {options.length} {choice} sections.
+              </strong>{" "}
+              Choose yours and the others are removed.
+            </p>
+            <div className="choice-options">
+              {options.map(({ title, time, firstDate }) => (
+                <button key={title} type="button" className="button button-quiet" onClick={() => setEvents((current) => chooseSection(current, choice, title))}>
+                  {[title, firstDate && formatDate(firstDate, { weekday: "short" }), time].filter(Boolean).join(", ")}
+                </button>
+              ))}
+              <button type="button" className="link" onClick={() => setEvents((current) => chooseSection(current, choice, null))}>
+                Keep them all
+              </button>
+            </div>
+          </div>
+        ))}
+
         {view === "list" && <ListView events={list} onOpen={setOpen} />}
         {view === "month" && (
           <MonthView
@@ -360,7 +396,13 @@ export default function Planner({ events, setEvents, account, saveLine }) {
       </main>
 
       {open !== null && list[open] && (
-        <EventEditor event={list[open]} onChange={(patch) => changeEvent(open, patch)} onClose={() => setOpen(null)} />
+        <EventEditor
+          event={list[open]}
+          onChange={(patch) => changeEvent(open, patch)}
+          onExpand={() => expandEvent(open)}
+          onRemove={() => removeEvent(open)}
+          onClose={() => setOpen(null)}
+        />
       )}
     </div>
   );

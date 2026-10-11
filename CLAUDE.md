@@ -24,16 +24,16 @@ Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Li
 | `app/api/extract/route.js` | holds the API key, validates, extracts per file, returns `{ events, assessmentChecks, failed }` | done (no follow-up flow yet) |
 | `lib/extract.js` | `readFileText`, `extractEvents(text, term)` -> `{ events, checks }` (Gemini model chain + output checks) | done (not yet scored on a real outline) |
 | `lib/polyu-calendar.js` | PolyU teaching weeks typed in by hand: `TERMS`, `weekMondays`, `termRange`, `resolveTerm` | done for 2026/27 only; **update by hand each academic year** |
-| `lib/suggest.js` | works out a suggested date from a week number and weekday (`suggestForWeek`) | done (single dates; weekly classes not yet) |
+| `lib/suggest.js` | works out suggested dates: one from a week number and weekday (`suggestForWeek`), or every meeting of a weekly class (`suggestWeekly`) | done |
 | `lib/assess.js` | `checkAssessments(rows, events)`: do the assessments found add up to the outline's 100%? | done |
 | `lib/calendar.js` | `toIcs(events, remindMinutes)` | done (not yet imported into a real calendar app) |
-| `lib/review.js` | `needsReview`, `canExport`, `mergeEvents(old, new)` | done |
+| `lib/review.js` | `needsReview`, `canExport`, `mergeEvents(old, new)`, `expandWeekly`, `openChoices`, `chooseSection` | done |
 | `lib/evaluate.js` | `score(predicted, truth)` | done (no truth file or runner script yet) |
 | `app/page.js` | picks the screen (landing or planner), loads and saves the signed-in student's events | done |
 | `app/landing.js` | signed-out page: headline, how it works, then sign-in below | done |
 | `app/planner.js` | signed-in screen: outlines and download on the left, calendar in the middle | done |
 | `app/views.js` | `ListView` (tasks by date), `MonthView`, `WeekView` (hour grid) | done |
-| `app/event-editor.js` | pop-up to fix one event's date, time or type and mark it as checked | done |
+| `app/event-editor.js` | pop-up to fix one event's date, time or type, accept a suggested date, add weekly classes, remove it, or mark it as checked | done |
 | `lib/dates.js` | date helpers for the views (ISO strings in UTC, weeks start Monday) | done |
 | `app/auth-form.js` | sign in / create account (email + password) | done (not yet run against a real Supabase project) |
 | `lib/account.js` | browser Supabase client, `loadEvents`, `saveEvents` | done (same caveat) |
