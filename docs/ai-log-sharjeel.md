@@ -463,3 +463,25 @@ I sent a screenshot of a 20-item checklist for finished websites and chose: buil
 - How the share image looks when the link is pasted into a chat app, and whether analytics counts arrive: both need the live site, and analytics must be switched on in Vercel.
 - The Month view on a phone fits, but seven 50px columns leave little room for event names. Not changed.
 - On short pages the cookie notice covers the footer links until it is dismissed.
+
+## 2026-10-12: Gemini models reordered for speed; Groq ruled out
+
+**Tool:** Claude Code (Opus 5.5). Branch `fix/model-order`, not committed.
+
+**What I asked**
+
+"why is the process so slow. give me other faster alternatives", then "lets do groq", then "do the reorder".
+
+**What happened**
+
+- Groq cannot be used from here: its website and API both answer "Access denied. Please check your network settings." from my network (Hong Kong). The AI tested this before writing any code. OpenRouter and Mistral were reachable; not pursued.
+- The model order is now 3.6, 3.5, 3.8, 3.7 flash (was newest first), because 3.8 and 3.7 often hung for the full 40 second limit.
+
+**How it was checked**
+
+- One made-up outline through real Gemini with the new order: 3.6 answered "busy" after 16 seconds, then 3.5 answered in 15 seconds. About 31 seconds in all, against 100 seconds or more with the old order the day before.
+
+**Not checked**
+
+- One run on one day. Which model is busy changes, so this order may stop being the best one.
+- Accuracy now comes mostly from 3.6 and 3.5, not 3.8. No outline has been scored on any of them.
