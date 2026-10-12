@@ -30,6 +30,10 @@ export default function Terms() {
         <li>A suggested date is worked out from a week number and is only a suggestion until you accept it.</li>
         <li>The built-in teaching weeks are for PolyU in 2026/27 and do not know about make-up classes or changes.</li>
         <li>When the planner says your assessments add up to 100%, it means each graded part was found, not that every item or date is right.</li>
+        <li>
+          For some courses the planner compares your outline with PolyU&rsquo;s published subject description form. Those
+          forms can be out of date and are less detailed than an outline, so a difference is only a prompt to check.
+        </li>
         <li>Your lecturer&rsquo;s announcements and the official outline always come first.</li>
       </ul>
       <p>We are not responsible for a missed deadline, class or exam.</p>

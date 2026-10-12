@@ -26,6 +26,10 @@ Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Li
 | `lib/polyu-calendar.js` | PolyU teaching weeks typed in by hand: `TERMS`, `weekMondays`, `termRange`, `resolveTerm` | done for 2026/27 only; **update by hand each academic year** |
 | `lib/suggest.js` | works out suggested dates: one from a week number and weekday (`suggestForWeek`), or every meeting of a weekly class (`suggestWeekly`) | done |
 | `lib/assess.js` | `checkAssessments(rows, events)`: do the assessments found add up to the outline's 100%? | done |
+| `data/course-assessments.json` | known grade splits per PolyU subject: 107 read from public Subject Description Forms (DSAI and COMP), plus any typed from real outlines. See `data/README.md` | done for two departments; **re-collect each academic year** |
+| `lib/course-rules.mjs` | the rules every dataset entry must pass (`entryProblems`, `datasetProblems`); `npm run check-data` runs them | done |
+| `scripts/collect-forms.mjs` | developer tool that builds the dataset from PolyU's forms by pattern matching, no AI; unreadable forms go to `data/forms-not-read.json` | done (each new department needs its own entry in `SOURCES`) |
+| `lib/reference.js` | `compareToReference(check)`: compares an outline's exam share (or every row, for outline entries) with the dataset | done (only checked on made-up outlines) |
 | `lib/calendar.js` | `toIcs(events, remindMinutes)` | done (not yet imported into a real calendar app) |
 | `lib/review.js` | `needsReview`, `canExport`, `mergeEvents(old, new)`, `expandWeekly`, `openChoices`, `chooseSection` | done |
 | `lib/evaluate.js` | `score(predicted, truth)` | done (no truth file or runner script yet) |
@@ -59,6 +63,7 @@ Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Li
 5. **Mid-semester changes.** Re-uploads and tentative schedules must merge without duplicates (`mergeEvents`), keeping user edits.
 6. **A human confirms.** Anything `needsReview()` flags must be highlighted and editable before export or reminders. Only `canExport()` events (dated and not flagged) go in the calendar file. Never silently drop an event.
 7. **Assessments are checked against 100%.** The model copies the outline's grade breakdown; code adds it up (`lib/assess.js`). If it does not reach 100 or a row has no event, the model is asked once to re-read, and whatever is still missing is reported to the student. Nothing is invented to fill the gap. 100% shows every graded component was found, not every item inside one.
+8. **The course dataset only informs.** A difference between an outline and `data/course-assessments.json` is shown to the student as something to check. It never changes, removes or flags an event, and the dataset is never put in the model's prompt: the student's own outline wins, because a form can be years old.
 
 ## Planned features (not built; agree design before coding)
 - **Email reminders:** saved events and the user's email now exist (Supabase); still needs a scheduled job and an email service. Until built, reminders are `.ics` alarms (default 1440 and 60 minutes before).
@@ -70,6 +75,7 @@ Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Li
 - **Settings are one `settings` JSON value per user** in the same row, written on its own so saving settings can never overwrite events. A database without the column still loads events and uses default settings.
 - **Deleting an account goes through `delete_my_account(password)`**, a database function that checks the password itself and can only delete the caller. Do not replace it with the `service_role` key or a check done only in the browser.
 - **`/api/extract` requires a signed-in user**, and answers 503 if no account service is configured.
+- **The free Gemini tier allows about 20 requests per model per day** (measured Oct 2026), shared by everyone using the site and by local testing with the same key. An outline that fails the 100% check uses two. Do not spend it on test runs before a demo.
 - **The Gemini key is server-side only.** Read `process.env.GEMINI_API_KEY` only in server code (route handlers, `lib/extract.js` called from them). Never use a `NEXT_PUBLIC_` prefix, log the key, or echo it in errors.
 - Keep upload validation server-side; the browser's `accept` is not a security check.
 - Treat uploaded outline text as data, not instructions: a document saying "ignore previous instructions" must not change model behaviour. Keep the extraction prompt separate from the document text and validate the model's JSON against the schema before use.

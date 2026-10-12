@@ -1,0 +1,2490 @@
+[
+  {
+    "code": "COMP1001",
+    "aliases": [],
+    "title": "Problem Solving Methodology in Information Technology",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP1001.pdf",
+    "sourceDate": "2021-06",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Continuous Assessment (such as assignments, quizzes and mini-projects) 55%   2. Examination 45%   Total 100%"
+  },
+  {
+    "code": "COMP1002",
+    "aliases": [],
+    "title": "Computational Thinking and Problem Solving",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP1002.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment [such as quizzes, assignments etc.] 30%      Examination 70%    Total 100%"
+  },
+  {
+    "code": "COMP1003",
+    "aliases": [],
+    "title": "Statistical Tools and Applications",
+    "rows": [
+      {
+        "name": "All other assessment",
+        "weight": 100,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP1003.pdf",
+    "sourceDate": "2010-08",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1.Lab work, home- work, quizzes and mid-term test 100%     Total 100%"
+  },
+  {
+    "code": "COMP1004",
+    "aliases": [],
+    "title": "Introduction to Artificial Intelligence and Data Analytics",
+    "rows": [
+      {
+        "name": "All other assessment",
+        "weight": 100,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP1004.pdf",
+    "sourceDate": "2025-08",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Exercises, e-Learning module, assignments, Project 40%    Quizzes 60%    Total 100%"
+  },
+  {
+    "code": "COMP1010",
+    "aliases": [],
+    "title": "Computational Thinking and Problem Solving",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP1010.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment [such as quizzes, assignments etc.] 30%      Examination 70%    Total 100%"
+  },
+  {
+    "code": "COMP1011",
+    "aliases": [],
+    "title": "Programming Fundamentals",
+    "rows": [
+      {
+        "name": "Final Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP1011.pdf",
+    "sourceDate": "2025-08",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% 1. Assignments    2. Quizzes    3. Individual project(s)      Final Examination 70%      Total 100%"
+  },
+  {
+    "code": "COMP1012",
+    "aliases": [],
+    "title": "Programming Fundamentals and Applications",
+    "rows": [
+      {
+        "name": "Final Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP1012.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% Quizzes √ √ √ Project(s) √ √ √ √ √ √ Final Examination 70% √ √ √ √ √ Total 100%"
+  },
+  {
+    "code": "COMP1411",
+    "aliases": [],
+    "title": "Introduction to Computer Systems",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP1411.pdf",
+    "sourceDate": "2021-06",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 55% 1. Class Exercises and Assignments 25%     2. Quizzes and Tests 30%    Examination 45%    Total 100%"
+  },
+  {
+    "code": "COMP1433",
+    "aliases": [],
+    "title": "Introduction to Data Analytics",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP1433.pdf",
+    "sourceDate": "2019-08",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 55% 1. Assignments, Test, Quizzes    Examination 45%    Total 100%"
+  },
+  {
+    "code": "COMP1901",
+    "aliases": [],
+    "title": "Seminars and Topics in Information Technology",
+    "rows": [
+      {
+        "name": "All other assessment",
+        "weight": 100,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP1901.pdf",
+    "sourceDate": "2021-08",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Online Tutorial on Academic Integrity 0%  Seminars Quiz(zes) / Individual Assignment(s) 10%  Projects 90%     Total 100%"
+  },
+  {
+    "code": "COMP2011",
+    "aliases": [],
+    "title": "Data Structures",
+    "rows": [
+      {
+        "name": "Final Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP2011.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment (assignments / project / quizzes) 30%      Final Examination 70%      Total 100%"
+  },
+  {
+    "code": "COMP2012",
+    "aliases": [],
+    "title": "Discrete Mathematics",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP2012.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% Assignments and Quizzes      Examination 70%   Total 100%"
+  },
+  {
+    "code": "COMP2013",
+    "aliases": [],
+    "title": "Data Structures and Algorithms",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 40,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 60,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP2013.pdf",
+    "sourceDate": "2024-01",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 60% 1. Written Assignments 15%      2. Programming Assignments 20%      3. Quizzes 25%     Examination 40%     Total 100%"
+  },
+  {
+    "code": "COMP2014",
+    "aliases": [],
+    "title": "Mathematics for Machine Learning",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP2014.pdf",
+    "sourceDate": "2026-06",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment Assignments and Quizzes 30%      Examination 70%     Total 100%"
+  },
+  {
+    "code": "COMP2021",
+    "aliases": [],
+    "title": "Object-oriented Programming",
+    "rows": [
+      {
+        "name": "Final Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP2021.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% 1. Assignments & Project       Final Examination 70%   Total 100%"
+  },
+  {
+    "code": "COMP2022",
+    "aliases": [],
+    "title": "Programming for FinTech Applications",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP2022.pdf",
+    "sourceDate": "2021-06",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Lab Exercises 55%    2. Project    3. Quizzes    4. Examination 45%    Total 100%"
+  },
+  {
+    "code": "COMP2121",
+    "aliases": [],
+    "title": "E-Business",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP2121.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "In-class Assessment 30% Assignments / Tutor Exercises / Mid-term Quizzes        Examination 70%      Total 100%"
+  },
+  {
+    "code": "COMP2322",
+    "aliases": [],
+    "title": "Computer Networking",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP2322.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% 1. Assignments    2. Project      Examination 70%    Total 100%"
+  },
+  {
+    "code": "COMP2411",
+    "aliases": [],
+    "title": "Database Systems",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP2411.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% 1. Assignments, Tests and Projects      Examination 70%    Total 100%"
+  },
+  {
+    "code": "COMP2421",
+    "aliases": [],
+    "title": "Computer Organization",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP2421.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 20% 1. Quiz   2. Programming Assignments      3. Mid-Term 10%     Examination 70%     Total 100%"
+  },
+  {
+    "code": "COMP2432",
+    "aliases": [],
+    "title": "Operating Systems",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP2432.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30%      Examination 70%    Total 100%"
+  },
+  {
+    "code": "COMP3011",
+    "aliases": [],
+    "title": "Design and Analysis of Algorithms",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3011.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% 1. Assignments      2. Mid-Term / Tests      Examination 70%      Total 100%"
+  },
+  {
+    "code": "COMP3021",
+    "aliases": [],
+    "title": "Programming Language Paradigms",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3021.pdf",
+    "sourceDate": "2021-06",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignments 55%    2. Lab exercises     3. Project    4. Mid-term / Tests     5. Examination 45%     Total 100%"
+  },
+  {
+    "code": "COMP3022",
+    "aliases": [],
+    "title": "Algorithms Engineering",
+    "rows": [
+      {
+        "name": "Final Exam",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3022.pdf",
+    "sourceDate": "2026-06",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Continuous Assessment (assignments, project, quizzes) 30%     2. Final Exam 70%    Total 100%"
+  },
+  {
+    "code": "COMP3121",
+    "aliases": [],
+    "title": "Social and Collaborative Computing",
+    "rows": [
+      {
+        "name": "Final Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3121.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30%        Final Examination 70%      Total 100%"
+  },
+  {
+    "code": "COMP3122",
+    "aliases": [],
+    "title": "Information Systems Development",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3122.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% 1. Exercises, Assignments, Tests and Projects      Examination 70%     Total 100%"
+  },
+  {
+    "code": "COMP3131",
+    "aliases": [],
+    "title": "Business and Information Systems Strategies",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3131.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30%      Examination 70%     Total 100%"
+  },
+  {
+    "code": "COMP3134",
+    "aliases": [],
+    "title": "Business Intelligence and Customer Relationship Management",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3134.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% 1. Assignments, Tests and/or Project        Examination 70%     Total 100%"
+  },
+  {
+    "code": "COMP3211",
+    "aliases": [],
+    "title": "Software Engineering",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3211.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% 1. Assignments   2. Project    Examination 70%   Total 100%"
+  },
+  {
+    "code": "COMP3235",
+    "aliases": [],
+    "title": "Software Project Management",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3235.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% 1. Project   2. Quizzes   Examination 70%   Total 100%"
+  },
+  {
+    "code": "COMP3311",
+    "aliases": [],
+    "title": "Applied Cryptography",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3311.pdf",
+    "sourceDate": "2025-08",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% 1. Midterm Exam 15%     2. Project 15%   Examination 70%     Total 100%"
+  },
+  {
+    "code": "COMP3334",
+    "aliases": [],
+    "title": "Computer Systems Security",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3334.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 1. Assignments, Quizzes, Project 30%      Examination 70%     Total 100%"
+  },
+  {
+    "code": "COMP3335",
+    "aliases": [],
+    "title": "Database Security",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3335.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30%      Examination 70%     Total 100%"
+  },
+  {
+    "code": "COMP3421",
+    "aliases": [],
+    "title": "Web Application Design and Development",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3421.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% 1. Assignments, Tests & Projects           Examination 70%     Total 100%"
+  },
+  {
+    "code": "COMP3422",
+    "aliases": [],
+    "title": "Creative Digital Media Design",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3422.pdf",
+    "sourceDate": "2025-08",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30%       Examination 70%      Total 100%"
+  },
+  {
+    "code": "COMP3423",
+    "aliases": [],
+    "title": "Human Computer Interaction",
+    "rows": [
+      {
+        "name": "Final Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3423.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% 1. Assignments and/or Project        Final Examination 70%     Total 100%"
+  },
+  {
+    "code": "COMP3424",
+    "aliases": [],
+    "title": "Digital Twins: Simulation and Case Studies",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3424.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignments and / or Project 30%      2. Examination 70%      Total 100%"
+  },
+  {
+    "code": "COMP3531",
+    "aliases": [],
+    "title": "IT Entrepreneurship",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3531.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% Assignments and / or Project         Examination 70%     Total 100%"
+  },
+  {
+    "code": "COMP3911",
+    "aliases": [],
+    "title": "Service Learning and Civic Engagement in the Information Age",
+    "rows": [
+      {
+        "name": "All other assessment",
+        "weight": 100,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3911.pdf",
+    "sourceDate": "2022-01",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "e- Learning Module (individual) Pass/fail*  Attitude, discipline and contribution during preparation (individual) 10%     Plans/proposals for service (group) 20%     Performance in rendering service (individual & group) 40%     Reflective journal/report (individual) 30%      Total 100%"
+  },
+  {
+    "code": "COMP3921",
+    "aliases": [],
+    "title": "FinTech Seminars and Case Studies (I, II and III)",
+    "rows": [
+      {
+        "name": "All other assessment",
+        "weight": 100,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3921-23.pdf",
+    "sourceDate": "2021-06",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignments 100%     2. Projects      3. Quizzes   Total 100%"
+  },
+  {
+    "code": "COMP3924",
+    "aliases": [],
+    "title": "FinTech Seminars and Case Studies",
+    "rows": [
+      {
+        "name": "All other assessment",
+        "weight": 100,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3924.pdf",
+    "sourceDate": "2020-12",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignments 100%     2. Projects      3. Quizzes   Total 100%"
+  },
+  {
+    "code": "COMP4001",
+    "aliases": [],
+    "title": "Internship",
+    "rows": [
+      {
+        "name": "All other assessment",
+        "weight": 100,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4001.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous assessment and internship report 100%       Total 100%"
+  },
+  {
+    "code": "COMP4002",
+    "aliases": [],
+    "title": "Experiential Learning",
+    "rows": [
+      {
+        "name": "All other assessment",
+        "weight": 100,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4002.pdf",
+    "sourceDate": "2026-08",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous assessment and report/certificates 100%        Total 100%"
+  },
+  {
+    "code": "COMP4011",
+    "aliases": [],
+    "title": "Theory of Computation",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4011.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% 1. Assignments      2. Mid-Term / Tests      Examination 70%      Total 100%"
+  },
+  {
+    "code": "COMP4121",
+    "aliases": [],
+    "title": "E-Commerce Technology and Applications",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4121.pdf",
+    "sourceDate": "2025-08",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% 1. Assignment(s)    2. Group Project      3. Other A ssessment(s) (e.g., In- class Quizzes)   Examination 70%    Total 100%"
+  },
+  {
+    "code": "COMP4122",
+    "aliases": [],
+    "title": "Game Design and Development",
+    "rows": [
+      {
+        "name": "Final Exam",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4122.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 1. Project 45%          2. Mid-term Programming Exam 10%   Examination 3. Final Exam 45%       Total 100%"
+  },
+  {
+    "code": "COMP4123",
+    "aliases": [],
+    "title": "Business Process and Workflow Management",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4123.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% Project 1. Written Report         2. Oral Presentation         Examination 70%        Total 100%"
+  },
+  {
+    "code": "COMP4125",
+    "aliases": [],
+    "title": "Operations Research and Logistics Management",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4125.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% 1. Assignments and / or Project       Examination 70%      Total 100%"
+  },
+  {
+    "code": "COMP4127",
+    "aliases": [],
+    "title": "Information Systems Audit and Control",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4127.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% 1. Assignments, Tests and / or Project       Examination 70%       Total 100%"
+  },
+  {
+    "code": "COMP4133",
+    "aliases": [],
+    "title": "Information Retrieval",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4133.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Assignments, Lab Exercises and Project 30%       Examination 70%    Total 100%"
+  },
+  {
+    "code": "COMP4135",
+    "aliases": [],
+    "title": "Knowledge and Information Management",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4135.pdf",
+    "sourceDate": "2021-06",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 55%      Examination 45%     Total 100%"
+  },
+  {
+    "code": "COMP4136",
+    "aliases": [],
+    "title": "Data Protection and Security",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4136.pdf",
+    "sourceDate": "2023-12",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 55% 1. Assignments 10%         2. Lab exercises 10%    3. Project 10%       4. Mid-term 25%       Examination 45%        Total 100%"
+  },
+  {
+    "code": "COMP4141",
+    "aliases": [],
+    "title": "Crowdfunding and E-Finance",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4141.pdf",
+    "sourceDate": "2021-06",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignments 55%      2. Project      3. Quiz    4. Examination 45%     Total 100%"
+  },
+  {
+    "code": "COMP4142",
+    "aliases": [],
+    "title": "E-Payment and Cryptocurrency",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4142.pdf",
+    "sourceDate": "2021-06",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 55% 1. Assignments    2. Project      3. Mid-Term Test   Examination 45%    Total 100%"
+  },
+  {
+    "code": "COMP4146",
+    "aliases": [],
+    "title": "Computational Finance",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4146.pdf",
+    "sourceDate": "2020-12",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Project 55%       2. Mid-term/Quizzes    3. Examination 45%    Total 100%"
+  },
+  {
+    "code": "COMP4322",
+    "aliases": [],
+    "title": "Internetworking Protocols, Software and Management",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4322.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30%         Examination 70%       Total 100%"
+  },
+  {
+    "code": "COMP4332",
+    "aliases": [],
+    "title": "Mobile Security: Principles and Practice",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4332.pdf",
+    "sourceDate": "2023-12",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 100% 1. Assignments 25%      2. Term Project 30%     3. Examination 45%      4. Tutorial/Lab     5. Workshops    Total 100%"
+  },
+  {
+    "code": "COMP4334",
+    "aliases": [],
+    "title": "Principles and Practice of Internet Security",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4334.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% 1. Assignments 10%     2. Midterm 10%   3. Project 10%    Examination 70%     Total 100%"
+  },
+  {
+    "code": "COMP4342",
+    "aliases": [],
+    "title": "Mobile Computing",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4342.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% 1. Assignments      2. Lab Exercises   3. Project        Examination 70%       Total 100%"
+  },
+  {
+    "code": "COMP4422",
+    "aliases": [],
+    "title": "Computer Graphics",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4422.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% 1. Assignments    2. Project/Lab Exercises      Examination 70%    Total 100%"
+  },
+  {
+    "code": "COMP4423",
+    "aliases": [],
+    "title": "Computer Vision",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4423.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% 1. Assignments 10%     2. Project 20%      Examination 70%      Total 100%"
+  },
+  {
+    "code": "COMP4424",
+    "aliases": [],
+    "title": "Extended Reality: Theory and Practice",
+    "rows": [
+      {
+        "name": "Final Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4424.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 30% 1. Group Project       Final Examination 70%     Total 100%"
+  },
+  {
+    "code": "COMP4431",
+    "aliases": [],
+    "title": "Artificial Intelligence",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4431.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Continuous Assessment 30%         2. Final Examination 70%       Total 100%"
+  },
+  {
+    "code": "COMP4432",
+    "aliases": [],
+    "title": "Machine Learning",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4432.pdf",
+    "sourceDate": "2021-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 55% 1. Assignments    2. Tests/Quizzes    3. Project   Examination 45%     Total 100%"
+  },
+  {
+    "code": "COMP4433",
+    "aliases": [],
+    "title": "Data Mining and Data Warehousing",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4433.pdf",
+    "sourceDate": "2022-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 55% 1. Assignment      2. Project         Examination 45%          Total 100%"
+  },
+  {
+    "code": "COMP4434",
+    "aliases": [],
+    "title": "Big Data Analytics",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 40,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 60,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4434.pdf",
+    "sourceDate": "2022-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 60% 1. Lab Exercises / Assignments      2. Project      3. Quiz    Examination 40%     Total 100%"
+  },
+  {
+    "code": "COMP4436",
+    "aliases": [],
+    "title": "Artificial Intelligence of Things",
+    "rows": [
+      {
+        "name": "Exam",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4436.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignments 10%    2. Quizzes 10%    3. Project 10%    4. Exam 70%     Total 100%"
+  },
+  {
+    "code": "COMP4438",
+    "aliases": [],
+    "title": "Embedded Software",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4438.pdf",
+    "sourceDate": "2021-06",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignments 35%      2. Mid-term 20%     3. Examination 45%     Total 100%"
+  },
+  {
+    "code": "COMP4442",
+    "aliases": [],
+    "title": "Service and Cloud Computing",
+    "rows": [
+      {
+        "name": "Final Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4442.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Continuous Assessments 30%       2. Final Examination 70%     Total 100%"
+  },
+  {
+    "code": "COMP4512",
+    "aliases": [],
+    "title": "Intellectual Property Protection and Management",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4512.pdf",
+    "sourceDate": "2025-07",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Assignment and / or project 30%      Examination 70%      Total 100%"
+  },
+  {
+    "code": "COMP4531",
+    "aliases": [],
+    "title": "Emerging Topics in FinTech",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4531.pdf",
+    "sourceDate": "2020-12",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 55% 1. Assignments, Project and Quiz     Examination 45%    Total 100%"
+  },
+  {
+    "code": "COMP4913",
+    "aliases": [],
+    "title": "Capstone Project",
+    "rows": [
+      {
+        "name": "All other assessment",
+        "weight": 100,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4913.pdf",
+    "sourceDate": "2025-06",
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 100%                Total 100%"
+  },
+  {
+    "code": "DSAI1101",
+    "aliases": [],
+    "title": "Fundamentals of AI and Data Analytics",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 40,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 60,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai1101.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Intended subject learning outcomes to be assessed (Please tick as appropriate) (a) (b) (c) (d) (e) (f) (g) 1. Assignments / tests / quizzes 30% ✓ ✓ ✓ ✓ ✓ 2. Term paper/ mini-project 30% ✓ ✓ ✓ ✓ ✓ ✓ 3. Examination 40% ✓ ✓ ✓ ✓ ✓ Total 100%"
+  },
+  {
+    "code": "DSAI1102",
+    "aliases": [],
+    "title": "Data Analytics Fundamentals",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 60,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 40,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai1102.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Intended subject learning outcomes to be assessed (Please tick as appropriate) (a) (b) (c) (d) (e) (f) 1. Assignments/Test 40%       2. Examination 60%       Total 100%"
+  },
+  {
+    "code": "DSAI1103",
+    "aliases": [],
+    "title": "Principles of Data Science",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 60,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 40,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai1103.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignments 15 %      2. Mid-term Test 25 %    3. Examination 60 %      Total 100%"
+  },
+  {
+    "code": "DSAI1104",
+    "aliases": [],
+    "title": "AI and Data Analytics Basics",
+    "rows": [
+      {
+        "name": "All other assessment",
+        "weight": 100,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai1104.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Quizzes 10 % √ √ √ 2. Hands-on programming 10 % √ √ √ 3. Participation 20% √ √ √ √ √ 4. AIDA case study report 60 % √ √ √ √ √ Total 100%"
+  },
+  {
+    "code": "DSAI1201",
+    "aliases": [],
+    "title": "Introduction to Data Analytics",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai1201.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 55% 1. Assignments, Test, Quizzes ✓ ✓ ✓ Examination 45% ✓ ✓ ✓ Total 100%"
+  },
+  {
+    "code": "DSAI1202",
+    "aliases": [],
+    "title": "Introduction to Artificial Intelligence and Data Analytics",
+    "rows": [
+      {
+        "name": "All other assessment",
+        "weight": 100,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai1202.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Exercises, e-Learning module, assignments, Project 40% ✓ ✓ ✓ Quizzes 60% ✓ ✓ ✓ Total 100%"
+  },
+  {
+    "code": "DSAI2201",
+    "aliases": [],
+    "title": "Data Structures and Algorithms",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 40,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 60,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai2201.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 60% 1. Written Assignments 15% ✓ ✓ ✓ ✓ ✓ 2. Programming Assignments 20% ✓ ✓ ✓ ✓ ✓ 3. Quizzes 25% ✓ ✓ ✓ ✓ Examination 40% ✓ ✓ ✓ ✓ Total 100%"
+  },
+  {
+    "code": "DSAI2202",
+    "aliases": [],
+    "title": "Database Principles",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 30,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 70,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai2202.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignments, Tests and Projects 70% √ √ √ √ 2. Examination 30% √ √ √ Total 100%"
+  },
+  {
+    "code": "DSAI3101",
+    "aliases": [],
+    "title": "Bayesian Methods for Data Science",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 60,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 40,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai3101.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignments 30% ✓ ✓ ✓ ✓ 2. Project 10% ✓ ✓ ✓ 3. Examination 60% ✓ ✓ ✓ ✓ Total 100%"
+  },
+  {
+    "code": "DSAI3102",
+    "aliases": [],
+    "title": "Multivariate Statistical Analysis",
+    "rows": [
+      {
+        "name": "Final Exam",
+        "weight": 50,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 50,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai3102.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignments 25% √ √ √ 2. Course Project 25% √ √ √ 4. Final Exam 50% √ √ √ Total 100%"
+  },
+  {
+    "code": "DSAI3201",
+    "aliases": [],
+    "title": "Introduction to Natural Language Processing",
+    "rows": [
+      {
+        "name": "Final Examination",
+        "weight": 60,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 40,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai3201.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Tests/Quizzes 20% ✓ ✓ 2. Assignment/Project 20% ✓ ✓ ✓ 3. Final Examination 60% ✓ ✓ ✓ Total 100%"
+  },
+  {
+    "code": "DSAI3911",
+    "aliases": [],
+    "title": "Professionalism and Ethics in Data Science and AI",
+    "rows": [
+      {
+        "name": "All other assessment",
+        "weight": 100,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai3911.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 100 % ✓ ✓ ✓ ✓ ✓ Total 100%"
+  },
+  {
+    "code": "DSAI4001",
+    "aliases": [],
+    "title": "Company Attachment",
+    "rows": [
+      {
+        "name": "All other assessment",
+        "weight": 100,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai4001.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Personal Reflection Journal on Innovation and Entrepreneurship 35%   2. Personal Learning Journal on Company Attachment 35%   3. Performance Assessment by Attachment Supervisors 30%   Total 100%"
+  },
+  {
+    "code": "DSAI4101",
+    "aliases": [],
+    "title": "Reinforcement Learning",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 50,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 50,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai4101.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignments 20% ✓ ✓ ✓ 2. Project 30% ✓ ✓ ✓ ✓ 3. Examination 50% ✓ ✓ ✓ Total 100%"
+  },
+  {
+    "code": "DSAI4201",
+    "aliases": [],
+    "title": "Data Protection and Security",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai4201.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 55% 1. Assignments 10% ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ 2. Lab exercises 10% ✓ ✓ ✓ 3. Project 10% ✓ ✓ ✓ ✓ ✓ ✓ 4. Mid-term 25% ✓ ✓ ✓ ✓ ✓ ✓ Examination 45% ✓ ✓ ✓ ✓ ✓ ✓ ✓ Total 100%"
+  },
+  {
+    "code": "DSAI4202",
+    "aliases": [],
+    "title": "E-Payment and Cryptocurrency",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai4202.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 55% 1. Assignments ✓ ✓ ✓ 2. Project ✓ ✓ ✓ ✓ ✓ 3. Mid-Term Test ✓ ✓ Examination 45% ✓ ✓ ✓ Total 100%"
+  },
+  {
+    "code": "DSAI4203",
+    "aliases": [],
+    "title": "Machine Learning",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai4203.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 55% 1. Assignments ✓ ✓ ✓ 2. Tests/Quizzes ✓ ✓ ✓ 3. Project ✓ ✓ Examination 45% ✓ ✓ ✓ ✓ Total 100%"
+  },
+  {
+    "code": "DSAI4204",
+    "aliases": [],
+    "title": "Data Mining and Data Warehousing",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai4204.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 55% 1. Assignment      2. Project         Examination 45%          Total 100%"
+  },
+  {
+    "code": "DSAI4205",
+    "aliases": [],
+    "title": "Big Data Analytics",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 40,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 60,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai4205.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 60% 1. Lab Exercises / Assignments      2. Project      3. Quiz    Examination 40%     Total 100%"
+  },
+  {
+    "code": "DSAI4206",
+    "aliases": [],
+    "title": "Emerging Topics in FinTech",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai4206.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "Continuous Assessment 55% 1. Assignments, Project, Mid-Term Test and In- class Participations     Examination 45%    Total 100%"
+  },
+  {
+    "code": "DSAI4207",
+    "aliases": [],
+    "title": "Introduction to Large Language Models",
+    "rows": [
+      {
+        "name": "Final Exam",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai4207.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignments 20% √ √ √ 2. Course Project 35% √ √ √ √ 3. Final Exam 45% √ √ √ Total 100%"
+  },
+  {
+    "code": "DSAI4208",
+    "aliases": [],
+    "title": "Introduction to Machine Vision and Intelligence",
+    "rows": [
+      {
+        "name": "Final Examination",
+        "weight": 60,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 40,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai4208.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignments 20% ✓ ✓ ✓ 2. Projects 20% ✓ ✓ ✓ 3.. Final Examination 60% ✓ ✓ ✓ Total 100%"
+  },
+  {
+    "code": "DSAI4209",
+    "aliases": [],
+    "title": "Introduction to Generative AI and Foundation Models",
+    "rows": [
+      {
+        "name": "All other assessment",
+        "weight": 100,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai4209.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignments 20% √ √ √ 2. Course Project 40% √ √ √ 3. Quizzes 20% √ √ 4. Paper Review and Presentation 20% √ √ Total 100%"
+  },
+  {
+    "code": "DSAI4901",
+    "aliases": [],
+    "title": "Capstone Project",
+    "rows": [
+      {
+        "name": "All other assessment",
+        "weight": 100,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai4901.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Workshop Attendance 5% ✓ 1. Interim Report 20% ✓ ✓ ✓ 2. Final Report 50% ✓ ✓ ✓ ✓ ✓ 3. Oral Presentation 25% ✓ ✓ ✓ ✓ ✓ Total 100%"
+  },
+  {
+    "code": "DSAI5101",
+    "aliases": [],
+    "title": "Statistical Data Mining",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 60,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 40,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai5101.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignments/Projects 20%     2. Midterm Test 20%    3. Examination 60%     Total 100%"
+  },
+  {
+    "code": "DSAI5102",
+    "aliases": [],
+    "title": "Principles of Data Science",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 50,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 50,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai5102.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignments 20% ✓ ✓ ✓ ✓ ✓ 2. Project 30% ✓ ✓ 3. Examination 50% ✓ ✓ ✓ ✓ ✓ Total 100%"
+  },
+  {
+    "code": "DSAI5103",
+    "aliases": [],
+    "title": "Advanced High Dimensional Data Analysis",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 60,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 40,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai5103.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignments 24% ✓ ✓ ✓ 2. Mid-term test/Project 16% ✓ ✓ ✓ 3. Examination 60% ✓ ✓ Total 100%"
+  },
+  {
+    "code": "DSAI5104",
+    "aliases": [],
+    "title": "Optimization for Machine Learning",
+    "rows": [
+      {
+        "name": "Examination",
+        "weight": 70,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 30,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai5104.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Mid-term test/ Assignments 30% √ √ √ √ 2. Examination 70% √ √ √ √ Total 100%"
+  },
+  {
+    "code": "DSAI5105",
+    "aliases": [],
+    "title": "Hands-on AI for Science and Technology",
+    "rows": [
+      {
+        "name": "Exam",
+        "weight": 50,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 50,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai5105.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1.Project50 %     2.Exam50 %     Total 100%"
+  },
+  {
+    "code": "DSAI5203",
+    "aliases": [],
+    "title": "Brain-inspired Computing",
+    "rows": [
+      {
+        "name": "All other assessment",
+        "weight": 100,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai5203.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignment 60% ✓ ✓ ✓ ✓ ✓ ✓ 2. Group Project 40% ✓ ✓ ✓ ✓ ✓ Total 100%"
+  },
+  {
+    "code": "DSAI5204",
+    "aliases": [],
+    "title": "Efficient Data Processing",
+    "rows": [
+      {
+        "name": "Exam",
+        "weight": 40,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 60,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai5204.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Quizzes and assignments 60% ✓ ✓ ✓ 2. Exam 40% ✓ ✓ ✓ Total 100%"
+  },
+  {
+    "code": "DSAI5206",
+    "aliases": [],
+    "title": "Machine Vision and Intelligence",
+    "rows": [
+      {
+        "name": "Final Examination",
+        "weight": 40,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 60,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai5206.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignments, Quizzes and Projects 60%     2. Final Examination 40%    Total 100%"
+  },
+  {
+    "code": "DSAI5207",
+    "aliases": [],
+    "title": "Modern Deep Learning",
+    "rows": [
+      {
+        "name": "Final Exam",
+        "weight": 30,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 70,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai5207.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignments 20% √ √ √ 2. Course Projects 30% √ √ √ 3. Midterm Test 20% √ √ √ 4. Final Exam 30% √ √ Total 100%"
+  },
+  {
+    "code": "DSAI5208",
+    "aliases": [],
+    "title": "Trustworthy AI Systems and Technologies",
+    "rows": [
+      {
+        "name": "Final Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai5208.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignments, Quizzes and Projects 55% ✓ ✓ ✓ ✓ 2. Final Examination 45% ✓ ✓ ✓ ✓ Total 100%"
+  },
+  {
+    "code": "DSAI5209",
+    "aliases": [],
+    "title": "Visual Data Representation and Processing",
+    "rows": [
+      {
+        "name": "Final Examination",
+        "weight": 45,
+        "kind": "exam"
+      },
+      {
+        "name": "All other assessment",
+        "weight": 55,
+        "kind": "coursework",
+        "computed": true
+      }
+    ],
+    "source": "form",
+    "sourceUrl": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai5209.pdf",
+    "sourceDate": null,
+    "semester": null,
+    "checkedBy": "script rules; read by Claude",
+    "evidence": "1. Assignments, Quizzes and Projects 55%     2. Final Examination 45%     Total 100%"
+  }
+]

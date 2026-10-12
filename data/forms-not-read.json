@@ -1,0 +1,97 @@
+[
+  {
+    "dept": "COMP",
+    "url": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP1BN02.pdf",
+    "reason": "no subject code found in the form"
+  },
+  {
+    "dept": "COMP",
+    "url": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP1BN03.pdf",
+    "reason": "no subject code found in the form"
+  },
+  {
+    "dept": "COMP",
+    "url": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP1D04.pdf",
+    "reason": "no subject code found in the form"
+  },
+  {
+    "dept": "COMP",
+    "url": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP2S01S.pdf",
+    "reason": "no subject code found in the form"
+  },
+  {
+    "dept": "COMP",
+    "url": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3133.pdf",
+    "reason": "the table mentions an examination but its weight could not be picked out"
+  },
+  {
+    "dept": "COMP",
+    "url": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3233.pdf",
+    "reason": "the table mentions an examination but its weight could not be picked out"
+  },
+  {
+    "dept": "COMP",
+    "url": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3438.pdf",
+    "reason": "the weights add up to 130, not 100"
+  },
+  {
+    "dept": "COMP",
+    "url": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3511.pdf",
+    "reason": "row \"Examination\" has weight 0"
+  },
+  {
+    "dept": "COMP",
+    "url": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3512.pdf",
+    "reason": "row \"Examination\" has weight 0"
+  },
+  {
+    "dept": "COMP",
+    "url": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP3S02.pdf",
+    "reason": "no subject code found in the form"
+  },
+  {
+    "dept": "COMP",
+    "url": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4134.pdf",
+    "reason": "the table mentions an examination but its weight could not be picked out"
+  },
+  {
+    "dept": "COMP",
+    "url": "https://www.polyu.edu.hk/comp/docdrive/ug/subject/COMP4921.pdf",
+    "reason": "HTTP 404"
+  },
+  {
+    "dept": "DSAI",
+    "url": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai5201.pdf",
+    "reason": "the assessment table has no \"Total 100%\" line"
+  },
+  {
+    "dept": "DSAI",
+    "url": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai5202.pdf",
+    "reason": "no weights found in the assessment table"
+  },
+  {
+    "dept": "DSAI",
+    "url": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai5205.pdf",
+    "reason": "no weights found in the assessment table"
+  },
+  {
+    "dept": "DSAI",
+    "url": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai5210.pdf",
+    "reason": "no weights found in the assessment table"
+  },
+  {
+    "dept": "DSAI",
+    "url": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai5901.pdf",
+    "reason": "no weights found in the assessment table"
+  },
+  {
+    "dept": "DSAI",
+    "url": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai5902.pdf",
+    "reason": "no weights found in the assessment table"
+  },
+  {
+    "dept": "DSAI",
+    "url": "https://www.polyu.edu.hk/dsai/-/media/department/dsai/programme/sdfs/dsai5t09-dsai5r09.pdf",
+    "reason": "no subject code found in the form"
+  }
+]

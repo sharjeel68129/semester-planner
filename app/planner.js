@@ -14,6 +14,9 @@ const MAX_MB = MAX_FILE_BYTES / 1024 / 1024;
 
 /** Turn a server error into something a student can act on. */
 function explain(message) {
+  if (/daily limit/.test(message)) {
+    return "The AI service's free daily limit has been used up. It resets within a day; try again tomorrow.";
+  }
   if (/\((429|503)\)/.test(message)) {
     return "The AI service is busy right now. Wait a minute, then press the button again.";
   }
@@ -223,6 +226,20 @@ export default function Planner({ events, setEvents, settings, account, saveLine
             {checks.map((check, i) => (
               <li key={i} className={check.complete ? "check-ok" : "check-gap"}>
                 <b>{check.course || check.file}:</b> {checkLine(check)}
+                {/* A comparison with PolyU's published split for the course. Information only: the outline wins. */}
+                {check.reference && (
+                  <span className="check-reference">
+                    {check.reference.message}
+                    {check.reference.sourceUrl && (
+                      <>
+                        {" "}
+                        <a className="link" href={check.reference.sourceUrl} target="_blank" rel="noreferrer">
+                          Open the form
+                        </a>
+                      </>
+                    )}
+                  </span>
+                )}
               </li>
             ))}
           </ul>

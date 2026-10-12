@@ -233,6 +233,11 @@ blockquote {
   color: var(--ink-soft);
 }
 
+.check-reference {
+  display: block;
+  margin-top: 0.4rem;
+}
+
 .checks .check-gap {
   border-left-color: var(--maroon);
   background: var(--blush);

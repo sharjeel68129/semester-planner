@@ -485,3 +485,46 @@ I sent a screenshot of a 20-item checklist for finished websites and chose: buil
 
 - One run on one day. Which model is busy changes, so this order may stop being the best one.
 - Accuracy now comes mostly from 3.6 and 3.5, not 3.8. No outline has been scored on any of them.
+
+## 2026-10-12: a dataset of PolyU grade splits, used to cross-check uploads
+
+**Tool:** Claude Code (Opus 5.5). Branch `feature/course-dataset`, not committed.
+
+**What I asked**
+
+"maybe i can make a dataset for all courses. atleast the grade distribution. then the ai can learn from that to reduce errors?" I chose: as many courses as possible; "you find them, we also find them, you check them"; use it to cross-check uploads.
+
+**What the AI corrected in my idea**
+
+- The AI does not learn from the dataset. Code compares Gemini's answer with it afterwards. It is deliberately kept out of Gemini's prompt, so Gemini cannot copy rows the outline does not contain.
+- It only informs. A difference is shown to the student; no event is changed or flagged, because the form may be the one that is out of date.
+
+**What was built**
+
+- `data/course-assessments.json`: **107 subjects** read from PolyU's public Subject Description Forms (35 of 42 DSAI, 72 of 84 COMP). 19 forms could not be read with confidence and are listed in `data/forms-not-read.json` with the reason.
+- A collector script (pattern matching, no AI), a set of rules every entry must pass, and `npm run check-data`.
+- The cross-check: under the upload form the planner now says whether the outline's examination share matches the form, with a link to the form.
+
+**What the AI got wrong**
+
+- **Its first reading of the forms was wrong for many subjects, and it passed its own rules.** The forms list sub-items without weights, and the script glued them onto the next row's name. 38 of the first 100 entries were recorded as having no examination when they had one (for example "Assignments, Test, Quizzes Examination 45%" was read as one coursework row). The weights added up to 100, so the rules did not notice. It was found by reading every entry beside its source text.
+- The fix was to stop trusting the row names at all. A form entry now keeps only the examination row, and one worked-out row for "all other assessment".
+- After that fix one entry was still wrong: COMP4122's "Mid-term Programming Exam 10%" was counted as part of the final examination because the name wrapped over two lines. Fixed and re-read.
+- It first told me DSAI1202 had no form of its own. It does; a web search summary was wrong and the department's page was right.
+- The collector did nothing on its first run, because of the space in my folder name.
+
+**How it was checked**
+
+- All 107 entries read against the text they came from, after the fixes. Examination shares: 70% (46 subjects), 45% (25), 40% (7), 60% (7), 50% (4), 30% (2), none (16).
+- 29 checks on the rules and the comparison: match, different exam weight, mid-term not counted as the exam, no exam on either side, unknown course, an old form marked "may be out of date", and four kinds of bad entry refused.
+- One made-up COMP1010 outline with a 70% exam through real Gemini: "Matches PolyU's subject form (Jul 2025)", no event flagged.
+
+**Not checked / limits**
+
+- **The 60% (mismatch) outline could not be run through Gemini: the free daily limit ran out.** The mismatch message is covered only by the checks on the comparison code.
+- **New finding: the free Gemini tier allows 20 requests per model per day.** My testing used up all four models' allowance, so the live site could not read outlines for about 21 hours afterwards if it shares this key. This is a hard ceiling for a class using the site.
+- **An AI read the entries, not a person.** A random tenth should be checked by hand against the PDFs.
+- A form entry can only confirm the examination share. It cannot tell that a quiz is missing.
+- 36 forms carry no date (most of the DSAI ones), and several COMP forms are from 2021 or earlier (one from 2010).
+- Only two departments. Each further department needs its own listing page worked out.
+- No entries typed from real outlines yet; those are the ones that could check every row.
