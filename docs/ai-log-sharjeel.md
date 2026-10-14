@@ -528,3 +528,28 @@ I sent a screenshot of a 20-item checklist for finished websites and chose: buil
 - 36 forms carry no date (most of the DSAI ones), and several COMP forms are from 2021 or earlier (one from 2010).
 - Only two departments. Each further department needs its own listing page worked out.
 - No entries typed from real outlines yet; those are the ones that could check every row.
+
+## 14 Oct 2026: uploads slow and never finishing
+
+**Prompt:** "i havent done billing yet. it's so slow and doesnt ever finish"
+
+**What was found**
+
+- One tiny request to each model in the chain: all four Flash models (3.5, 3.6, 3.7, 3.8) answered 503 "This model is currently experiencing high demand" within 5 seconds, twice in a row. The free tier is turned away first when Google is busy.
+- So every upload went round the whole chain, waited, went round again, and gave up. On a day when the models hang instead of refusing, each one costs up to 40 seconds before the next is asked, so one outline could take two and a half minutes and still fail.
+- `gemini-2.5-flash` and `gemini-2.5-flash-lite` are gone for new users (404). `gemini-3.5-flash-lite` answered at once.
+
+**What was changed**
+
+- `gemini-3.5-flash-lite` is now first in the chain; the four Flash models stay as fallbacks.
+
+**How it was checked**
+
+- The four made-up outlines (adds to 100 with a heading row, a row only in the table, a table adding to 90, no breakdown with written dates) through real extraction on Flash-Lite alone: each answered in 2 to 6 seconds, with the same events, weights, sections and 100% results the Flash models gave earlier. The table adding to 90 used its second look and still correctly reported 90.
+- One small slip: a note read "Wed 19:0." for 19:00. The time field itself was right.
+
+**Not checked / limits**
+
+- **Only made-up outlines.** Lite is a smaller model, and a real, messy outline may show a difference the made-up ones do not. This is the most important thing to test next.
+- Lite's own free daily limit was not measured.
+- One moment on one day; Google's load changes.
