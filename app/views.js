@@ -69,7 +69,7 @@ function ListRow({ event, index, onOpen }) {
           </span>
         )}
         {/* Not a warning: a date was worked out from the week number and waits for the student to accept it. */}
-        {!flagged && !event.date && event.suggestedDates.length > 0 && (
+        {!flagged && (!event.date || event.suggestedDates.length > 1) && event.suggestedDates.length > 0 && (
           <span className="task-tag">{event.suggestedDates.length > 1 ? "Weekly dates suggested" : "Date suggested"}</span>
         )}
       </button>

@@ -553,3 +553,27 @@ I sent a screenshot of a 20-item checklist for finished websites and chose: buil
 - **Only made-up outlines.** Lite is a smaller model, and a real, messy outline may show a difference the made-up ones do not. This is the most important thing to test next.
 - Lite's own free daily limit was not measured.
 - One moment on one day; Google's load changes.
+
+## 14 Oct 2026: Flash-Lite was quick but less accurate on a real outline
+
+**Prompt:** "it works now. got a quick result. but its not very accurate" (screenshots: COMP1010 and AMA1702 outlines uploaded), then "NO CLASS on monday shown on calendar. only once in week 1 shown."
+
+**What went wrong**
+
+- On the real COMP1010 outline, Flash-Lite gave each weekly class a single week-1 date ("Lecture L02 (Week 1)", Mon 31 Aug) instead of one undated weekly class, which the instructions ask for. A class with a date was never offered the other weeks, so it appeared on the calendar once.
+- I also misread "200%": I assumed the breakdown was counted twice and started writing code to drop duplicate rows. It was the student adding the COMP1010 (100%) and AMA1702 (100%) lines together. Both were right. The code was removed before committing. Lesson: get the exact text of a problem before fixing it.
+- The COMP1010 breakdown itself was right: Assignment 10%, Quiz 1 5%, Quiz 2 15%, Examination 70%, matching PolyU's form.
+
+**What was changed**
+
+- Model order: `gemini-3.6-flash`, `gemini-3.5-flash`, then `gemini-3.5-flash-lite`, then the rest. Each model now gets 30 s instead of 40 s, and a refused model is still skipped for 5 minutes, so only the first upload in a while waits on a busy Flash.
+- A class the model dates only once keeps that date and is also offered every teaching week ("Add N weekly classes"), with a note saying why. A trailing "(Week 1)" is taken off its title so the weekly copies are not all called week 1. Expanding keeps the class's own date.
+
+**How it was checked**
+
+- 11 checks with a made-up model reply (no Gemini call): dated lecture keeps its date and gets every teaching Monday; a lab with no weekday gets it from its date; titles cleaned; not flagged for this alone; undated classes unchanged; expanding includes the original date once, and keeps it even if it is outside the suggestions. The earlier logic checks all still pass.
+
+**Not checked**
+
+- Not re-run on the real outline yet, and not looked at in the browser (two small display conditions changed).
+- Events already saved from the earlier upload are not fixed by this; they need removing and the outline uploading again.

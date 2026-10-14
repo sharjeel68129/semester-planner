@@ -55,7 +55,7 @@ export default function EventEditor({ event, onChange, onExpand, onRemove, onClo
             <span className="hint">Check it against your outline first.</span>
           </p>
         )}
-        {!event.date && event.suggestedDates.length > 1 && (
+        {event.suggestedDates.length > 1 && (
           <p className="editor-suggest">
             <button type="button" className="button" onClick={onExpand}>
               Add {event.suggestedDates.length} weekly classes
