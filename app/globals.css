@@ -470,7 +470,11 @@ blockquote {
   align-content: start;
 }
 
+/* Stays in view while the page scrolls; below the bottom bars (z-index 10 and 20) and the editor, which is a modal dialog. */
 .topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
   grid-column: 1 / -1;
   display: flex;
   flex-wrap: wrap;
@@ -480,6 +484,12 @@ blockquote {
   padding: 0.7rem 1.25rem;
   background: var(--maroon);
   color: var(--on-maroon);
+}
+
+/* A link to a part of the page (/settings#semester) lands below the pinned bar, not under it. */
+.app [id],
+.auth-page [id] {
+  scroll-margin-top: 5rem;
 }
 
 .topbar-account {
@@ -666,6 +676,22 @@ blockquote {
   margin-top: 0.6rem;
 }
 
+.class-time label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.class-time select,
+.class-time input {
+  font: inherit;
+  padding: 0.35rem 0.5rem;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+
 /* ---- Event chips: fill shows the type, the triangle shows "needs checking" ---- */
 
 .chip {
@@ -711,6 +737,13 @@ blockquote {
   color: var(--ink);
   background: var(--neutral);
   border-color: var(--rule);
+}
+
+/* A date worked out from the week number and not yet accepted: drawn faint and dashed, whatever the type. */
+.chip.chip-suggested {
+  color: var(--ink-soft);
+  background: var(--paper);
+  border: 1px dashed var(--maroon);
 }
 
 .chip:hover {

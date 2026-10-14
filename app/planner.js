@@ -1,7 +1,20 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { canExport, chooseSection, expandWeekly, mergeEvents, needsReview, openChoices } from "@/lib/review";
+import {
+  acceptSuggestions,
+  canExport,
+  chooseSection,
+  courseKey,
+  coursesWithoutClass,
+  expandWeekly,
+  mergeEvents,
+  needsReview,
+  openChoices,
+  preferDetailed,
+} from "@/lib/review";
+import { makeEvent } from "@/lib/schema";
+import { suggestWeekly } from "@/lib/suggest";
 import { toIcs } from "@/lib/calendar";
 import { MAX_FILE_BYTES, MAX_FILES } from "@/lib/validate";
 import { addDays, addMonths, focusDate, formatDate, today } from "@/lib/dates";
@@ -39,17 +52,77 @@ function checkLine({ total, rows }) {
   return lines.join(" ");
 }
 
+const WEEKDAY_OPTIONS = [
+  ["Mon", "Monday"],
+  ["Tue", "Tuesday"],
+  ["Wed", "Wednesday"],
+  ["Thu", "Thursday"],
+  ["Fri", "Friday"],
+  ["Sat", "Saturday"],
+];
+
+/** Asks when a course meets, for a course whose outline gave no class time. `onAdd` returns false if it could not add one. */
+function ClassTimePrompt({ course, onAdd, onSkip }) {
+  const [problem, setProblem] = useState("");
+  function submit(e) {
+    e.preventDefault();
+    const form = new FormData(e.target);
+    if (!onAdd(course, form.get("weekday"), form.get("time"))) {
+      setProblem("The teaching weeks are not known: choose your semester in Settings first.");
+    }
+  }
+  return (
+    <form className="choice" onSubmit={submit} aria-label={`Class time for ${course}`}>
+      <p>
+        <strong>When is {course}&rsquo;s class?</strong> No class time was found in its outline. Add it and it goes on the
+        calendar in every teaching week.
+      </p>
+      <div className="choice-options class-time">
+        <label>
+          Day{" "}
+          <select name="weekday" required defaultValue="">
+            <option value="" disabled>
+              Choose
+            </option>
+            {WEEKDAY_OPTIONS.map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Starts <input type="time" name="time" required />
+        </label>
+        <button type="submit" className="button">
+          Add weekly class
+        </button>
+        <button type="button" className="link" onClick={onSkip}>
+          It has no classes
+        </button>
+      </div>
+      {problem && (
+        <p className="alert" role="alert">
+          {problem}
+        </p>
+      )}
+    </form>
+  );
+}
+
 /**
  * The signed-in screen: outlines go in on the left, the calendar is in the middle.
  * `events` is the saved list (null when empty); `settings` is from lib/settings.js; `account` is the bar's right-hand side.
  */
-export default function Planner({ events, setEvents, settings, account, saveLine }) {
+export default function Planner({ events, setEvents, settings, updateSettings, account, saveLine }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [failed, setFailed] = useState([]);
   const [progress, setProgress] = useState("");
   const [exportError, setExportError] = useState("");
   const [checks, setChecks] = useState([]);
+  // Events left out because another file in the same upload describes the course in more detail; can be put back.
+  const [leftOut, setLeftOut] = useState([]);
   // The semester from Settings; if none is chosen there, the term running now or the next one.
   const semester = settings.semester || TERMS.find((item) => today() <= termRange(item).end)?.id || "other";
   const term = resolveTerm(semester, settings.weekOneMonday);
@@ -62,6 +135,12 @@ export default function Planner({ events, setEvents, settings, account, saveLine
   const ready = list.filter(canExport);
   const toCheck = list.filter((event) => needsReview(event)).length;
   const undated = list.filter((event) => !event.date && !needsReview(event)).length;
+  // What one press of "Accept all suggested dates" would change, so the button only shows when it does something.
+  const acceptable = acceptSuggestions(list).accepted;
+  const noDateAtAll = list.filter((event) => !event.date && event.suggestedDates.length === 0 && !needsReview(event)).length;
+  const missingClasses = coursesWithoutClass(list, settings.noClassCourses);
+  // The calendar shows dated events and suggested dates; only events with neither are missing from it.
+  const unshown = list.filter((event) => !event.date && event.suggestedDates.length === 0).length;
 
   // When events first appear, open the calendar where they are, not on an empty month.
   const hadEvents = useRef(false);
@@ -76,14 +155,14 @@ export default function Planner({ events, setEvents, settings, account, saveLine
     const form = new FormData(e.target);
     const files = form.getAll("files");
     if (files.length > MAX_FILES) return setError(`Choose at most ${MAX_FILES} files at a time.`);
-    const found = [];
-    const checked = [];
+    const results = [];
     const skipped = [];
     let stopped = false;
     setLoading(true);
     setError("");
     setFailed([]);
     setChecks([]);
+    setLeftOut([]);
     for (const [i, file] of files.entries()) {
       // Checked here as well as on the server, so a large file is not uploaded just to be refused.
       if (file.size > MAX_FILE_BYTES) {
@@ -104,16 +183,15 @@ export default function Planner({ events, setEvents, settings, account, saveLine
           stopped = true;
           break;
         }
-        if (res.ok) {
-          found.push(...data.events);
-          checked.push(...(data.assessmentChecks || []));
-        }
+        if (res.ok) results.push({ file: file.name, events: data.events, checks: data.assessmentChecks || [] });
         else if (res.status === 413) skipped.push({ file: file.name, error: "too large for this server to accept" });
         else skipped.push({ file: file.name, error: data.error || `the server could not process it (${res.status})` });
       } catch {
         skipped.push({ file: file.name, error: "could not reach the server; check your connection" });
       }
     }
+    // A short subject form and a detailed outline for the same course would list the same marks twice.
+    const { events: found, checks: checked, leftOut: duplicates } = preferDetailed(results);
     // Merged in one go, so two outlines for the same course are not mistaken for an old and a new version.
     if (found.length > 0) setEvents((current) => mergeEvents(current || [], found));
     else if (skipped.length === 0 && !stopped) {
@@ -121,6 +199,7 @@ export default function Planner({ events, setEvents, settings, account, saveLine
     }
     setFailed(skipped);
     setChecks(checked);
+    setLeftOut(duplicates.filter((item) => item.events.length > 0));
     setProgress("");
     setLoading(false);
   }
@@ -142,6 +221,38 @@ export default function Planner({ events, setEvents, settings, account, saveLine
       const next = current.filter((_, i) => i !== index);
       return next.length > 0 ? next : null;
     });
+  }
+
+  // A fresh start before uploading again: a re-upload merges into what is saved, so mistakes from an earlier
+  // reading would otherwise stay. The same action is in Settings.
+  function removeAll() {
+    if (!window.confirm(`Remove all ${list.length} events? This cannot be undone.`)) return;
+    setOpen(null);
+    setChecks([]);
+    setFailed([]);
+    setEvents(null);
+  }
+
+  function acceptAll() {
+    setOpen(null);
+    setEvents((current) => acceptSuggestions(current).events);
+  }
+
+  /** Put back the events left out for a course because another file described it in more detail. */
+  function putBack(item) {
+    setEvents((current) => mergeEvents(current || [], item.events, { partial: true }));
+    setLeftOut((current) => current.filter((other) => other !== item));
+  }
+
+  /** A class time the student typed in: one dated class in each teaching week. They gave it, so it needs no accepting. */
+  function addClassTime(course, weekday, time) {
+    const { dates } = suggestWeekly(weekday, term);
+    if (dates.length === 0) return false;
+    const added = dates.map((date) =>
+      makeEvent({ title: `${course} class`, course, type: "class", date, time: time || null, note: "Class time you entered." }),
+    );
+    setEvents((current) => [...(current || []), ...added]);
+    return true;
   }
 
   function downloadCalendar() {
@@ -270,6 +381,16 @@ export default function Planner({ events, setEvents, settings, account, saveLine
           )}
         </section>
 
+        {list.length > 0 && (
+          <section className="sidebar-section">
+            <h2>Start again</h2>
+            <button className="button button-quiet button-wide" type="button" disabled={loading} onClick={removeAll}>
+              Remove all events
+            </button>
+            <p className="hint">Clears the calendar, for example before uploading your outlines again.</p>
+          </section>
+        )}
+
         <div className="sidebar-foot">
           {saveLine}
         </div>
@@ -316,9 +437,24 @@ export default function Planner({ events, setEvents, settings, account, saveLine
                 checked.
               </>
             )}
-            {undated > 0 && ` ${undated} with no date yet: open ${undated === 1 ? "it" : "each one"} in the list to add a date.`}
+            {noDateAtAll > 0 &&
+              ` ${noDateAtAll} with no date at all: open ${noDateAtAll === 1 ? "it" : "each one"} in the list to add a date.`}
           </p>
         )}
+
+        {leftOut.map((item) => (
+          <div key={item.course} className="choice" role="status">
+            <p>
+              <strong>Two files describe {item.course}.</strong> The more detailed one, {item.kept}, was used, so the same marks
+              are not listed twice. Left out from {item.files.join(", ")}: {item.events.map((event) => event.title).join(", ")}.
+            </p>
+            <div className="choice-options">
+              <button type="button" className="button button-quiet" onClick={() => putBack(item)}>
+                Put them back
+              </button>
+            </div>
+          </div>
+        ))}
 
         {openChoices(list).map(({ choice, options }) => (
           <div key={choice} className="choice" role="group" aria-label={`Choose your ${choice} section`}>
@@ -341,6 +477,32 @@ export default function Planner({ events, setEvents, settings, account, saveLine
           </div>
         ))}
 
+        {missingClasses.map(({ key, course }) => (
+          <ClassTimePrompt
+            key={key}
+            course={course}
+            onAdd={addClassTime}
+            onSkip={() => updateSettings({ noClassCourses: [...settings.noClassCourses, key] })}
+          />
+        ))}
+
+        {acceptable > 0 && (
+          <div className="choice">
+            <p>
+              <strong>
+                {acceptable} {acceptable === 1 ? "event has a suggested date" : "events have suggested dates"}
+              </strong>
+              , worked out from the week numbers in your outline and drawn with a dashed outline. Check them against the
+              outline, then accept them to put them in the calendar file. Weekly classes become one class per teaching week.
+            </p>
+            <div className="choice-options">
+              <button type="button" className="button" onClick={acceptAll}>
+                Accept all suggested dates
+              </button>
+            </div>
+          </div>
+        )}
+
         {view === "list" && <ListView events={list} onOpen={setOpen} />}
         {view === "month" && (
           <MonthView
@@ -356,9 +518,9 @@ export default function Planner({ events, setEvents, settings, account, saveLine
         )}
         {view === "week" && <WeekView events={list} cursor={cursor} weekStart={settings.weekStart} onOpen={setOpen} />}
 
-        {view !== "list" && list.some((event) => !event.date) && (
+        {view !== "list" && unshown > 0 && (
           <p className="notice">
-            {list.filter((event) => !event.date).length} with no date yet cannot be shown here.{" "}
+            {unshown} with no date yet cannot be shown here.{" "}
             <button type="button" className="link" onClick={() => setView("list")}>
               See them in the list
             </button>
@@ -371,6 +533,9 @@ export default function Planner({ events, setEvents, settings, account, saveLine
               <span className={`chip chip-${type} legend-swatch`}>{label}</span>
             </li>
           ))}
+          <li>
+            <span className="chip chip-class chip-suggested legend-swatch">Suggested</span>
+          </li>
           <li>
             <CheckIcon /> Needs checking
           </li>

@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { accountsEnabled, supabase, deleteAccount } from "@/lib/account";
+import { accountsEnabled, supabase, deleteAccount, maskEmail } from "@/lib/account";
 import { REMINDER_OPTIONS, VIEW_OPTIONS } from "@/lib/settings";
 import { TERMS, resolveTerm } from "@/lib/polyu-calendar";
 import AuthShell from "../auth-shell";
@@ -54,13 +54,13 @@ function ChangeEmail({ email }) {
     const next = new FormData(e.target).get("email");
     run(async () => {
       check(await supabase().auth.updateUser({ email: next }, { emailRedirectTo: window.location.origin }));
-      return `We emailed a confirmation link to ${next}. Your address stays ${email} until you open it.`;
+      return `We emailed a confirmation link to ${next}. Your address stays ${maskEmail(email)} until you open it.`;
     });
   }
   return (
     <form onSubmit={onSubmit} aria-busy={busy}>
       <h3>Email</h3>
-      <p className="hint">You sign in with {email}.</p>
+      <p className="hint">You sign in with {maskEmail(email)}.</p>
       <div className="field">
         <label htmlFor="new-email">New email address</label>
         <input id="new-email" type="email" name="email" autoComplete="email" required />
@@ -174,7 +174,7 @@ export default function SettingsPage() {
       <header className="topbar">
         <span className="brand">AI Semester Planner</span>
         <div className="topbar-account">
-          <span>{user.email}</span>
+          <span>{maskEmail(user.email)}</span>
           <Link className="link" href="/">
             Back to calendar
           </Link>

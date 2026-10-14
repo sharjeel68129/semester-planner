@@ -21,32 +21,41 @@ export function CheckIcon() {
 const indexed = (events) => events.map((event, index) => ({ event, index }));
 const byTime = (a, b) => (a.event.time || "").localeCompare(b.event.time || "");
 
-function groupByDate(events) {
+/**
+ * Events by day. With `withSuggested`, an event also appears (marked `suggested`) on each date worked out for it
+ * but not yet accepted, so the calendar shows where it will probably fall. The list view leaves these out.
+ */
+function groupByDate(events, withSuggested = false) {
   const days = new Map();
+  const add = (date, item) => {
+    if (!days.has(date)) days.set(date, []);
+    days.get(date).push(item);
+  };
   for (const item of indexed(events)) {
-    if (!item.event.date) continue;
-    if (!days.has(item.event.date)) days.set(item.event.date, []);
-    days.get(item.event.date).push(item);
+    if (item.event.date) add(item.event.date, item);
+    if (!withSuggested) continue;
+    for (const date of item.event.suggestedDates) if (date !== item.event.date) add(date, { ...item, suggested: true });
   }
   for (const items of days.values()) items.sort(byTime);
   return days;
 }
 
 /** A small clickable event, used in the month grid and the all-day row. Opens the editor. */
-function Chip({ event, index, onOpen, style }) {
+function Chip({ event, index, suggested = false, onOpen, style }) {
   const flagged = needsReview(event);
   const name = `${event.time ? `${event.time} ` : ""}${event.title}`;
   return (
     <button
       type="button"
-      className={`chip chip-${event.type}`}
+      className={`chip chip-${event.type}${suggested ? " chip-suggested" : ""}`}
       style={style}
-      title={`${name}${event.course ? `, ${event.course}` : ""}`}
+      title={`${name}${event.course ? `, ${event.course}` : ""}${suggested ? " (suggested date, not yet accepted)" : ""}`}
       onClick={() => onOpen(index)}
     >
       {flagged && <CheckIcon />}
       <span>{name}</span>
       {flagged && <span className="sr-only"> (needs checking)</span>}
+      {suggested && <span className="sr-only"> (suggested date)</span>}
     </button>
   );
 }
@@ -110,7 +119,7 @@ export function ListView({ events, onOpen }) {
 // ---- Month ----
 
 export function MonthView({ events, cursor, weekStart, onOpen, onShowWeek }) {
-  const days = groupByDate(events);
+  const days = groupByDate(events, true);
   const grid = monthGrid(cursor, weekStart);
   const month = cursor.slice(0, 7);
   const now = today();
@@ -130,7 +139,7 @@ export function MonthView({ events, cursor, weekStart, onOpen, onShowWeek }) {
               {Number(day.slice(8))}
             </time>
             {items.slice(0, MAX_PER_DAY).map((item) => (
-              <Chip key={item.index} {...item} onOpen={onOpen} />
+              <Chip key={`${item.index}${item.suggested ? "s" : ""}`} {...item} onOpen={onOpen} />
             ))}
             {items.length > MAX_PER_DAY && (
               <button type="button" className="month-more" onClick={() => onShowWeek(day)}>
@@ -183,7 +192,7 @@ function layOut(items) {
 
 export function WeekView({ events, cursor, weekStart, onOpen }) {
   const scroller = useRef(null);
-  const days = groupByDate(events);
+  const days = groupByDate(events, true);
   const week = weekDays(cursor, weekStart);
   const now = today();
 
@@ -213,7 +222,7 @@ export function WeekView({ events, cursor, weekStart, onOpen }) {
                 {(days.get(day) || [])
                   .filter(({ event }) => !event.time)
                   .map((item) => (
-                    <Chip key={item.index} {...item} onOpen={onOpen} />
+                    <Chip key={`${item.index}${item.suggested ? "s" : ""}`} {...item} onOpen={onOpen} />
                   ))}
               </div>
             ))}
@@ -233,7 +242,7 @@ export function WeekView({ events, cursor, weekStart, onOpen }) {
                 const height = Math.max((lengthOf(item.event) / 60) * HOUR_PX, HOUR_PX / 2);
                 return (
                   <Chip
-                    key={item.index}
+                    key={`${item.index}${item.suggested ? "s" : ""}`}
                     {...item}
                     onOpen={onOpen}
                     style={{

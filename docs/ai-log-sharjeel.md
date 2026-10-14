@@ -577,3 +577,38 @@ I sent a screenshot of a 20-item checklist for finished websites and chose: buil
 
 - Not re-run on the real outline yet, and not looked at in the browser (two small display conditions changed).
 - Events already saved from the earlier upload are not fixed by this; they need removing and the outline uploading again.
+
+## 14 Oct 2026: calendar mostly empty, duplicate marks, class times, small screen changes
+
+**Prompts:** "bring the remove events option to main page"; "my email should be like *************698@gmail.com"; "ON SCROLLING, THE top bar should stay there and be visible at all times."; "still not satisfactory" (screenshot: AMA1702 form and outline uploaded together, September empty, 23 events with no date); "yeah. also make a feature to add class timings. each week has one class for each course obv. so ask for prompt from user if the class timing is not found in the file."
+
+**What was wrong**
+
+- Two files for the same course (PolyU's short subject form and the detailed outline) were both read correctly, but together put the same marks on the calendar twice ("Examination" and "Final Exam").
+- Most events had a date worked out from the week number, but each needed opening and accepting one by one (19 clicks), and until then the calendar showed nothing.
+- A course whose outline gives no class time had no classes at all, and nothing asked for them.
+
+**What was built**
+
+- "Remove all events" on the main page (it was only in Settings).
+- The email in the top bar and Settings shows only its last three characters before the @.
+- The top bar stays at the top while scrolling.
+- Suggested dates are drawn on the month and week calendars, dashed and faint, and stay out of the calendar file until accepted. One button, "Accept all suggested dates", accepts them; flagged events and sections not yet chosen are left alone.
+- Same course in two files: the file with more breakdown rows is used, the other's events for that course are left out (classes kept), and a notice names them with "Put them back".
+- A course with deadlines but no class gets a small form: day and start time, then "Add weekly class" puts it in every teaching week. "It has no classes" stops the question (saved in settings).
+
+**What the AI got wrong while building it**
+
+- "Put them back" first used the normal re-upload merge, which treated the two put-back events as a whole new outline and flagged every other AMA1702 event "Not found in the re-uploaded outline". Found in the browser test; fixed with a `partial` option on `mergeEvents`.
+- The "N with no date yet cannot be shown here" line still counted events that are now shown as suggestions. Found in the browser test and fixed.
+- One test's expected count was wrong (my arithmetic, not the code).
+
+**How it was checked**
+
+- 29 logic checks (accept all, same course in two files, put back, class prompt, settings, merge) plus the earlier checks, all passing.
+- In the browser against a local stand-in for Supabase, with extraction replaced by fixed results so no Gemini quota was used: three files uploaded; the duplicate notice, class form (13 Tuesday classes, saved), "Accept all" (29 events ready to download), "Put them back" (nothing flagged), "It has no classes" (saved), top bar pinned after scrolling, masked email, and "Remove all events".
+
+**Not checked**
+
+- Not tried with real outlines through Gemini, and not on the live site with the real Supabase.
+- "Two files describe the same course" relies on both files naming the course with the same subject code.

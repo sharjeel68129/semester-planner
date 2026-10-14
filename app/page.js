@@ -1,13 +1,13 @@
 "use client";
 import Link from "next/link";
-import { supabase } from "@/lib/account";
+import { maskEmail, supabase } from "@/lib/account";
 import Landing from "./landing";
 import Planner from "./planner";
 import { usePlanner } from "./use-planner";
 
 /** Decides which screen to show: the landing page when signed out, the planner when signed in. */
 export default function Home() {
-  const { user, events, setEvents, settings, loaded, loadError, saveState, retrySave } = usePlanner();
+  const { user, events, setEvents, settings, updateSettings, loaded, loadError, saveState, retrySave } = usePlanner();
 
   // No way into the planner without an account: signed out (or still checking) shows only the landing page.
   // Its buttons lead to /login and /signup, which also explain when no account service is set up.
@@ -15,7 +15,7 @@ export default function Home() {
 
   const account = (
     <>
-      <span>{user.email}</span>
+      <span>{maskEmail(user.email)}</span>
       <Link className="link" href="/settings">
         Settings
       </Link>
@@ -63,5 +63,5 @@ export default function Home() {
     </div>
   );
 
-  return <Planner events={events} setEvents={setEvents} settings={settings} account={account} saveLine={saveLine} />;
+  return <Planner events={events} setEvents={setEvents} settings={settings} updateSettings={updateSettings} account={account} saveLine={saveLine} />;
 }

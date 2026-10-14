@@ -28,10 +28,11 @@ export default function Privacy() {
         </li>
         <li>
           <strong>Your events.</strong> Each class, deadline, quiz and exam on your calendar, including the words quoted
-          from your outline and any changes you make.
+          from your outline, any class times you type in, and any changes you make.
         </li>
         <li>
-          <strong>Your settings.</strong> Reminder times, semester and calendar display.
+          <strong>Your settings.</strong> Reminder times, semester, calendar display, and the courses you said have no
+          classes.
         </li>
       </ul>
 
@@ -85,7 +86,9 @@ export default function Privacy() {
           To delete everything, sign in, open <Link className="link" href="/settings">Settings</Link> and choose
           &ldquo;Delete account&rdquo;. This removes your account, events and settings at once and cannot be undone.
         </li>
-        <li>To delete only your events, choose &ldquo;Remove all events&rdquo; on the same page.</li>
+        <li>
+          To delete only your events, choose &ldquo;Remove all events&rdquo; on the same page or on the main page.
+        </li>
         <li>Text already sent to Google when you uploaded an outline cannot be recalled by us.</li>
       </ul>
       <p>The site may be switched off when the course ends; accounts and events are deleted when that happens.</p>

@@ -31,13 +31,13 @@ Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Li
 | `scripts/collect-forms.mjs` | developer tool that builds the dataset from PolyU's forms by pattern matching, no AI; unreadable forms go to `data/forms-not-read.json` | done (each new department needs its own entry in `SOURCES`) |
 | `lib/reference.js` | `compareToReference(check)`: compares an outline's exam share (or every row, for outline entries) with the dataset | done (only checked on made-up outlines) |
 | `lib/calendar.js` | `toIcs(events, remindMinutes)` | done (not yet imported into a real calendar app) |
-| `lib/review.js` | `needsReview`, `canExport`, `mergeEvents(old, new)`, `expandWeekly`, `openChoices`, `chooseSection` | done |
+| `lib/review.js` | `needsReview`, `canExport`, `mergeEvents(old, new, { partial })`, `expandWeekly`, `openChoices`, `chooseSection`, `courseKey`, `acceptSuggestions`, `preferDetailed`, `coursesWithoutClass` | done |
 | `lib/evaluate.js` | `score(predicted, truth)` | done (no truth file or runner script yet) |
 | `app/page.js` | picks the screen (landing or planner) | done |
 | `app/use-planner.js` | `usePlanner()`: who is signed in, with their events and settings loaded and saved; shared by both pages | done |
 | `app/settings/page.js` | `/settings`: reminders, semester, calendar display, email, password, remove all events, delete account | done (account actions only run against a local stand-in for Supabase) |
 | `app/reset-password/page.js` | where the password-reset email leads | done (same caveat) |
-| `lib/settings.js` | `Settings` shape + `makeSettings`, reminder and view options | done |
+| `lib/settings.js` | `Settings` shape + `makeSettings`, reminder and view options, `noClassCourses` | done |
 | `app/landing.js` | signed-out page: headline, how it works, and buttons to `/signup` and `/login` (no form on it) | done |
 | `app/login/page.js`, `app/signup/page.js` | the sign-in and sign-up pages; both render `app/auth-screen.js`, which sends a signed-in student to `/` | done (the redirect after a real sign-in is untested) |
 | `app/auth-shell.js` | the plain page around the sign-in, sign-up, reset-password and signed-out settings screens, and (with `wide`) the pages of text | done |
@@ -46,21 +46,21 @@ Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Li
 | `app/not-found.js` | the 404 page | done |
 | `app/site-footer.js`, `app/cookie-notice.js`, `app/sticky-cta.js` | footer of public pages; the cookie notice (a notice, not consent: there are no tracking cookies); the phone-only sign-up bar on the landing page | done |
 | `app/layout.js`, `app/robots.js`, `app/sitemap.js`, `app/opengraph-image.js`, `app/icon.svg`, `app/apple-icon.js` | site-wide metadata, robots.txt, sitemap.xml, share image, icons, and Vercel Analytics | done (share preview and analytics only checkable on the live site) |
-| `app/planner.js` | signed-in screen: outlines and download on the left, calendar in the middle | done |
-| `app/views.js` | `ListView` (tasks by date), `MonthView`, `WeekView` (hour grid) | done |
+| `app/planner.js` | signed-in screen: outlines, download and "Remove all events" on the left; calendar in the middle with the notices above it (same course in two files, class time missing, accept all suggested dates) | done (checked in the browser with made-up results only) |
+| `app/views.js` | `ListView` (tasks by date), `MonthView`, `WeekView` (hour grid); month and week also draw suggested dates, dashed | done |
 | `app/event-editor.js` | pop-up to fix one event's date, time or type, accept a suggested date, add weekly classes, remove it, or mark it as checked | done |
 | `lib/dates.js` | date helpers for the views (ISO strings in UTC, weeks start Monday) | done |
 | `app/auth-form.js` | sign in / create account / forgot password (email + password) | done |
-| `lib/account.js` | browser Supabase client, `loadPlanner`, `saveEvents`, `saveSettings`, `deleteAccount` | done |
+| `lib/account.js` | browser Supabase client, `loadPlanner`, `saveEvents`, `saveSettings`, `deleteAccount`, `maskEmail` (the address as pages show it) | done |
 | `lib/account-server.js` | `getUser()` for route handlers | done (same caveat) |
 | `supabase/schema.sql` | `planners` table (one row per user, `events` and `settings` jsonb) + row level security + `delete_my_account(password)` | the settings column and the delete function have **never been run on a real project** |
 
 ## Product rules (do not violate)
-1. **Never invent dates.** If a date is unclear ("Week 7", "TBA", "see Canvas"), set `date: null` with a `note`; the event is listed as "no date yet". The model never calculates a date. Code may work one out from a week number (`lib/suggest.js`), but only into `suggestedDates`: it reaches `date` only when the student accepts it. `ambiguous: true` is for things that look wrong (quote not found, weekday and date disagree, sources conflict), not for a missing date. A flagged event is better than a confident wrong one.
-2. **Every event carries `sourceQuote`**: the exact outline text that justifies it, so the reviewer can check it.
+1. **Never invent dates.** If a date is unclear ("Week 7", "TBA", "see Canvas"), set `date: null` with a `note`; the event is listed as "no date yet". The model never calculates a date. Code may work one out from a week number (`lib/suggest.js`), but only into `suggestedDates`: it reaches `date` only when the student accepts it (one at a time, or all at once with "Accept all suggested dates"). The calendar draws suggested dates dashed; they are never in the `.ics` file until accepted. `ambiguous: true` is for things that look wrong (quote not found, weekday and date disagree, sources conflict), not for a missing date. A flagged event is better than a confident wrong one.
+2. **Every event carries `sourceQuote`**: the exact outline text that justifies it, so the reviewer can check it. The one exception is a class time the student types in when the outline has none: it has an empty `sourceQuote` and the note "Class time you entered.", and `mergeEvents` never reports it missing from a re-upload.
 3. **Inputs are messy.** Files are only `.pdf`, `.docx` or `.txt`, but the content inside may be badly formatted, out of order, or partly missing. Parse defensively; do not assume tables or clean headings.
 4. **Ask for more context when information is incomplete.** If the outline does not contain the full course picture (for example no assessment dates, no weekly schedule, no semester dates, unclear weighting, or a mentioned item with no date), the API must not guess to fill the gap. It returns what it found plus a list of specific follow-up questions, and the UI re-prompts the user to supply that context, then re-runs extraction with it. Prefer asking over assuming.
-5. **Mid-semester changes.** Re-uploads and tentative schedules must merge without duplicates (`mergeEvents`), keeping user edits.
+5. **Mid-semester changes.** Re-uploads and tentative schedules must merge without duplicates (`mergeEvents`), keeping user edits. When one upload has two files for the same course (a short subject form and a detailed outline), `preferDetailed` keeps the file with more breakdown rows and the planner says what it left out, with a button to put it back.
 6. **A human confirms.** Anything `needsReview()` flags must be highlighted and editable before export or reminders. Only `canExport()` events (dated and not flagged) go in the calendar file. Never silently drop an event.
 7. **Assessments are checked against 100%.** The model copies the outline's grade breakdown; code adds it up (`lib/assess.js`). If it does not reach 100 or a row has no event, the model is asked once to re-read, and whatever is still missing is reported to the student. Nothing is invented to fill the gap. 100% shows every graded component was found, not every item inside one.
 8. **The course dataset only informs.** A difference between an outline and `data/course-assessments.json` is shown to the student as something to check. It never changes, removes or flags an event, and the dataset is never put in the model's prompt: the student's own outline wins, because a form can be years old.
