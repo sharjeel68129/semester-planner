@@ -284,9 +284,9 @@ export default function Planner({ events, setEvents, settings, updateSettings, a
           <div className="field">
             <label htmlFor="files">Course outlines</label>
             <span className="hint" id="files-hint">
-              PDF, Word or text. Up to {MAX_FILES} files, {MAX_MB} MB each.
+              PDF, Word, text or image (PNG, JPG, WebP). Up to {MAX_FILES} files, {MAX_MB} MB each.
             </span>
-            <input id="files" type="file" name="files" accept=".pdf,.docx,.txt" multiple required aria-describedby="files-hint" />
+            <input id="files" type="file" name="files" accept=".pdf,.docx,.txt,.png,.jpg,.jpeg,.webp" multiple required aria-describedby="files-hint" />
           </div>
           <div className="field">
             <span className="field-name">Semester</span>
