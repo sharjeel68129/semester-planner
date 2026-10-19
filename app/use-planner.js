@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { accountsEnabled, supabase, loadPlanner, saveEvents, saveSettings } from "@/lib/account";
 import { makeSettings } from "@/lib/settings";
+import { listenToOtherTabs, tellOtherTabs } from "@/lib/tabs";
 
 /**
  * Who is signed in, with their events and settings kept loaded and saved. Shared by the planner and settings pages.
@@ -51,6 +52,23 @@ export function usePlanner() {
     };
   }, [userId]);
 
+  // Another tab of the same account saved: reload, so this tab does not later overwrite that save with its old copy.
+  // What is loaded becomes the saved snapshot, so loading it does not trigger a save back.
+  useEffect(() => {
+    if (!userId) return;
+    return listenToOtherTabs((message) => {
+      if (message.type !== "saved" || message.userId !== userId) return;
+      loadPlanner()
+        .then((saved) => {
+          lastSaved.current = JSON.stringify(saved.events);
+          setEvents(saved.events.length ? saved.events : null);
+          setSettings(saved.settings);
+          setSaveState("saved");
+        })
+        .catch(() => {}); // the next save or reload tries again
+    });
+  }, [userId]);
+
   // Save shortly after every change. Never before the saved list has loaded, or an empty page would overwrite it.
   useEffect(() => {
     if (!userId || !loaded) return;
@@ -63,6 +81,7 @@ export function usePlanner() {
         .then(() => {
           lastSaved.current = snapshot;
           setSaveState("saved");
+          tellOtherTabs({ type: "saved", userId });
         })
         .catch(() => setSaveState("error"));
     }, 500);
@@ -77,6 +96,7 @@ export function usePlanner() {
     try {
       await saveSettings(userId, next);
       setSettingsState("saved");
+      tellOtherTabs({ type: "saved", userId });
     } catch {
       setSettingsState("error");
     }

@@ -60,8 +60,12 @@ export default function Privacy() {
       <h2>Who else handles your information</h2>
       <ul>
         <li>
-          <strong>Supabase</strong> holds accounts, saved events and settings, and sends the confirmation and
-          password-reset emails.
+          <strong>Supabase</strong> holds accounts, saved events and settings.
+        </li>
+        <li>
+          <strong>Brevo</strong> delivers the account emails (confirming your address, resetting your password,
+          changing your email) for Supabase. It receives your email address and the content of those emails, and
+          nothing else: not your events, outlines or settings.
         </li>
         <li>
           <strong>Vercel</strong> hosts the site and counts page views. The counting uses no cookies and does not

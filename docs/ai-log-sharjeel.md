@@ -712,3 +712,54 @@ I sent a screenshot of a 20-item checklist for finished websites and chose: buil
 **Not checked**
 
 - With three questions above the calendar the month is at its smallest and the area scrolls by a pixel; that is on purpose, to keep the month readable.
+
+## 19 Oct 2026: account emails through Brevo
+
+**Prompts:** "now im making a brevo account." then "1 done" (Supabase now sends its account emails through Brevo's SMTP).
+
+**What was done**
+
+- The team set up Brevo and Supabase's custom SMTP themselves; no key or password passed through the AI.
+- `supabase/email-templates/`: three emails in the planner's colours (confirm signup, reset password, change email), with a README giving each one's Supabase template name and subject.
+- The reset email links to `{{ .RedirectTo }}?token_hash=...&type=recovery`. `RedirectTo` is the exact `/reset-password` address the app asks for, so the Site URL's trailing slash cannot produce `//reset-password`, and the code is only used when the new password is submitted, so the link works on any device and survives email scanners.
+- Privacy page: Brevo named, and what it receives (email address and the email's content only).
+
+**What the AI got wrong**
+
+- The first version of the templates had no mobile viewport tag, so they rendered tiny at phone width in the browser check. Added.
+
+**How it was checked**
+
+- Each template opened in the browser at desktop and phone width (with the placeholders unfilled).
+
+**Not checked**
+
+- No email has been received in a real inbox yet, and the links have not been followed end to end. The reset link only works if `https://semester-planner-chi.vercel.app/**` is in Supabase's Redirect URLs; otherwise Supabase falls back to the Site URL and the link lands on the home page.
+
+## 19 Oct 2026: email change "didn't change", and two tabs fighting
+
+**Prompts:** "change email is acting up." then "it didnt change the email. furthermore, make a feature for all redirections: i click from my email to open a tab with the website and the website was already open. so it causes conflicts bw the 2 tabs"
+
+**What was going on**
+
+- Supabase's "Secure email change" (on by default) sends a link to the old and the new address and changes the email only after both are opened. After the first, it sends the browser back with a message; the app ignored it (and any error from an expired link), so nothing seemed to happen.
+- Sign-in is already kept in step between tabs by Supabase, but each tab kept its own copy of the events and saved the whole list, so whichever tab saved last overwrote the other.
+
+**What was built**
+
+- `app/link-landing.js` on every page: when a page is opened from an email link, it says what happened ("Half done: now open the link sent to your other email address", "This link did not work (Email link is invalid or has expired)...", or "Link opened. You are signed in as ...; ... still needs confirming"), removes the link from the address bar, tells any other open tab (which shows the same message), and says the new tab can be closed. The reset-password page is left alone, because it needs its code until the password is submitted.
+- `lib/tabs.js`: tabs in the same browser tell each other when they save events or settings; the others reload from the account, so none overwrites another.
+- Settings shows a pending email change ("A change to ... is waiting: open the links sent to both addresses"), and the change-email template says to press the button in both emails.
+
+**What the AI got wrong**
+
+- The first version said "Done: you are signed in" after any link with a code. Tested with a code the browser had not asked for, it still said "Done", because Supabase quietly skips such a code and the tab was already signed in. It now says only what the account looks like, read fresh from Supabase (which also updates the email shown in the other tab).
+- "Your other tab has been updated" read wrongly after an error; reworded.
+
+**How it was checked**
+
+- In the browser against the local stand-in, with two tabs: the "other email" message in the new tab and "From your other tab" in the first; an expired-link error; a code link with a pending new address; "Accept all" in one tab reloading the other (38 events ready to download in both); the pending change shown in Settings.
+
+**Not checked**
+
+- Real email links from Supabase have not been followed end to end; the exact message text Supabase sends after the first of the two links is taken from its usual wording, and any other message is shown as it is.

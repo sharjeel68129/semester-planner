@@ -34,7 +34,8 @@ Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Li
 | `lib/review.js` | `needsReview`, `canExport`, `mergeEvents(old, new, { partial })`, `expandWeekly`, `openChoices`, `chooseSection`, `courseKey`, `acceptSuggestions`, `preferDetailed`, `coursesWithoutClass`, `numberGaps` (Exercise 1-7 and 9-13: is 8 missing?) | done |
 | `lib/evaluate.js` | `score(predicted, truth)` | done (no truth file or runner script yet) |
 | `app/page.js` | picks the screen (landing or planner) | done |
-| `app/use-planner.js` | `usePlanner()`: who is signed in, with their events and settings loaded and saved; shared by both pages | done |
+| `app/use-planner.js` | `usePlanner()`: who is signed in, with their events and settings loaded and saved; shared by both pages; reloads when another tab saves | done |
+| `lib/tabs.js`, `app/link-landing.js` | open tabs in the same browser tell each other about saves (the others reload, so none overwrites another) and about links from emails; every page shows what a link from an email did ("Half done: now open the link sent to your other email address") and tidies it out of the address bar | done (checked with a local stand-in; real email links not yet followed) |
 | `app/settings/page.js` | `/settings`: reminders, semester, calendar display, email, password, remove all events, delete account | done (account actions only run against a local stand-in for Supabase) |
 | `app/reset-password/page.js` | where the password-reset email leads | done (same caveat) |
 | `lib/settings.js` | `Settings` shape + `makeSettings`, reminder and view options, `noClassCourses`, `breakdowns` (each course's grade breakdown), `ignoredGaps` | done |
@@ -54,6 +55,7 @@ Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Li
 | `app/auth-form.js` | sign in / create account / forgot password (email + password) | done |
 | `lib/account.js` | browser Supabase client, `loadPlanner`, `saveEvents`, `saveSettings`, `deleteAccount`, `maskEmail` (the address as pages show it) | done |
 | `lib/account-server.js` | `getUser()` for route handlers | done (same caveat) |
+| `supabase/email-templates/` | the account emails (confirm signup, reset password, change email), sent by Supabase through Brevo SMTP; pasted into Supabase by hand, see its README | done (not yet received in a real inbox) |
 | `supabase/schema.sql` | `planners` table (one row per user, `events` and `settings` jsonb) + row level security + `delete_my_account(password)` | the settings column and the delete function have **never been run on a real project** |
 
 ## Product rules (do not violate)

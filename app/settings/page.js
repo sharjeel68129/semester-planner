@@ -47,20 +47,24 @@ function check({ error }) {
   if (error) throw new Error(error.message);
 }
 
-function ChangeEmail({ email }) {
+function ChangeEmail({ email, pending }) {
   const { busy, run, result } = useAction();
   function onSubmit(e) {
     e.preventDefault();
     const next = new FormData(e.target).get("email");
     run(async () => {
       check(await supabase().auth.updateUser({ email: next }, { emailRedirectTo: window.location.origin }));
-      return `We emailed a confirmation link to ${next}. Your address stays ${maskEmail(email)} until you open it.`;
+      return `We emailed a link to ${next} and to ${maskEmail(email)}. Your address changes once you have opened both.`;
     });
   }
   return (
     <form onSubmit={onSubmit} aria-busy={busy}>
       <h3>Email</h3>
-      <p className="hint">You sign in with {maskEmail(email)}.</p>
+      <p className="hint">
+        You sign in with {maskEmail(email)}.
+        {/* Supabase changes the address only after the links sent to both the old and the new one are opened. */}
+        {pending && ` A change to ${maskEmail(pending)} is waiting: open the links sent to both addresses.`}
+      </p>
       <div className="field">
         <label htmlFor="new-email">New email address</label>
         <input id="new-email" type="email" name="email" autoComplete="email" required />
@@ -292,7 +296,7 @@ export default function SettingsPage() {
 
             <section aria-labelledby="account-heading">
               <h2 id="account-heading">Account</h2>
-              <ChangeEmail email={user.email} />
+              <ChangeEmail email={user.email} pending={user.new_email} />
               <ChangePassword />
               <div>
                 <h3>Saved events</h3>

@@ -1488,6 +1488,30 @@ blockquote {
   padding: 0.6rem 0;
 }
 
+/* ---- What a link from an email did, shown just under the top bar ---- */
+
+.link-landing {
+  position: fixed;
+  top: 4.25rem;
+  left: 50%;
+  z-index: 30;
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  width: min(36rem, calc(100vw - 2rem));
+  padding: 0.75rem 1rem;
+  transform: translateX(-50%);
+  background: var(--paper);
+  border: 1.5px solid var(--maroon);
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.12);
+  font-size: 0.9375rem;
+}
+
+.link-landing p {
+  flex: 1;
+}
+
 /* ---- Cookie notice and the phone-only sign-up bar, both fixed to the bottom ---- */
 
 .cookie-notice {

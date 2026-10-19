@@ -2,6 +2,7 @@ import { Crimson_Pro, Atkinson_Hyperlegible } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import CookieNotice from "./cookie-notice";
+import LinkLanding from "./link-landing";
 import "./globals.css";
 
 // Self-hosted by Next at build time, so no font request leaves the student's browser.
@@ -23,6 +24,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${crimson.variable} ${atkinson.variable}`}>
       <body>
         {children}
+        <LinkLanding />
         <CookieNotice />
         {/* Page-view counts in the Vercel dashboard. Sets no cookies. Does nothing until switched on there. */}
         <Analytics />
