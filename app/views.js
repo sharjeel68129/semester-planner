@@ -62,28 +62,60 @@ function Chip({ event, index, suggested = false, onOpen, style }) {
 
 // ---- Task list by date ----
 
-function ListRow({ event, index, onOpen }) {
+/** The first sentence of a note, short enough for one line of a row. */
+function firstSentence(note) {
+  const sentence = String(note || "").split(/(?<=[.!?])\s/)[0].trim();
+  return sentence.length > 110 ? `${sentence.slice(0, 107)}...` : sentence;
+}
+
+const shortDay = (iso) => formatDate(iso, { weekday: "short", day: "numeric", month: "short" });
+
+/**
+ * One event as a compact row: type badge, title, what it is worth and when, one line saying why it needs a look
+ * (or what the outline says about when), and on the right a suggested date if there is one.
+ */
+function ListRow({ event, index, onOpen, showCourse = true }) {
   const flagged = needsReview(event);
+  const meta = [showCourse && event.course, event.weight !== null && `${event.weight}%`, event.time].filter(Boolean);
+  const why = firstSentence(event.note);
+  const suggested = event.suggestedDates;
   return (
     <li>
       <button type="button" className={flagged ? "task task-flagged" : "task"} onClick={() => onOpen(index)}>
-        <span className="task-time">{event.time || (event.date ? "All day" : "")}</span>
+        <span className={`chip chip-${event.type} task-type`}>{TYPE_LABELS[event.type]}</span>
         <span className="task-body">
-          <span className="task-title">{event.title}</span>
-          <span className="task-meta">{[TYPE_LABELS[event.type], event.course].filter(Boolean).join(", ")}</span>
+          <span className="task-head">
+            <span className="task-title">{event.title}</span>
+            {meta.length > 0 && <span className="task-meta">{meta.join(" · ")}</span>}
+          </span>
+          {flagged && (
+            <span className="task-why">
+              <CheckIcon /> {why || "The AI was not confident about this one."}
+            </span>
+          )}
+          {!flagged && !event.date && why && <span className="task-note">{why}</span>}
         </span>
-        {flagged && (
-          <span className="task-check">
-            <CheckIcon /> Check
+        {/* Not a warning: a date was worked out from the week number and waits for the student to accept it. */}
+        {!flagged && (!event.date || suggested.length > 1) && suggested.length > 0 && (
+          <span className="task-tag">
+            {suggested.length > 1 ? `Weekly from ${shortDay(suggested[0])}` : `Suggested ${shortDay(suggested[0])}`}
           </span>
         )}
-        {/* Not a warning: a date was worked out from the week number and waits for the student to accept it. */}
-        {!flagged && (!event.date || event.suggestedDates.length > 1) && event.suggestedDates.length > 0 && (
-          <span className="task-tag">{event.suggestedDates.length > 1 ? "Weekly dates suggested" : "Date suggested"}</span>
-        )}
+        {flagged && <span className="sr-only"> (needs checking)</span>}
       </button>
     </li>
   );
+}
+
+/** Undated events grouped by course, in the order they were found. */
+function byCourse(items) {
+  const groups = new Map();
+  for (const item of items) {
+    const name = item.event.course || "No course given";
+    if (!groups.has(name)) groups.set(name, []);
+    groups.get(name).push(item);
+  }
+  return [...groups];
 }
 
 export function ListView({ events, onOpen }) {
@@ -94,24 +126,42 @@ export function ListView({ events, onOpen }) {
       {undated.length > 0 && (
         <section>
           <h3>No date yet</h3>
-          <p className="hint">Open each one and add a date to put it on the calendar.</p>
-          <ul>
-            {undated.map((item) => (
-              <ListRow key={item.index} {...item} onOpen={onOpen} />
+          <p className="hint">Open one to add a date or accept the suggested one. Flagged ones need a look first.</p>
+          <div className="list-cards">
+            {byCourse(undated).map(([course, items]) => (
+              <div key={course} className="list-card">
+                <h4>
+                  {course} <span className="list-count">{items.length}</span>
+                </h4>
+                <ul>
+                  {items.map((item) => (
+                    <ListRow key={item.index} {...item} onOpen={onOpen} showCourse={false} />
+                  ))}
+                </ul>
+              </div>
             ))}
-          </ul>
+          </div>
         </section>
       )}
-      {days.map(([date, items]) => (
-        <section key={date}>
-          <h3>{formatDate(date, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}</h3>
-          <ul>
-            {items.map((item) => (
-              <ListRow key={item.index} {...item} onOpen={onOpen} />
+      {days.length > 0 && (
+        <section>
+          <h3>By date</h3>
+          <div className="list-cards">
+            {days.map(([date, items]) => (
+              <div key={date} className={date === today() ? "list-card is-today" : "list-card"}>
+                <h4>
+                  <time dateTime={date}>{formatDate(date, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}</time>
+                </h4>
+                <ul>
+                  {items.map((item) => (
+                    <ListRow key={item.index} {...item} onOpen={onOpen} />
+                  ))}
+                </ul>
+              </div>
             ))}
-          </ul>
+          </div>
         </section>
-      ))}
+      )}
     </div>
   );
 }

@@ -40,6 +40,10 @@ export default function Privacy() {
       <ul>
         <li>The file is read on our server to get its text. The file itself is not saved.</li>
         <li>
+          A picture (.png, .jpg, .webp) or a scanned PDF has no text to read, so the whole file is sent to Google&rsquo;s
+          Gemini AI service to copy the text out of it. Everything in the picture goes to Google, not only the outline.
+        </li>
+        <li>
           The text is sent to Google&rsquo;s Gemini AI service, which picks out the events. Google handles that text
           under its own terms, and may keep it or use it to improve its services.
         </li>
@@ -63,7 +67,8 @@ export default function Privacy() {
           identify you.
         </li>
         <li>
-          <strong>Google</strong> receives the text of each outline you upload, as described above.
+          <strong>Google</strong> receives the text of each outline you upload, and the whole file if it is a picture
+          or a scanned PDF, as described above.
         </li>
       </ul>
       <p>We do not sell your information or show advertising.</p>

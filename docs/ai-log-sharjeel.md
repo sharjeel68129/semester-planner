@@ -612,3 +612,55 @@ I sent a screenshot of a 20-item checklist for finished websites and chose: buil
 
 - Not tried with real outlines through Gemini, and not on the live site with the real Supabase.
 - "Two files describe the same course" relies on both files naming the course with the same subject code.
+
+## 19 Oct 2026: finishing PR #1 (Khoa: pictures, scanned PDFs, event types, week ranges)
+
+**Prompt:** "check for prs", then "do the first choice of new branch" (fix the PR's problems on a new branch, keeping Khoa's commits).
+
+**What the PR did (Khoa's work)**
+
+- Pictures (.png, .jpg, .webp) and scanned PDFs: Gemini copies the text out, then extraction runs as usual.
+- Clearer rules for the four event types, and things staff do (solutions posted) left out.
+- Classes that run only in some weeks ("Weeks 2-13", "No lecture in Week 8"), and items held during a class ("Test in the Monday lecture") taking that class's weekday and time.
+
+**Problems found in review, and what was changed**
+
+- **Could run past the host's 5-minute limit.** Copying text tried up to five models at 30 s each with no overall limit, before extraction's own 3.5 minutes. Now it uses the same model chain as extraction (busy models rested, one time limit of 60 s), so the two together stay under 300 s.
+- **A busy or used-up AI service was reported as "may be corrupt or password-protected".** Copying text now happens outside the file parser's error handling and reports "Gemini request failed (429, daily limit)" like extraction does, which the planner turns into the usual message.
+- **Week ranges did nothing:** the model was asked for them but the date code ignored them (the PR said so). `suggestWeekly` now takes `{ from, to, skip }`, leaves those weeks out, and says so in the note.
+- "lab", "tutorial" and "lecture" are matched as whole words (a title containing "Collaborative" no longer counts as a lab), and a time is no longer borrowed when sections meet at different times.
+- **The privacy page said only text goes to Google.** A picture or scanned PDF is sent whole; the page now says so. `CLAUDE.md` updated for the new file types and the extra request.
+- Removed `.vscode/launch.json` (a personal editor file), undid a formatting-only change to `next.config.mjs`, fixed indentation.
+
+**What the AI got wrong while doing this**
+
+- Two of my own test mistakes: the test set the model list after the code had read it, so a "daily limit" check failed for the wrong reason.
+- My first edit script mangled a regular expression (`\b` became an invisible character). Caught by reading the line back.
+
+**How it was checked**
+
+- 17 new checks with Gemini stubbed (week ranges, file checks, picture text copied, daily limit and other errors reported correctly, blank picture, "during a lab/tutorial"), plus all earlier checks.
+- One live run with real Gemini on a made-up outline rendered as a picture: the text was copied exactly (21 s), extraction took 12 s, the lecture skipped week 8, the tutorial ran weeks 2 to 13, both tests got Monday at the lecture's 08:30, and the breakdown came to 100%. 2 requests used.
+
+**Not checked**
+
+- A real scanned PDF (only a picture was tried; the PDF path differs only in the file type sent).
+- A real photo of a page (angled, blurred), and pictures near the 4 MB limit.
+- Whether the new event-type rules change results on the earlier made-up outlines.
+
+## 19 Oct 2026: list view made denser
+
+**Prompt:** "region looks very bland. so much wasted space." (screenshot of the list: one full-width row per event, title and type only, mostly empty).
+
+**What was changed**
+
+- The list is now a grid of cards that fills the width: one card per course for events with no date yet, one per day for dated events.
+- Each row has a type badge in the calendar's colours, the weight and time on the title line, and one line saying why it is flagged or what the outline says about when. A suggested date ("Suggested Thu 10 Sept", "Weekly from Thu 10 Sept") shows on the right, so it can be seen without opening the event.
+
+**What the AI got wrong**
+
+- The first screenshot after the change showed the weight run into the title ("Tests/assignments40%"): the page had the new styles but the old markup. A reload fixed it; nothing was wrong in the code.
+
+**How it was checked**
+
+- In the browser against the local stand-in, with 13 made-up events like the AMA1702 screenshot: two columns of cards at desktop width, rows 57 px instead of 75 px, no sideways scrolling at phone width (375 px).
