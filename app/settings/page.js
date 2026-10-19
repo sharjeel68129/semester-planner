@@ -54,7 +54,7 @@ function ChangeEmail({ email, pending }) {
     const next = new FormData(e.target).get("email");
     run(async () => {
       check(await supabase().auth.updateUser({ email: next }, { emailRedirectTo: window.location.origin }));
-      return `We emailed a link to ${next} and to ${maskEmail(email)}. Your address changes once you have opened both.`;
+      return `We emailed a link to ${maskEmail(next)} and to ${maskEmail(email)}. Your address changes once you have opened both.`;
     });
   }
   return (

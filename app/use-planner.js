@@ -27,6 +27,29 @@ export function usePlanner() {
     return () => data.subscription.unsubscribe();
   }, []);
 
+  // A change made in another browser or on another device (an email change confirmed elsewhere) only reaches this tab
+  // when its sign-in next refreshes, up to an hour later. So on coming back to the tab, ask Supabase for the account
+  // and refresh at once if it differs. At most once a minute.
+  useEffect(() => {
+    if (!userId) return;
+    let checked = 0;
+    async function check() {
+      if (document.visibilityState !== "visible" || Date.now() - checked < 60000) return;
+      checked = Date.now();
+      const { data } = await supabase().auth.getUser();
+      const fresh = data?.user;
+      if (fresh && (fresh.email !== user.email || (fresh.new_email || "") !== (user.new_email || ""))) {
+        await supabase().auth.refreshSession(); // its sign-in event updates `user` here and in other tabs
+      }
+    }
+    document.addEventListener("visibilitychange", check);
+    window.addEventListener("focus", check);
+    return () => {
+      document.removeEventListener("visibilitychange", check);
+      window.removeEventListener("focus", check);
+    };
+  }, [userId, user?.email, user?.new_email]);
+
   // Signing in loads that student's events and settings; signing out clears them from the page.
   useEffect(() => {
     setEvents(null);

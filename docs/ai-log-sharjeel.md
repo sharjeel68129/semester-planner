@@ -781,3 +781,28 @@ I sent a screenshot of a 20-item checklist for finished websites and chose: buil
 **How it was checked**
 
 - In the browser against the local stand-in: a second tab opened as from an email link closed the first one (the preview browser allowed it); with closing blocked, as in an ordinary Chrome tab, the old tab showed the message and its page could not be clicked; "Use it here" (a reload) took over and paused the other tab; Escape pressed twice left it paused.
+
+## 19 Oct 2026: email change tested live; fixing what it showed
+
+**Prompt:** "solve any discrepancies if any." (three screenshots: the Settings tab not paused although the new tab said it was; a second Chrome profile signed in as the new address; the first profile still showing the old one).
+
+**What the screenshots showed**
+
+- The email change itself worked: after both links, the account is the new address.
+- The Settings tab was not paused. It had been opened before the new version went live, so it ran old code that cannot pause; the new tab still said "The planner in your other tab has been paused", because it only checked that another tab answered, not that it paused.
+- Tabs in the other Chrome profile kept showing the old address: a tab only learns of a change made in another browser when its sign-in next refreshes, up to an hour later.
+- The Settings confirmation showed the new address unmasked.
+
+**What was changed**
+
+- A paused tab now confirms it paused, and the new tab only says "paused" after that confirmation.
+- Coming back to a tab (focus or switching to it) asks Supabase for the account at most once a minute and refreshes at once if the email or a pending change differs.
+- The new address is masked in the Settings message.
+
+**How it was checked**
+
+- In the browser against the local stand-in: "paused" said when the other tab paused, not said with no other tab; an email change completed behind the tab's back showed the new address in the header and Settings as soon as the tab was focused.
+
+**Note for testing after a deploy**
+
+- A tab opened before a new version goes live keeps running the old code until it is reloaded.

@@ -17,6 +17,7 @@ export default function OneTab() {
     const stop = listenToOtherTabs((message) => {
       if (message.type !== "claim") return;
       setPaused(true);
+      tellOtherTabs({ type: "paused" }); // so the new tab can say so truthfully
       window.close(); // does nothing where the browser does not allow it
     });
     tellOtherTabs({ type: "claim" });

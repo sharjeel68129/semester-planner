@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { accountsEnabled, maskEmail, supabase } from "@/lib/account";
-import { anotherTabOpen, listenToOtherTabs, tellOtherTabs } from "@/lib/tabs";
+import { anotherTabPaused, listenToOtherTabs, tellOtherTabs } from "@/lib/tabs";
 
 // The reset page needs its one-time code in the address until the new password is submitted, so it is left alone.
 const LEAVE_ALONE = ["/reset-password"];
@@ -34,7 +34,6 @@ export default function LinkLanding() {
   useEffect(() => {
     if (!accountsEnabled) return;
     const stop = listenToOtherTabs((message) => {
-      if (message.type === "ping") tellOtherTabs({ type: "pong" });
       if (message.type === "link") setText(`From your other tab: ${message.text}`);
     });
 
@@ -66,8 +65,9 @@ export default function LinkLanding() {
       // Without the code or message in the address, a reload does not try to use the link again.
       window.history.replaceState(null, "", path);
       tellOtherTabs({ type: "link", text: result });
-      const other = await anotherTabOpen();
-      setText(other ? `${result} The planner in your other tab has been paused, so carry on here.` : result);
+      // Only claimed if a tab actually answered that it paused (a tab on an older version of the site does not).
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      setText(anotherTabPaused() ? `${result} The planner in your other tab has been paused, so carry on here.` : result);
     })();
     return stop;
   }, []);
