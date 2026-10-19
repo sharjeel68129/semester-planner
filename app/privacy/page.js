@@ -31,8 +31,9 @@ export default function Privacy() {
           from your outline, any class times you type in, and any changes you make.
         </li>
         <li>
-          <strong>Your settings.</strong> Reminder times, semester, calendar display, and the courses you said have no
-          classes.
+          <strong>Your settings.</strong> Reminder times, semester, calendar display, the courses you said have no
+          classes, each course&rsquo;s grade breakdown as read from its outline, and the numbered items you said are not
+          missing.
         </li>
       </ul>
 

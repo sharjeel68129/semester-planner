@@ -167,6 +167,8 @@ export default function SettingsPage() {
   function removeAll() {
     if (!window.confirm("Remove all your events? This cannot be undone.")) return;
     setEvents(null);
+    // The grade breakdowns and skipped-number answers came with those events' outlines.
+    updateSettings({ breakdowns: {}, ignoredGaps: [] });
   }
 
   return (

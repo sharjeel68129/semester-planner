@@ -684,3 +684,31 @@ I sent a screenshot of a 20-item checklist for finished websites and chose: buil
 **How it was checked**
 
 - In the browser against the local stand-in at 1600 x 780 (the size in the screenshot), 55 made-up events: no page scroll and no scroll in the calendar area, with both questions showing and without; no day's events cut off; week view fits and scrolls inside its own box; Settings still scrolls to "Delete account"; at phone width the page scrolls as before with no sideways scrolling.
+
+## 19 Oct 2026: tighter sidebar, grade breakdown per course, a missing Exercise 8
+
+**Prompt:** "reduce vertical gaps in image 1. and also find some space to give an overall grade distribution of the course. like 20% for midterm, 60 for exam, 10 for assignment and 10 for weekly exercises. furthermore, weekly exercise 8 is missing. i know it was also missing in the file but im not sure how to deal with it"
+
+**What was changed**
+
+- Sidebar: smaller section headings, less space between sections and around the upload box, smaller small print.
+- A "Grade breakdown" panel in the sidebar: for each course, its parts as a list of bars, largest first, each with its percentage written beside it; the 100% check and the comparison with PolyU's form underneath. It replaces the one-line "Assessments add up to 100%" text, which vanished on reload; the breakdown is now saved with the account (in settings) and cleared by "Remove all events".
+- Numbered items with a gap ("Exercise 1-7 and 9-13") get a question above the calendar: "Exercise 8 is not in the outline... It may be skipped on purpose, for example in a test week", with "Add Exercise 8" (added with no date and a note saying the student added it) or "It isn't missing" (remembered). Nothing is added by itself (rule 1: never invent).
+- In this case week 8 is the AMA1702 Midterm Test week (Sun 25 Oct), so Exercise 8 is probably skipped on purpose; the app cannot know that, so it asks.
+
+**Form of the breakdown chart**
+
+- A ranked bar list in one colour rather than one stacked bar: a 21rem sidebar with names like "Weekly exercises" cannot label stacked segments, and every value is written beside its bar, so no colour key or colour-blind check is needed.
+
+**What the AI got wrong**
+
+- An edit script broke on a "\n" inside a Python string and did not run; nothing was changed by it, and it was fixed and rerun.
+
+**How it was checked**
+
+- 16 new checks (gap finding: missing 8 found, answered gaps stay quiet, complete series, two items, scattered numbers, sections, separate courses, "Ex. 1" titles, weekly copies; saved breakdowns cleaned of bad rows and non-https links) plus all earlier checks.
+- In the browser against the local stand-in at 1600 x 780: the Exercise 8 question, both answers (the added event saved with no date and the note; "It isn't missing" saved and still answered after a reload), breakdowns shown after a reload, and an upload (canned extraction, no Gemini) saving its breakdown beside the earlier ones with "No event was found for Examination".
+
+**Not checked**
+
+- With three questions above the calendar the month is at its smallest and the area scrolls by a pixel; that is on purpose, to keep the month readable.

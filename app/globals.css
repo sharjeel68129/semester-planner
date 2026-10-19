@@ -217,31 +217,79 @@ blockquote {
   padding-left: 1.1rem;
 }
 
-/* The 100% check after an upload: plain when it adds up, outlined when something is missing. */
-.checks {
-  margin: 0.9rem 0 0;
+/* Each course's grade breakdown: one bar per part, largest first; the value is always written beside its bar. */
+.breakdown {
+  margin-top: 0.7rem;
+  font-size: 0.875rem;
+}
+
+.breakdown h3 {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.breakdown-total {
+  color: var(--ink-soft);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+.breakdown-gap .breakdown-total {
+  color: var(--maroon);
+  font-weight: 700;
+}
+
+.breakdown-rows {
+  margin: 0.3rem 0 0;
   padding: 0;
   list-style: none;
-  font-size: 0.9375rem;
+}
+
+.breakdown-rows li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.1rem 0.5rem;
+  padding: 0.2rem 0;
+}
+
+.breakdown-name {
   overflow-wrap: anywhere;
 }
 
-.checks li {
-  margin-top: 0.5rem;
-  padding: 0.6rem 0.75rem;
-  border-left: 4px solid var(--rule);
+.breakdown-value {
+  font-variant-numeric: tabular-nums;
   color: var(--ink-soft);
 }
 
-.check-reference {
-  display: block;
-  margin-top: 0.4rem;
+/* A thin bar on a quiet track of the full 100%, rounded at the end. */
+.breakdown-track {
+  grid-column: 1 / -1;
+  height: 6px;
+  background: var(--rule);
+  border-radius: 3px;
 }
 
-.checks .check-gap {
-  border-left-color: var(--maroon);
+.breakdown-bar {
+  display: block;
+  height: 100%;
+  background: var(--maroon);
+  border-radius: 3px;
+}
+
+.breakdown-note {
+  margin-top: 0.35rem;
+  padding: 0.35rem 0.5rem;
+  color: var(--maroon);
   background: var(--blush);
-  color: inherit;
+  border-left: 3px solid var(--maroon);
+}
+
+.breakdown-reference {
+  margin-top: 0.35rem;
+  color: var(--ink-soft);
 }
 
 .check-icon {
@@ -510,7 +558,7 @@ blockquote {
 }
 
 .sidebar {
-  padding: 1.5rem 1.25rem;
+  padding: 1.1rem 1.1rem;
   background: var(--blush);
   border-bottom: 1px solid var(--rule);
 }
@@ -523,18 +571,42 @@ blockquote {
   line-height: 1.2;
 }
 
+.sidebar h2 {
+  font-size: 1.25rem;
+}
+
+.sidebar .hint {
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.sidebar .field {
+  margin-top: 0.7rem;
+}
+
+.sidebar .field input[type="file"] {
+  min-height: 0;
+  padding: 0.45rem;
+}
+
+/* Empty until something is uploading; then it holds the progress line. */
+.sidebar .status {
+  min-height: 0;
+  margin-top: 0.5rem;
+}
+
 .sidebar-section {
-  margin-top: 1.75rem;
-  padding-top: 1.5rem;
+  margin-top: 1rem;
+  padding-top: 0.9rem;
   border-top: 1px solid var(--rule);
 }
 
 .sidebar-section .button {
-  margin: 0.8rem 0 0.6rem;
+  margin: 0.6rem 0 0.4rem;
 }
 
 .sidebar form .button {
-  margin-top: 1.25rem;
+  margin-top: 0.8rem;
 }
 
 .sidebar-foot {
@@ -542,8 +614,8 @@ blockquote {
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 0.5rem 1rem;
-  margin-top: 1.75rem;
-  padding-top: 1rem;
+  margin-top: 1rem;
+  padding-top: 0.8rem;
   border-top: 1px solid var(--rule);
   font-size: 0.9375rem;
 }
@@ -595,7 +667,7 @@ blockquote {
   /* Never squeezed below a readable size: with many notices above it, the calendar area scrolls instead. */
   .main > .month {
     flex: 1 1 0;
-    min-height: 20rem;
+    min-height: 18rem;
     grid-template-rows: auto;
     grid-auto-rows: minmax(0, 1fr);
   }

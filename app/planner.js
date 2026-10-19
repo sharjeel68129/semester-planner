@@ -6,10 +6,12 @@ import {
   canExport,
   chooseSection,
   courseKey,
+  describeNumbers,
   coursesWithoutClass,
   expandWeekly,
   mergeEvents,
   needsReview,
+  numberGaps,
   openChoices,
   preferDetailed,
 } from "@/lib/review";
@@ -22,6 +24,7 @@ import { TERMS, resolveTerm, termRange } from "@/lib/polyu-calendar";
 import { VIEW_OPTIONS, describeReminders } from "@/lib/settings";
 import { CheckIcon, ListView, MonthView, WeekView, TYPE_LABELS, periodLabel } from "./views";
 import EventEditor from "./event-editor";
+import Breakdown from "./breakdown";
 
 const MAX_MB = MAX_FILE_BYTES / 1024 / 1024;
 
@@ -34,22 +37,6 @@ function explain(message) {
     return "The AI service is busy right now. Wait a minute, then press the button again.";
   }
   return message || "Something went wrong. Try again.";
-}
-
-const percent = (n) => `${Math.round(n * 100) / 100}%`;
-
-/** One course's 100% check in words. It covers graded components only, and says nothing about dates. */
-function checkLine({ total, rows }) {
-  if (total === null) return "No grade breakdown was found, so the assessments could not be checked against 100%.";
-  const parts = rows.map((row) => `${row.name} ${percent(row.weight)}`).join(", ");
-  const empty = rows.filter((row) => row.events === 0).map((row) => `${row.name} (${percent(row.weight)})`);
-  const lines = [];
-  if (total === 100) lines.push(`Assessments add up to 100%: ${parts}.`);
-  else if (total < 100) {
-    lines.push(`Assessments found add up to ${percent(total)}: ${parts}. ${percent(100 - total)} is missing; check the outline's assessment section.`);
-  } else lines.push(`Assessments found add up to ${percent(total)}, which is over 100%: ${parts}. Something may be counted twice.`);
-  if (empty.length > 0) lines.push(`No event was found for ${empty.join(", ")}.`);
-  return lines.join(" ");
 }
 
 const WEEKDAY_OPTIONS = [
@@ -139,6 +126,7 @@ export default function Planner({ events, setEvents, settings, updateSettings, a
   const acceptable = acceptSuggestions(list).accepted;
   const noDateAtAll = list.filter((event) => !event.date && event.suggestedDates.length === 0 && !needsReview(event)).length;
   const missingClasses = coursesWithoutClass(list, settings.noClassCourses);
+  const gaps = numberGaps(list, settings.ignoredGaps);
   // The calendar shows dated events and suggested dates; only events with neither are missing from it.
   const unshown = list.filter((event) => !event.date && event.suggestedDates.length === 0).length;
 
@@ -200,6 +188,20 @@ export default function Planner({ events, setEvents, settings, updateSettings, a
     setFailed(skipped);
     setChecks(checked);
     setLeftOut(duplicates.filter((item) => item.events.length > 0));
+    // Each course's breakdown is kept with the account, so it is still shown after a reload. A file with no
+    // breakdown does not wipe one read earlier from another file for the same course.
+    const read = {};
+    for (const check of checked) {
+      const key = courseKey(check.course || check.file);
+      if (check.total === null && settings.breakdowns[key]?.rows.length) continue;
+      read[key] = {
+        course: check.course || check.file,
+        total: check.total,
+        rows: check.rows.map(({ name, weight }) => ({ name, weight })),
+        reference: check.reference || null,
+      };
+    }
+    if (Object.keys(read).length > 0) updateSettings({ breakdowns: { ...settings.breakdowns, ...read } });
     setProgress("");
     setLoading(false);
   }
@@ -231,6 +233,7 @@ export default function Planner({ events, setEvents, settings, updateSettings, a
     setChecks([]);
     setFailed([]);
     setEvents(null);
+    updateSettings({ breakdowns: {}, ignoredGaps: [] });
   }
 
   function acceptAll() {
@@ -253,6 +256,12 @@ export default function Planner({ events, setEvents, settings, updateSettings, a
     );
     setEvents((current) => [...(current || []), ...added]);
     return true;
+  }
+
+  /** The student says a numbered item the outline skips does exist: added with no date, for them to fill in. */
+  function addMissing(gap, number) {
+    const note = `Not in the outline: you added it because the outline lists ${gap.stem} ${describeNumbers(gap.numbers)}.`;
+    setEvents((current) => [...(current || []), makeEvent({ title: `${gap.stem} ${number}`, course: gap.course, type: gap.type, note })]);
   }
 
   function downloadCalendar() {
@@ -332,29 +341,7 @@ export default function Planner({ events, setEvents, settings, updateSettings, a
           </div>
         )}
 
-        {checks.length > 0 && (
-          <ul className="checks" aria-label="Assessment check">
-            {checks.map((check, i) => (
-              <li key={i} className={check.complete ? "check-ok" : "check-gap"}>
-                <b>{check.course || check.file}:</b> {checkLine(check)}
-                {/* A comparison with PolyU's published split for the course. Information only: the outline wins. */}
-                {check.reference && (
-                  <span className="check-reference">
-                    {check.reference.message}
-                    {check.reference.sourceUrl && (
-                      <>
-                        {" "}
-                        <a className="link" href={check.reference.sourceUrl} target="_blank" rel="noreferrer">
-                          Open the form
-                        </a>
-                      </>
-                    )}
-                  </span>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
+        <Breakdown breakdowns={settings.breakdowns} checks={checks} />
 
         <section className="sidebar-section">
           <h2>Calendar file</h2>
@@ -472,6 +459,33 @@ export default function Planner({ events, setEvents, settings, updateSettings, a
               ))}
               <button type="button" className="link" onClick={() => setEvents((current) => chooseSection(current, choice, null))}>
                 Keep them all
+              </button>
+            </div>
+          </div>
+        ))}
+
+        {gaps.map((gap) => (
+          <div key={gap.key} className="choice" role="group" aria-label={`${gap.stem} missing from ${gap.course}`}>
+            <p>
+              <strong>
+                {gap.course ? `${gap.course}: ` : ""}
+                {gap.missing.map((n) => `${gap.stem} ${n}`).join(" and ")} {gap.missing.length === 1 ? "is" : "are"} not in the
+                outline.
+              </strong>{" "}
+              It lists {gap.stem} {describeNumbers(gap.numbers)}. It may be skipped on purpose, for example in a test week.
+            </p>
+            <div className="choice-options">
+              {gap.missing.map((n) => (
+                <button key={n} type="button" className="button button-quiet" onClick={() => addMissing(gap, n)}>
+                  Add {gap.stem} {n}
+                </button>
+              ))}
+              <button
+                type="button"
+                className="link"
+                onClick={() => updateSettings({ ignoredGaps: [...settings.ignoredGaps, ...gap.missing.map((n) => `${gap.key}|${n}`)] })}
+              >
+                {gap.missing.length === 1 ? "It isn't missing" : "They aren't missing"}
               </button>
             </div>
           </div>
