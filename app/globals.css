@@ -563,18 +563,78 @@ blockquote {
 }
 
 @media (min-width: 960px) {
+  /* The page fits the window: the sidebar and the calendar area scroll on their own, and the month grid stretches
+     to fill the height. A phone keeps one scrolling page, as a month cannot fit there. */
   .app {
+    height: 100dvh;
     grid-template-columns: 21rem minmax(0, 1fr);
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+    align-content: stretch;
+    overflow: hidden;
   }
 
   .sidebar {
+    min-height: 0;
+    overflow-y: auto;
     border-bottom: 0;
     border-right: 1px solid var(--rule);
   }
 
   .main {
-    padding: 1.75rem 2rem 3rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 1.25rem 2rem 1.25rem;
+  }
+
+  .main > * {
+    flex: none;
+  }
+
+  /* Never squeezed below a readable size: with many notices above it, the calendar area scrolls instead. */
+  .main > .month {
+    flex: 1 1 0;
+    min-height: 20rem;
+    grid-template-rows: auto;
+    grid-auto-rows: minmax(0, 1fr);
+  }
+
+  .main > .month .month-cell {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .main > .week {
+    flex: 1 1 0;
+    min-height: 20rem;
+    max-height: none;
+  }
+
+  .main > .legend {
+    margin-top: 0.75rem;
+  }
+
+  .main > .notice {
+    margin: 0.75rem 0;
+  }
+
+  /* Questions above the calendar take one or two lines, with their buttons beside the text. */
+  .main > .choice {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 1rem;
+    margin: 0 0 0.6rem;
+    padding: 0.55rem 0.8rem;
+  }
+
+  .main > .choice > p {
+    flex: 1 1 26rem;
+  }
+
+  .main > .choice .choice-options {
+    margin-top: 0;
   }
 }
 
@@ -829,11 +889,24 @@ blockquote {
 
 .list ul {
   padding: 0;
+  margin-bottom: -1px; /* the last row's line is hidden by the card's edge */
   list-style: none;
 }
 
-.list li + li .task {
-  border-top: 1px solid var(--rule);
+.list li {
+  border-bottom: 1px solid var(--rule);
+}
+
+/* Undated events: one full-width card per course, its rows in as many columns as fit. */
+.list-courses {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 0.9rem;
+}
+
+.list-courses ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
 }
 
 .task {

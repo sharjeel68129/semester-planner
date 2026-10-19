@@ -74,8 +74,8 @@ function ClassTimePrompt({ course, onAdd, onSkip }) {
   return (
     <form className="choice" onSubmit={submit} aria-label={`Class time for ${course}`}>
       <p>
-        <strong>When is {course}&rsquo;s class?</strong> No class time was found in its outline. Add it and it goes on the
-        calendar in every teaching week.
+        <strong>When is {course}&rsquo;s class?</strong> None was found in its outline; it will be added to every
+        teaching week.
       </p>
       <div className="choice-options class-time">
         <label>
@@ -492,8 +492,8 @@ export default function Planner({ events, setEvents, settings, updateSettings, a
               <strong>
                 {acceptable} {acceptable === 1 ? "event has a suggested date" : "events have suggested dates"}
               </strong>
-              , worked out from the week numbers in your outline and drawn with a dashed outline. Check them against the
-              outline, then accept them to put them in the calendar file. Weekly classes become one class per teaching week.
+, worked out from the week numbers in your outline (dashed on the calendar). Check them, then accept them to put
+              them in the calendar file.
             </p>
             <div className="choice-options">
               <button type="button" className="button" onClick={acceptAll}>

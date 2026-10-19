@@ -664,3 +664,23 @@ I sent a screenshot of a 20-item checklist for finished websites and chose: buil
 **How it was checked**
 
 - In the browser against the local stand-in, with 13 made-up events like the AMA1702 screenshot: two columns of cards at desktop width, rows 57 px instead of 75 px, no sideways scrolling at phone width (375 px).
+
+## 19 Oct 2026: page fits the window; list rows use the full width
+
+**Prompts:** "make it unscrollable" (screenshot: month view with a page scrollbar), then "pointless empty space" (screenshot: one course card in a narrow column, the rest of the list empty).
+
+**What was changed**
+
+- On a wide screen (960 px and up) the page is the height of the window and does not scroll. The sidebar and the calendar area scroll on their own if they must, and the month and week grids stretch to fill the space left. A phone keeps one scrolling page, because a month cannot fit there.
+- Each day of the month shows as many events as its height allows (measured, not fixed at 3), and "N more" for the rest, so nothing is cut off silently when days get shorter.
+- The questions above the calendar (class time, accept all) are shorter and put their buttons beside the text on wide screens.
+- In the list, each course card for undated events is full width and its rows flow into as many columns as fit.
+
+**What the AI got wrong**
+
+- First attempt: the page stopped scrolling but the month grid still took its full content height, so the calendar area scrolled instead. A grid's automatic minimum height in a flex column had to be overridden.
+- With two questions showing, the grid was squeezed until days had room for one event; making the questions compact fixed it.
+
+**How it was checked**
+
+- In the browser against the local stand-in at 1600 x 780 (the size in the screenshot), 55 made-up events: no page scroll and no scroll in the calendar area, with both questions showing and without; no day's events cut off; week view fits and scrolls inside its own box; Settings still scrolls to "Delete account"; at phone width the page scrolls as before with no sideways scrolling.

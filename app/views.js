@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { needsReview } from "@/lib/review";
 import { formatDate, monthGrid, today, weekDays } from "@/lib/dates";
 
@@ -7,6 +7,9 @@ export const TYPE_LABELS = { class: "Class", deadline: "Deadline", quiz: "Quiz",
 
 const HOUR_PX = 48;
 const MAX_PER_DAY = 3;
+// Heights in the month grid, for working out how many events fit in a day once the grid fills the window.
+const CHIP_PX = 27; // a chip and the gap above it
+const CELL_TOP_PX = 34; // the day number and the cell's padding
 
 export function CheckIcon() {
   return (
@@ -127,7 +130,7 @@ export function ListView({ events, onOpen }) {
         <section>
           <h3>No date yet</h3>
           <p className="hint">Open one to add a date or accept the suggested one. Flagged ones need a look first.</p>
-          <div className="list-cards">
+          <div className="list-courses">
             {byCourse(undated).map(([course, items]) => (
               <div key={course} className="list-card">
                 <h4>
@@ -168,13 +171,33 @@ export function ListView({ events, onOpen }) {
 
 // ---- Month ----
 
+/**
+ * How many events a day of the month grid has room for. On a wide screen the grid is stretched to the window, so
+ * that is measured from a day's height; otherwise days grow to fit and MAX_PER_DAY applies.
+ */
+function useSlotsPerDay(gridRef) {
+  const [slots, setSlots] = useState(MAX_PER_DAY);
+  useEffect(() => {
+    const cell = gridRef.current?.querySelector(".month-cell");
+    if (!cell || typeof ResizeObserver === "undefined") return;
+    const wide = window.matchMedia("(min-width: 960px)");
+    const measure = () => setSlots(wide.matches ? Math.max(1, Math.floor((cell.clientHeight - CELL_TOP_PX) / CHIP_PX)) : MAX_PER_DAY);
+    const observer = new ResizeObserver(measure);
+    observer.observe(cell);
+    return () => observer.disconnect();
+  }, [gridRef]);
+  return slots;
+}
+
 export function MonthView({ events, cursor, weekStart, onOpen, onShowWeek }) {
   const days = groupByDate(events, true);
   const grid = monthGrid(cursor, weekStart);
   const month = cursor.slice(0, 7);
   const now = today();
+  const gridRef = useRef(null);
+  const slots = useSlotsPerDay(gridRef);
   return (
-    <div className="month">
+    <div className="month" ref={gridRef}>
       {grid.slice(0, 7).map((day) => (
         <div key={day} className="month-weekday">
           {formatDate(day, { weekday: "short" })}
@@ -182,18 +205,20 @@ export function MonthView({ events, cursor, weekStart, onOpen, onShowWeek }) {
       ))}
       {grid.map((day) => {
         const items = days.get(day) || [];
+        // When not all fit, the last slot says how many more there are.
+        const shown = items.length > slots ? slots - 1 : items.length;
         const classes = ["month-cell", day.slice(0, 7) !== month && "month-outside", day === now && "is-today"];
         return (
           <div key={day} className={classes.filter(Boolean).join(" ")}>
             <time dateTime={day} aria-label={formatDate(day, { weekday: "long", day: "numeric", month: "long" })}>
               {Number(day.slice(8))}
             </time>
-            {items.slice(0, MAX_PER_DAY).map((item) => (
+            {items.slice(0, shown).map((item) => (
               <Chip key={`${item.index}${item.suggested ? "s" : ""}`} {...item} onOpen={onOpen} />
             ))}
-            {items.length > MAX_PER_DAY && (
+            {items.length > shown && (
               <button type="button" className="month-more" onClick={() => onShowWeek(day)}>
-                {items.length - MAX_PER_DAY} more
+                {items.length - shown} more
               </button>
             )}
           </div>
