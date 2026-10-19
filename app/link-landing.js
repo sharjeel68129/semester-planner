@@ -67,7 +67,7 @@ export default function LinkLanding() {
       window.history.replaceState(null, "", path);
       tellOtherTabs({ type: "link", text: result });
       const other = await anotherTabOpen();
-      setText(other ? `${result} Your other tab shows this too, so you can close this one.` : result);
+      setText(other ? `${result} The planner in your other tab has been paused, so carry on here.` : result);
     })();
     return stop;
   }, []);

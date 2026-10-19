@@ -763,3 +763,21 @@ I sent a screenshot of a 20-item checklist for finished websites and chose: buil
 **Not checked**
 
 - Real email links from Supabase have not been followed end to end; the exact message text Supabase sends after the first of the two links is taken from its usual wording, and any other message is shown as it is.
+
+## 19 Oct 2026: one tab at a time
+
+**Prompt:** "make it so other tabs close on the change so that nobody tries complex shit"
+
+**What was built**
+
+- `app/one-tab.js` on every page: opening the site in a tab pauses every other open tab. A paused tab tries to close itself; browsers only allow that for a tab with no history of its own (such as one just opened from an email link), so otherwise a modal message covers it ("The planner is open in another tab... This one has been paused. You can close it.") with "Use it here", which reloads it with fresh data and pauses the other tab. The newest tab wins, so the tab opened from an email is the one in use.
+- The cross-tab save sync stays as a safety net for a save that was still on its way when a tab was paused.
+
+**What the AI got wrong**
+
+- Closing other tabs outright is not possible from a web page in general; the honest version is "close where allowed, otherwise pause".
+- Escape uncovered the paused page: newer Chrome closes a modal on Escape even when the page cancels it. The dialog now reopens itself whenever it is closed while paused. Found by pressing Escape in the browser test.
+
+**How it was checked**
+
+- In the browser against the local stand-in: a second tab opened as from an email link closed the first one (the preview browser allowed it); with closing blocked, as in an ordinary Chrome tab, the old tab showed the message and its page could not be clicked; "Use it here" (a reload) took over and paused the other tab; Escape pressed twice left it paused.

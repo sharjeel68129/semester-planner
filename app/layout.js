@@ -3,6 +3,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import CookieNotice from "./cookie-notice";
 import LinkLanding from "./link-landing";
+import OneTab from "./one-tab";
 import "./globals.css";
 
 // Self-hosted by Next at build time, so no font request leaves the student's browser.
@@ -25,6 +26,7 @@ export default function RootLayout({ children }) {
       <body>
         {children}
         <LinkLanding />
+        <OneTab />
         <CookieNotice />
         {/* Page-view counts in the Vercel dashboard. Sets no cookies. Does nothing until switched on there. */}
         <Analytics />
