@@ -5,3 +5,6 @@ node_modules/
 data/samples/*
 !data/samples/.gitkeep
 context/
+
+# throwaway copy of the app for local screen checks (scripts/dev/test-copy.mjs)
+.accttest/

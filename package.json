@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "check-data": "node scripts/check-data.mjs"
+    "check-data": "node scripts/check-data.mjs",
+    "test": "node scripts/dev/run-checks.mjs"
   },
   "dependencies": {
     "@google/generative-ai": "^0.21.0",

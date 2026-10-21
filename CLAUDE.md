@@ -10,8 +10,11 @@ npm install
 copy .env.example .env.local   # GEMINI_API_KEY, server-side only
 npm run dev                    # http://localhost:3000
 npm run build
+npm test                       # logic checks in scripts/dev/checks (no Gemini, no accounts)
 ```
-There is no test runner yet. Verify with `lib/evaluate.js` against samples in `data/samples/` (gitignored), and by running the app.
+Screens are checked against a local stand-in for Supabase and a copy of the app in `.accttest/`; scripts that spend Gemini
+quota are in `scripts/dev/live/`. See `scripts/dev/README.md`. Accuracy on real outlines is not measured yet: `lib/evaluate.js`
+has no runner or truth files.
 
 ## Stack
 Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Libraries: `@google/generative-ai`, `pdf-parse`, `mammoth`, `ics`, `@supabase/supabase-js`, `@supabase/ssr`, `@vercel/analytics`.

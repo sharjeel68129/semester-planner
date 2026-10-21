@@ -806,3 +806,19 @@ I sent a screenshot of a 20-item checklist for finished websites and chose: buil
 **Note for testing after a deploy**
 
 - A tab opened before a new version goes live keeps running the old code until it is reloaded.
+
+## 21 Oct 2026: the test setup moved into the repo
+
+**Prompt:** "if i clear, will i lose any progress?" then "move the test setup into the repo"
+
+**What was done**
+
+- The checks and the local test setup lived in a temporary folder of one AI session, which Windows can clean out. They are now in `scripts/dev/` (see its README):
+  - `npm test` runs six files of logic checks (140 checks: calendar and suggested dates, weekly classes, planner helpers, dataset comparison, uploads, gaps and breakdowns). It replaces the Gemini key with a fake one, so it never spends quota.
+  - `mock-supabase.mjs`, `test-copy.mjs` (`--canned` for fixed upload results) and `seed-mock.mjs` check screens locally without touching real accounts.
+  - `live/` holds the scripts that call the real Gemini, each saying how many requests it spends.
+- Each script now finds the project folder itself instead of taking a path, and `.accttest/` is in `.gitignore`.
+
+**How it was checked**
+
+- `npm test`: all six files pass. The whole screen setup run from the repo copies: stand-in started, account seeded, signed in, two canned files uploaded, and the "Two files describe AMA1702" notice and grade breakdowns appeared.
