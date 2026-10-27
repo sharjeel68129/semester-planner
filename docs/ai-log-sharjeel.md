@@ -822,3 +822,28 @@ I sent a screenshot of a 20-item checklist for finished websites and chose: buil
 **How it was checked**
 
 - `npm test`: all six files pass. The whole screen setup run from the repo copies: stand-in started, account seeded, signed in, two canned files uploaded, and the "Two files describe AMA1702" notice and grade breakdowns appeared.
+
+## 27 Oct 2026: first real outline tested; accuracy study set up
+
+**Prompts:** "test this file on the website" (COMP1010 Tentative Schedule.pdf), "how can we fix this issue?", "try in an order", "fix the lab problem", then the plan for the accuracy study: "i would use a measurement system (subjective and done by me and my groupmates) to evaluate the website performance ... we plan to test 100 + 100", "accurate means perfect. no flagging and no inaccuracy. but false flagging should also be checked".
+
+**What the AI got wrong (COMP1010, a PDF timetable with a lecture and a lab column for each of three sections)**
+
+- The live site found 3 of the 6 classes and labelled them wrongly: section 02's Thursday lecture became "Lab S01", section 03's Monday lecture became "Lecture L02", and all three labs were missing. A student in section 01 who picked their section would have kept another section's lecture on their calendar, with no warning.
+- The cause was ours, not only the model's: pdf-parse turned the timetable into one stream of cells, so the columns for the sections were mixed before Gemini saw them.
+- The correct final exam was flagged "check this event is real", because its quote ("3rd - 18th December") was split by superscripts in the copied text.
+- Gemini Flash was busy all day; every answer came from Flash-Lite, which once skipped the timetable entirely (0 of 6 classes) when given the better text alone.
+- My first scorer matched events by their titles, so "Lec 010S01" against "Lecture 010S01" scored as wrong although every value was right. Scoring has to match by what an event is, not by its wording; this shaped the study's rules.
+
+**What was changed (branch `feature/pdf-layout-text`, held back until the study's first round is scored)**
+
+- PDF text keeps the page's layout (one line per row, " | " between cells); the PDF itself is also sent to Gemini; a quote made of whole table cells passes; two classes with the same quote are both flagged; a "-" in a timetable week means no class that week. COMP1010 classes: 1 of 6 right before, 6 of 6 after, with no false flags. The privacy page says PDFs are now sent whole.
+
+**What was set up for the accuracy study (this commit)**
+
+- The live site as of today is saved as the git tag `baseline-2026-10-27`.
+- `scripts/dev/study/run-study.mjs` runs each course's files through the same code the website uses, with one pinned model, and writes what the website would show; it scores nothing. The group scores by hand in a workbook, using answer keys written before seeing the output. Outlines, results and the workbook stay in `study/`, out of the repository.
+
+**How it was checked**
+
+- `npm test`: all six files pass (150 checks, 10 of them new for the PDF fix). The runner was run on COMP1010 against the baseline and reproduced the live site's mistakes; the workbook's formulas were evaluated on test data and matched counts done by hand.

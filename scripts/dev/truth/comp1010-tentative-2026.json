@@ -1,0 +1,16 @@
+{
+  "outline": "COMP1010 Tentative Schedule.pdf (2026/27 Semester 1, two pages: a timetable with a lecture and a lab column for each of sections 010S01-010S03, then important dates and the grade breakdown)",
+  "labelledBy": "Sharjeel with Claude, 27 Oct 2026, read from the PDF",
+  "events": [
+    { "title": "Lecture 010S01", "course": "COMP1010", "type": "class", "date": null, "time": "08:30", "firstClass": "2026-09-02" },
+    { "title": "Lab 010S01", "course": "COMP1010", "type": "class", "date": null, "time": "09:30", "firstClass": "2026-09-11" },
+    { "title": "Lecture 010S02", "course": "COMP1010", "type": "class", "date": null, "time": "16:30", "firstClass": "2026-09-03" },
+    { "title": "Lab 010S02", "course": "COMP1010", "type": "class", "date": null, "time": "16:30", "firstClass": "2026-09-09" },
+    { "title": "Lecture 010S03", "course": "COMP1010", "type": "class", "date": null, "time": "16:30", "firstClass": "2026-08-31" },
+    { "title": "Lab 010S03", "course": "COMP1010", "type": "class", "date": null, "time": "10:30", "firstClass": "2026-09-11" },
+    { "title": "Quiz 1", "course": "COMP1010", "type": "quiz", "date": null, "time": null, "weight": 5, "week": 5 },
+    { "title": "Quiz 2", "course": "COMP1010", "type": "quiz", "date": null, "time": null, "weight": 15, "week": 12 },
+    { "title": "Assignment", "course": "COMP1010", "type": "deadline", "date": null, "time": null, "weight": 10, "week": 12 },
+    { "title": "Final Examination", "course": "COMP1010", "type": "exam", "date": null, "time": null, "weight": 70 }
+  ]
+}

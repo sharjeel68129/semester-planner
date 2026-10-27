@@ -8,3 +8,7 @@ context/
 
 # throwaway copy of the app for local screen checks (scripts/dev/test-copy.mjs)
 .accttest/
+
+# accuracy study (scripts/dev/study): course outlines, results, and unpacked older versions of lib/
+/study/
+/.study-versions/
