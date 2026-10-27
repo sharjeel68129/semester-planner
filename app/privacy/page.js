@@ -45,8 +45,9 @@ export default function Privacy() {
           Gemini AI service to copy the text out of it. Everything in the picture goes to Google, not only the outline.
         </li>
         <li>
-          The text is sent to Google&rsquo;s Gemini AI service, which picks out the events. Google handles that text
-          under its own terms, and may keep it or use it to improve its services.
+          The text is sent to Google&rsquo;s Gemini AI service, which picks out the events. A PDF is sent as the whole
+          file too, so the AI can see how its tables are laid out. Google handles what it receives under its own terms,
+          and may keep it or use it to improve its services.
         </li>
         <li>Only the events that come back are saved to your account.</li>
       </ul>
@@ -72,8 +73,8 @@ export default function Privacy() {
           identify you.
         </li>
         <li>
-          <strong>Google</strong> receives the text of each outline you upload, and the whole file if it is a picture
-          or a scanned PDF, as described above.
+          <strong>Google</strong> receives the text of each outline you upload, and the whole file if it is a PDF or
+          a picture, as described above.
         </li>
       </ul>
       <p>We do not sell your information or show advertising.</p>

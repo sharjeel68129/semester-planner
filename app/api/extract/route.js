@@ -42,7 +42,7 @@ export async function POST(request) {
   for (const { name, buffer } of loaded) {
     try {
       const text = await readFileText(name, buffer);
-      const found = await extractEvents(text, term);
+      const found = await extractEvents(text, term, /\.pdf$/i.test(name) ? buffer : null);
       events.push(...found.events);
       assessmentChecks.push(...found.checks.map((check) => ({ file: name, ...check })));
     } catch (err) {

@@ -4,7 +4,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const ROOT = fileURLToPath(new URL("../../../", import.meta.url)).replace(/[\\/]$/, "");
 process.env.GEMINI_MODELS = "model-a,model-b"; // before the code under test reads it
 const lib = (name) => import(pathToFileURL(`${ROOT}/lib/${name}.js`).href);
-const { readFileText, extractEvents } = await lib("extract");
+const { readFileText, extractEvents, layoutPage } = await lib("extract");
 const { suggestWeekly } = await lib("suggest");
 const { TERMS } = await lib("polyu-calendar");
 const { validateUpload } = await lib("validate");
@@ -64,6 +64,18 @@ check("blank picture says no readable text", /no readable text found/.test(messa
 
 check("text file needs no Gemini", (await readFileText("a.txt", Buffer.from("hello"))) === "hello");
 
+// A PDF table keeps its rows and columns, and a superscript stays with its number (layoutPage gets pdf.js's text items)
+const item = (str, x, y, size = 12) => ({ str, transform: [size, 0, 0, size, x, y], width: str.length * size * 0.5 });
+const page = (items) => ({ getTextContent: async () => ({ items }) });
+const tableText = (await layoutPage(page([
+  item("Lec S01", 72, 700), item("Lec S02", 250, 700),
+  item("Thu 3-Sep", 250, 681), item("Wed 2-Sep", 72, 680), item(" ", 200, 680),
+  item("Exam: 3", 72, 650), item("rd", 114, 654, 8), item("December", 130, 650),
+]))).split("\n");
+check("pdf table rows keep their columns", tableText[0] === "Lec S01 | Lec S02" && tableText[1] === "Wed 2-Sep | Thu 3-Sep");
+check("pdf superscript stays on its line", tableText[2] === "Exam: 3rd | December");
+check("pdf rows top to bottom", tableText.length === 3);
+
 // "during": an item in the lab takes the lab's day and time; disagreeing sections give nothing
 const outline = "Lab S01 Tue 14:30\nLab S02 Tue 14:30\nTutorial T1 Wed 10:30\nTutorial T2 Thu 10:30\nQuiz in Week 5 lab\nPresentation in Week 6 tutorial\nExamination 100%";
 const model = {
@@ -85,4 +97,31 @@ const quiz = events.find((e) => e.title === "Quiz");
 const pres = events.find((e) => e.title === "Presentation");
 check("quiz in the lab gets Tue of week 5 and 14:30", quiz.suggestedDates[0] === "2026-09-29" && quiz.time === "14:30");
 check("tutorial on two days: no day guessed", pres.suggestedDates.length === 0 && pres.time === "10:30");
+check("text outline: no file sent", calls.at(-1).body.contents[0].parts.length === 1);
+
+// A PDF goes as the file too; a quote copied from the laid-out text still matches with or without the " | "
+calls = [];
+const pdfModel = { ...model, assessments: [{ ...model.assessments[0], quote: "Examination | 100%" }] };
+replies = [{ status: 200, text: JSON.stringify(pdfModel) }];
+const fromPdf = await extractEvents(outline.replace("Examination 100%", "Examination | 100%"), term, Buffer.from("%PDF-1.4 stub"));
+const parts = calls[0].body.contents[0].parts;
+check("pdf sent inline with the text", parts[0].inlineData?.mimeType === "application/pdf" && /<outline>/.test(parts[1].text) && /quote from the text/i.test(parts[1].text));
+check("quote without the | still found", !fromPdf.events.find((e) => e.title === "Exam").ambiguous);
+check("breakdown row quote with the | found", fromPdf.checks[0]?.complete === true);
+
+// A timetable cell quoted as one line passes; stray words do not; two classes on one quote are both flagged
+const timetable = "Lec | Lab | Lec\n010S01 | 010S01 | 010S02\nWed | Thu\n2-Sep | 3 - Sep\n(8:30-10:20) | (16:30- 18:20)\nTU101 | FJ304\nExamination 100%";
+const cls = (title, sourceQuote, time) => ({ title, course: "X", type: "class", time, statedWeekday: sourceQuote.slice(0, 3), sourceQuote, ambiguous: false, confidence: 0.9 });
+replies = [{ status: 200, text: JSON.stringify({ ...model, events: [
+  cls("Lecture 010S01", "Wed 2-Sep (8:30-10:20) TU101", "08:30"),
+  cls("Lecture 010S02", "Thu 3 - Sep (16:30- 18:20) FJ304", "16:30"),
+  cls("Lab 010S01", "Thu 3 - Sep (16:30- 18:20) FJ304", "16:30"),
+  cls("Lab 010S02", "Wed 2 (8:30-10:20)", "08:30"),
+  model.events.at(-1),
+] }) }];
+const cellEvents = (await extractEvents(timetable, term)).events;
+const byTitle = (t) => cellEvents.find((e) => e.title === t);
+check("quote made of whole cells passes", !byTitle("Lecture 010S01").ambiguous);
+check("same quote on two classes flags both", byTitle("Lecture 010S02").ambiguous && byTitle("Lab 010S01").ambiguous && /Lab 010S01 has the same source quote/.test(byTitle("Lecture 010S02").note));
+check("part of a cell (\"2\" of \"2-Sep\") fails", /quote was not found/.test(byTitle("Lab 010S02").note));
 console.log(failures === 0 ? "ALL PASS" : `${failures} failed`);
