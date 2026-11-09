@@ -50,7 +50,7 @@ function Chip({ event, index, suggested = false, onOpen, style }) {
   return (
     <button
       type="button"
-      className={`chip chip-${event.type}${suggested ? " chip-suggested" : ""}`}
+      className={`chip chip-${event.type}${suggested ? " chip-suggested" : ""}${flagged ? " chip-flagged" : ""}`}
       style={style}
       title={`${name}${event.course ? `, ${event.course}` : ""}${suggested ? " (suggested date, not yet accepted)" : ""}`}
       onClick={() => onOpen(index)}
@@ -129,7 +129,7 @@ export function ListView({ events, onOpen }) {
       {undated.length > 0 && (
         <section>
           <h3>No date yet</h3>
-          <p className="hint">Open one to add a date or accept the suggested one. Flagged ones need a look first.</p>
+          <p className="hint">Open one to add a date or accept the suggested one. Ones marked with a warning sign need a look first.</p>
           <div className="list-courses">
             {byCourse(undated).map(([course, items]) => (
               <div key={course} className="list-card">

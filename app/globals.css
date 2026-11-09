@@ -13,6 +13,21 @@
   --rule: #e7d8dc;
   --neutral: #f2efef;
 
+  /* One colour per event type, so the calendar reads at a glance. Exams keep the site's maroon. */
+  --class-bg: #e3edf9;
+  --class-ink: #1d3c63;
+  --class-line: #93b2da;
+  --deadline-bg: #fde9cf;
+  --deadline-ink: #7a3a00;
+  --deadline-line: #e2a052;
+  --quiz-bg: #ddf2e4;
+  --quiz-ink: #175a33;
+  --quiz-line: #86c79e;
+  /* "Needs checking": amber, used only for that, so it stands out from every type colour. */
+  --check: #b45309;
+  --check-ink: #8a3c00;
+  --check-bg: #fff3df;
+
   --font-display: var(--font-crimson), Georgia, serif;
   --font-body: var(--font-atkinson), system-ui, sans-serif;
 }
@@ -783,7 +798,40 @@ blockquote {
 }
 
 .notice .check-icon {
-  color: var(--maroon);
+  color: var(--check);
+}
+
+/* The "N need checking" line above the calendar, in the same amber as the triangles. */
+.notice-check {
+  padding: 0.6rem 0.8rem;
+  color: var(--check-ink);
+  background: var(--check-bg);
+  border-left: 4px solid var(--check);
+  border-radius: 4px;
+}
+
+/* Under the download button: what is not in the calendar file yet, and why. */
+.export-missing {
+  margin-top: 0.6rem;
+  padding: 0.55rem 0.7rem;
+  color: var(--check-ink);
+  background: var(--check-bg);
+  border-left: 4px solid var(--check);
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.export-missing + .hint {
+  margin-top: 0.6rem;
+}
+
+.export-missing ul {
+  margin: 0.25rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.export-missing .check-icon {
+  color: var(--check);
 }
 
 /* A question above the calendar: which of several sections is the student's. */
@@ -850,32 +898,56 @@ blockquote {
 }
 
 .chip-exam {
+  --chip-stripe: #d9a3b1;
   color: var(--on-maroon);
   background: var(--maroon);
-}
-
-.chip-deadline {
-  color: var(--maroon);
-  background: var(--paper);
   border-color: var(--maroon);
 }
 
+.chip-deadline {
+  --chip-stripe: var(--deadline-line);
+  color: var(--deadline-ink);
+  background: var(--deadline-bg);
+  border-color: var(--deadline-line);
+}
+
 .chip-quiz {
-  color: var(--maroon-deep);
-  background: var(--blush-strong);
+  --chip-stripe: var(--quiz-line);
+  color: var(--quiz-ink);
+  background: var(--quiz-bg);
+  border-color: var(--quiz-line);
 }
 
 .chip-class {
-  color: var(--ink);
-  background: var(--neutral);
-  border-color: var(--rule);
+  --chip-stripe: var(--class-line);
+  color: var(--class-ink);
+  background: var(--class-bg);
+  border-color: var(--class-line);
 }
 
-/* A date worked out from the week number and not yet accepted: drawn faint and dashed, whatever the type. */
+/* A date worked out from the week number and not yet accepted: the type's colour in stripes, with a dashed edge. */
 .chip.chip-suggested {
-  color: var(--ink-soft);
-  background: var(--paper);
-  border: 1px dashed var(--maroon);
+  font-style: italic;
+  font-weight: 700;
+  background: repeating-linear-gradient(135deg, var(--paper) 0 6px, color-mix(in srgb, var(--chip-stripe) 55%, white) 6px 9px);
+  border: 1.5px dashed currentColor;
+}
+
+.chip-exam.chip-suggested {
+  color: var(--maroon);
+}
+
+/* Needs checking: an amber ring as well as the triangle. */
+.chip.chip-flagged {
+  box-shadow: inset 0 0 0 2px var(--check);
+}
+
+.chip .check-icon {
+  color: var(--check);
+}
+
+.chip-exam .check-icon {
+  color: #ffd08a;
 }
 
 .chip:hover {
@@ -901,7 +973,7 @@ blockquote {
 }
 
 .legend .check-icon {
-  color: var(--maroon);
+  color: var(--check);
 }
 
 /* ---- List view: cards of compact rows, one card per day (or per course when undated), filling the width ---- */
@@ -1004,7 +1076,8 @@ blockquote {
 }
 
 .task-flagged {
-  border-left-color: var(--maroon);
+  background: var(--check-bg);
+  border-left-color: var(--check);
 }
 
 /* The type badge reuses the calendar's chip colours, so a row and its chip look alike. */
@@ -1045,16 +1118,21 @@ blockquote {
 
 .task-why {
   display: block;
-  color: var(--maroon);
+  color: var(--check-ink);
   font-size: 0.875rem;
+}
+
+.task-why .check-icon {
+  color: var(--check);
 }
 
 .task-tag {
   padding: 0.05rem 0.4rem;
   color: var(--ink-soft);
   font-size: 0.8125rem;
+  font-style: italic;
   white-space: nowrap;
-  border: 1px dashed var(--maroon);
+  border: 1.5px dashed var(--ink-soft);
   border-radius: 4px;
 }
 

@@ -346,12 +346,32 @@ export default function Planner({ events, setEvents, settings, updateSettings, a
         <section className="sidebar-section">
           <h2>Calendar file</h2>
           <button className="button button-wide" type="button" disabled={ready.length === 0} onClick={downloadCalendar}>
-            Download ({ready.length} {ready.length === 1 ? "event" : "events"})
+            {ready.length < list.length
+              ? `Download (${ready.length}/${list.length} events)`
+              : `Download (${list.length} ${list.length === 1 ? "event" : "events"})`}
           </button>
+          {ready.length < list.length && (
+            <div className="export-missing" role="status">
+              <strong>
+                {list.length - ready.length} of {list.length} {list.length === 1 ? "event is" : "events are"} not in the file yet
+              </strong>
+              <ul>
+                {toCheck > 0 && (
+                  <li>
+                    <CheckIcon /> {toCheck} {toCheck === 1 ? "needs" : "need"} checking: the AI was not sure.{" "}
+                    {toCheck === 1 ? "Open it" : "Open each one"}, fix it if needed and mark it as checked.
+                  </li>
+                )}
+                {undated > 0 && (
+                  <li>
+                    {undated} {undated === 1 ? "has" : "have"} no date yet: accept the suggested date or add one in the List
+                    view.
+                  </li>
+                )}
+              </ul>
+            </div>
+          )}
           <p className="hint">
-            {toCheck > 0 &&
-              `${toCheck} still to check ${toCheck === 1 ? "is" : "are"} left out until you mark ${toCheck === 1 ? "it" : "them"} as checked. `}
-            {undated > 0 && `${undated} with no date yet ${undated === 1 ? "is" : "are"} left out until you add one. `}
             {settings.reminders.length > 0
               ? `Each event reminds you ${describeReminders(settings.reminders)}. `
               : "Events have no reminders. "}
@@ -415,12 +435,13 @@ export default function Planner({ events, setEvents, settings, updateSettings, a
         {list.length === 0 ? (
           <p className="notice">No events yet. Add your course outlines to fill the calendar.</p>
         ) : (
-          <p className="notice">
+          <p className={toCheck === 0 ? "notice" : "notice notice-check"}>
             {toCheck === 0 ? (
               "Nothing needs checking. Select any event to change its date, time or type."
             ) : (
               <>
-                <CheckIcon /> {toCheck} to check. Select an event marked like this to see why, fix it and mark it as
+                <CheckIcon /> <strong>{toCheck} {toCheck === 1 ? "event needs" : "events need"} checking.</strong> The AI was not
+                sure about {toCheck === 1 ? "it" : "them"}. Select an event marked like this to see why, fix it and mark it as
                 checked.
               </>
             )}
@@ -506,7 +527,7 @@ export default function Planner({ events, setEvents, settings, updateSettings, a
               <strong>
                 {acceptable} {acceptable === 1 ? "event has a suggested date" : "events have suggested dates"}
               </strong>
-, worked out from the week numbers in your outline (dashed on the calendar). Check them, then accept them to put
+, worked out from the week numbers in your outline (striped on the calendar). Check them, then accept them to put
               them in the calendar file.
             </p>
             <div className="choice-options">
@@ -551,7 +572,9 @@ export default function Planner({ events, setEvents, settings, updateSettings, a
             <span className="chip chip-class chip-suggested legend-swatch">Suggested</span>
           </li>
           <li>
-            <CheckIcon /> Needs checking
+            <span className="chip chip-class chip-flagged legend-swatch">
+              <CheckIcon /> Needs checking
+            </span>
           </li>
         </ul>
       </main>

@@ -877,3 +877,16 @@ I sent a screenshot of a 20-item checklist for finished websites and chose: buil
 **How it was checked**
 
 - `npm test`: all six files pass (150 checks, 3 new: a 504 hands over to the next try, an outline gets 90 s, copying a picture keeps its 60 s). Live check: AF1605.pdf on the site after this deploy.
+
+## 9 Nov 2026: clearer download button and colours (before testing started, kind: general)
+
+**Prompt:** "make the download button 14/19 ... since the user doesnt know what is flagged and such terms, and there is no significant indication to incite the user to check things. second. use multiple colors to manage the design and the legends, since the dotted and solid line differences are very hard to see." Then: "change it right now".
+
+**What was changed (looks only; what the AI finds is unchanged)**
+
+- The download button shows how many events are in the file out of all of them ("Download (14/19 events)"), and an amber box under it says in plain words what is left out and what to do.
+- One colour per type: class blue, deadline orange, quiz green, exam maroon. Suggested dates are striped in the type's colour, bold italic. "Needs checking" is amber everywhere (ring on calendar chips, background on list rows, banner above the calendar). The legend uses the same colours.
+
+**How it was checked**
+
+- `npm test` (150 checks) and `npm run build` pass. Screens checked on the local test copy with the seeded test account: month view, list view, sidebar and legend.
