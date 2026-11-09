@@ -890,3 +890,18 @@ I sent a screenshot of a 20-item checklist for finished websites and chose: buil
 **How it was checked**
 
 - `npm test` (150 checks) and `npm run build` pass. Screens checked on the local test copy with the seeded test account: month view, list view, sidebar and legend.
+
+## 10 Nov 2026: up to 30 files per upload (before testing, kind: general)
+
+**Prompt:** "make it 30 files limit. accept docx. and tell me if there is a size limit", then "approve".
+
+**Why:** six of the planned combinations have 11 to 22 files, more than the 10 a single upload allowed.
+
+**What was changed**
+
+- `lib/validate.js`: `MAX_FILES` 10 -> 30. Each file is still sent in its own request, so the 4 MB per-file limit (Vercel refuses bodies over about 4.5 MB) is unchanged. `.docx` was already accepted: MM1031's outline passed the upload check and its text was read.
+- Not changed: the 4 MB limit. ABCT1700's slides, ME22003, ME44001 and COMP1010 Lecture 8 are larger and will be refused in V1; the plan is to score that as the real result and raise the limit in V2.
+
+**How it was checked**
+
+- `npm test` passes (150 checks).
