@@ -4,7 +4,10 @@ const LIB = new URL("../../../lib/", import.meta.url).href;
 const TEST_COPY_LIB = new URL("../../../.accttest/lib/", import.meta.url).href;
 // Older versions of lib/ unpacked by scripts/dev/study/run-study.mjs, one folder per version.
 const STUDY_VERSIONS = new URL("../../../.study-versions/", import.meta.url).href;
+// `npm test` swaps the Gemini SDK for a stand-in (genai-stub.mjs), so checks never sign in to Google Cloud.
+const GENAI_STUB = new URL("./genai-stub.mjs", import.meta.url).href;
 export async function resolve(specifier, context, next) {
+  if (specifier === "@google/genai" && process.env.PLANNER_GENAI_STUB) return { url: GENAI_STUB, shortCircuit: true };
   if (specifier.startsWith(".") && !/\.[cm]?js$/.test(specifier)) {
     try {
       return await next(`${specifier}.js`, context);

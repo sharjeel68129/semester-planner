@@ -177,8 +177,8 @@ for (const id of courses) {
     }
     continue;
   }
-  if (errors.some((error) => /missing GEMINI_API_KEY/.test(error))) {
-    print("No GEMINI_API_KEY: run with --env-file=.env.local (see the top of this file).");
+  if (errors.some((error) => /missing GOOGLE_CREDENTIALS_JSON|GOOGLE_CREDENTIALS_JSON is not valid/.test(error))) {
+    print("No usable GOOGLE_CREDENTIALS_JSON: run with --env-file=.env.local (see the top of this file).");
     process.exit(1);
   }
 

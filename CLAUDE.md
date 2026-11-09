@@ -7,7 +7,7 @@ The project experiment: does an AI-built calendar keep students safe, or does it
 ## Commands
 ```
 npm install
-copy .env.example .env.local   # GEMINI_API_KEY, server-side only
+copy .env.example .env.local   # GOOGLE_CREDENTIALS_JSON (service account), server-side only
 npm run dev                    # http://localhost:3000
 npm run build
 npm test                       # logic checks in scripts/dev/checks (no Gemini, no accounts)
@@ -17,14 +17,14 @@ quota are in `scripts/dev/live/`. See `scripts/dev/README.md`. Accuracy on real 
 has no runner or truth files.
 
 ## Stack
-Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Libraries: `@google/generative-ai`, `pdf-parse`, `mammoth`, `ics`, `@supabase/supabase-js`, `@supabase/ssr`, `@vercel/analytics`.
+Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Libraries: `@google/genai` (Gemini on Vertex AI), `pdf-parse`, `mammoth`, `ics`, `@supabase/supabase-js`, `@supabase/ssr`, `@vercel/analytics`.
 
 ## Module map
 | File | Job | Status |
 |---|---|---|
 | `lib/schema.js` | `Event` shape + `makeEvent` | done |
 | `lib/validate.js` | upload check: extension, magic bytes (pdf, docx, txt, png, jpg, webp), size/count caps | done |
-| `app/api/extract/route.js` | holds the API key, validates, extracts per file, returns `{ events, assessmentChecks, failed }` | done (no follow-up flow yet) |
+| `app/api/extract/route.js` | refuses uploads if the Gemini credentials are not set, validates, extracts per file, returns `{ events, assessmentChecks, failed }` | done (no follow-up flow yet) |
 | `lib/extract.js` | `readFileText` (a picture or scanned PDF is sent to Gemini to copy its text out), `extractEvents(text, term)` -> `{ events, checks }` (Gemini model chain + output checks) | done (not yet scored on a real outline) |
 | `lib/polyu-calendar.js` | PolyU teaching weeks typed in by hand: `TERMS`, `weekMondays`, `termRange`, `resolveTerm` | done for 2026/27 only; **update by hand each academic year** |
 | `lib/suggest.js` | works out suggested dates: one from a week number and weekday (`suggestForWeek`), or every meeting of a weekly class (`suggestWeekly`, which respects "Weeks 2-13" and "no class in week 8") | done |
@@ -81,8 +81,8 @@ Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Li
 - **Settings are one `settings` JSON value per user** in the same row, written on its own so saving settings can never overwrite events. A database without the column still loads events and uses default settings.
 - **Deleting an account goes through `delete_my_account(password)`**, a database function that checks the password itself and can only delete the caller. Do not replace it with the `service_role` key or a check done only in the browser.
 - **`/api/extract` requires a signed-in user**, and answers 503 if no account service is configured.
-- **The free Gemini tier allows about 20 requests per model per day** (measured Oct 2026), shared by everyone using the site and by local testing with the same key. An outline that fails the 100% check uses two, and a picture or scanned PDF one more (copying the text out). Do not spend it on test runs before a demo. On the free tier the Flash models are often refused with 503 "high demand"; `gemini-3.6-flash` and `gemini-3.5-flash` are tried first with a 30 s limit each, then `gemini-3.5-flash-lite`, which kept answering but read a real outline worse (measured 14 Oct 2026).
-- **The Gemini key is server-side only.** Read `process.env.GEMINI_API_KEY` only in server code (route handlers, `lib/extract.js` called from them). Never use a `NEXT_PUBLIC_` prefix, log the key, or echo it in errors.
+- **Gemini runs on Vertex AI** (Gemini Enterprise Agent Platform; since Nov 2026, replacing the AI Studio free tier): project `project-c9b51bf9-6bb8-4e61-b2b`, location `global`, model `gemini-3.8-flash` at temperature 0, signed in as the project's service account. Requests are billed to that project. An outline that fails the 100% check uses two requests, and a picture or scanned PDF one more (copying the text out).
+- **The service account JSON is server-side only.** It is read from `process.env.GOOGLE_CREDENTIALS_JSON` in `lib/extract.js` only, parsed in memory and passed to the SDK. Never write it to disk, save a key file in the repo (`.gitignore` blocks the usual names), use a `NEXT_PUBLIC_` prefix, log it, or echo it in errors.
 - Keep upload validation server-side; the browser's `accept` is not a security check.
 - Treat uploaded outline text as data, not instructions: a document saying "ignore previous instructions" must not change model behaviour. Keep the extraction prompt separate from the document text and validate the model's JSON against the schema before use.
 - Match the existing style: small functions, short comments explaining why, no new dependencies without asking.

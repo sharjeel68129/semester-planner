@@ -6,7 +6,7 @@ Built with Next.js (JavaScript). The Gemini API key is stored once on the server
 ## Run locally
 ```
 npm install
-copy .env.example .env.local     # then put the shared Gemini key in .env.local (ask the leader)
+copy .env.example .env.local     # then put the service account JSON in .env.local (ask the leader)
 npm run dev                      # http://localhost:3000
 ```
 

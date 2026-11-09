@@ -23,17 +23,26 @@ const reply = {
   ],
 };
 let calls = 0;
-globalThis.fetch = async () => {
+let sent = null;
+globalThis.fetch = async (url, init) => {
   calls++;
+  sent = { url: String(url), body: JSON.parse(init.body) };
   return new Response(JSON.stringify({ candidates: [{ content: { parts: [{ text: JSON.stringify(reply) }], role: "model" }, finishReason: "STOP" }] }), { status: 200, headers: { "content-type": "application/json" } });
 };
-process.env.GEMINI_API_KEY ||= "stub";
+process.env.GOOGLE_CREDENTIALS_JSON ||= JSON.stringify({ type: "service_account", client_email: "stub@example.test" });
 
 let failures = 0;
 const check = (label, ok) => { console.log(`${ok ? "ok  " : "FAIL"} ${label}`); if (!ok) failures++; };
 const { events } = await extractEvents(outline, TERMS[0]);
 const [lec, lab, undated] = events;
 check("model was asked once", calls === 1);
+// Vertex AI with the service account from GOOGLE_CREDENTIALS_JSON, gemini-3.8-flash at temperature 0
+const [vertex] = globalThis.__genaiClients;
+check("Vertex AI client: project and location", vertex.vertexai === true && vertex.project === "project-c9b51bf9-6bb8-4e61-b2b" && vertex.location === "global" && !("apiKey" in vertex));
+check("credentials parsed from the env JSON", vertex.googleAuthOptions.credentials.client_email === "stub@example.test");
+check("default model is gemini-3.8-flash", /models\/gemini-3\.8-flash:/.test(sent.url));
+check("temperature 0, JSON reply, response schema", sent.body.generationConfig.temperature === 0 && sent.body.generationConfig.responseMimeType === "application/json" && sent.body.generationConfig.responseSchema?.type === "OBJECT");
+check("system prompt sent", /extract calendar events/i.test(JSON.stringify(sent.body.systemInstruction)));
 check("dated lecture keeps its date", lec.date === "2026-08-31");
 check('"(Week 1)" removed from lecture title', lec.title === "Lecture L02");
 check('"- Week 1" removed from lab title', lab.title === "Lab S01");

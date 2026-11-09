@@ -8,8 +8,8 @@ Nothing here is part of the website. It is how changes were checked during devel
 npm test
 ```
 
-Runs every file in `checks/` and prints one line per file. The real Gemini key is replaced with a fake one, and checks
-that need a model reply stub it, so this never uses quota. `loader/` lets plain Node import `lib/` the way Next does.
+Runs every file in `checks/` and prints one line per file. The Gemini SDK is swapped for a stand-in (`loader/genai-stub.mjs`)
+with fake credentials, and checks that need a model reply stub it, so this never calls Google. `loader/` lets plain Node import `lib/` the way Next does.
 
 | File | What it checks |
 |---|---|
@@ -25,7 +25,7 @@ that need a model reply stub it, so this never uses quota. `loader/` lets plain 
 The planner needs a signed-in account. To try it locally without touching the real accounts:
 
 1. `node scripts/dev/mock-supabase.mjs` starts an in-memory stand-in for Supabase on port 54399 (forgets everything when stopped).
-2. `node scripts/dev/test-copy.mjs` makes `.accttest/`, a copy of the app pointed at the stand-in with a fake Gemini key.
+2. `node scripts/dev/test-copy.mjs` makes `.accttest/`, a copy of the app pointed at the stand-in with fake Google Cloud credentials.
    Add `--canned` to make uploads return fixed results (`canned-extract.js`): an upload whose text contains `FORM` or
    `OUTLINE` gives AMA1702's short form or detailed outline; anything else gives COMP1010.
 3. `npx next dev .accttest -p 3111` runs that copy at http://localhost:3111.
@@ -37,8 +37,8 @@ Re-run `test-copy.mjs` after changing `app/` or `lib/`. Delete `.accttest/` when
 
 ## Live checks (spend Gemini quota)
 
-These call the real Gemini with the key in `.env.local`. The free tier allows about 20 requests per model per day,
-shared with the live site, so run them sparingly and never right before a demo.
+These call the real Gemini on Vertex AI with the service account in `.env.local`. Every request is billed to the
+Google Cloud project, so run them only when needed.
 
 ```
 node --env-file=.env.local --import ./scripts/dev/loader/register.mjs scripts/dev/live/outlines.mjs

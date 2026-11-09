@@ -39,7 +39,7 @@ globalThis.fetch = async (url, init) => {
   if (next.status !== 200) return new Response(JSON.stringify({ error: { code: next.status, message: next.message } }), { status: next.status, headers: { "content-type": "application/json" } });
   return new Response(JSON.stringify({ candidates: [{ content: { parts: [{ text: next.text }], role: "model" }, finishReason: "STOP" }] }), { status: 200, headers: { "content-type": "application/json" } });
 };
-process.env.GEMINI_API_KEY ||= "stub";
+process.env.GOOGLE_CREDENTIALS_JSON ||= JSON.stringify({ type: "service_account", client_email: "stub@example.test" });
 
 replies = [{ status: 200, text: "COMP1010\nQuiz 1 Week 5" }];
 check("image text copied out", (await readFileText("outline.png", png)) === "COMP1010\nQuiz 1 Week 5");
@@ -85,4 +85,15 @@ const quiz = events.find((e) => e.title === "Quiz");
 const pres = events.find((e) => e.title === "Presentation");
 check("quiz in the lab gets Tue of week 5 and 14:30", quiz.suggestedDates[0] === "2026-09-29" && quiz.time === "14:30");
 check("tutorial on two days: no day guessed", pres.suggestedDates.length === 0 && pres.time === "10:30");
+// Credentials missing or not JSON: a plain message that never quotes what was in the variable
+const saved = process.env.GOOGLE_CREDENTIALS_JSON;
+process.env.GOOGLE_CREDENTIALS_JSON = '{"private_key": "SECRET-KEY-TEXT"';
+let bad = "";
+try { await extractEvents("Exam 100%", term); } catch (err) { bad = err.message; }
+check("bad credentials JSON: safe message", bad === "GOOGLE_CREDENTIALS_JSON is not valid JSON" && !/SECRET/.test(bad));
+delete process.env.GOOGLE_CREDENTIALS_JSON;
+let missing = "";
+try { await extractEvents("Exam 100%", term); } catch (err) { missing = err.message; }
+check("no credentials: says which variable", missing === "Server is missing GOOGLE_CREDENTIALS_JSON");
+process.env.GOOGLE_CREDENTIALS_JSON = saved;
 console.log(failures === 0 ? "ALL PASS" : `${failures} failed`);

@@ -1,5 +1,6 @@
 // `npm test`: runs every script in scripts/dev/checks and reports one line per file. No Gemini calls are made: the
-// real key is replaced by a fake one, and the checks that need a model reply stub it. Exits 1 if anything failed.
+// Gemini SDK is swapped for a stand-in (loader/genai-stub.mjs) with fake credentials, and the checks that need a
+// model reply stub it. Exits 1 if anything failed.
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
@@ -13,7 +14,7 @@ let failedFiles = 0;
 for (const file of fs.readdirSync(checks).filter((name) => name.endsWith(".mjs")).sort()) {
   const run = spawnSync(process.execPath, ["--import", loader, path.join(checks, file)], {
     encoding: "utf8",
-    env: { ...process.env, GEMINI_API_KEY: "stub-not-a-real-key" },
+    env: { ...process.env, PLANNER_GENAI_STUB: "1", GOOGLE_CREDENTIALS_JSON: JSON.stringify({ type: "service_account", client_email: "stub@example.test", private_key: "not-a-real-key" }) },
   });
   const output = `${run.stdout}${run.stderr}`;
   const passed = (output.match(/^ok\b/gm) || []).length;

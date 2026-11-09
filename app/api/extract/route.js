@@ -7,10 +7,10 @@ export const runtime = "nodejs";
 // One outline is given up to 210 s (see lib/extract.js) when the models are busy, so ask the host for longer than its default.
 export const maxDuration = 300;
 
-// The Gemini key lives only on the server (process.env.GEMINI_API_KEY). Users never see or need one.
+// The Google Cloud credentials live only on the server (process.env.GOOGLE_CREDENTIALS_JSON). Users never see or need them.
 export async function POST(request) {
-  if (!process.env.GEMINI_API_KEY) {
-    return Response.json({ error: "Server is missing GEMINI_API_KEY" }, { status: 500 });
+  if (!process.env.GOOGLE_CREDENTIALS_JSON) {
+    return Response.json({ error: "Server is missing GOOGLE_CREDENTIALS_JSON" }, { status: 500 });
   }
   // Only signed-in students may spend the shared Gemini key. With no account service nobody can be, so refuse.
   if (!accountsEnabled) {

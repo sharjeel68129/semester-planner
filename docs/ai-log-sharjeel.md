@@ -847,3 +847,19 @@ I sent a screenshot of a 20-item checklist for finished websites and chose: buil
 **How it was checked**
 
 - `npm test`: all six files pass (150 checks, 10 of them new for the PDF fix). The runner was run on COMP1010 against the baseline and reproduced the live site's mistakes; the workbook's formulas were evaluated on test data and matched counts done by hand.
+
+## 9 Nov 2026: Gemini moved from the AI Studio key to Vertex AI (version 1 of the study)
+
+**Prompt:** "Switch the site's Gemini calls from the AI Studio API key to Vertex AI (Gemini Enterprise Agent Platform) ... Model: gemini-3.8-flash, with temperature: 0. Keep the prompts, parsing, UI and everything else exactly the same. Do not add any week-to-date logic ... Commit and push, then give me the commit hash so I can tag it as v1."
+
+**Why:** the AI Studio free tier allowed about 20 requests per model per day, shared by the whole group's testing and the live site; testing 100 courses could not fit in it, and busy free-tier models meant different uploads were read by different models.
+
+**What was changed**
+
+- `lib/extract.js` uses `@google/genai` with `vertexai: true`, project `project-c9b51bf9-6bb8-4e61-b2b`, location `global`, model `gemini-3.8-flash` at temperature 0. The service account JSON is read from `GOOGLE_CREDENTIALS_JSON`, parsed in memory and passed as `googleAuthOptions.credentials`; it is never written to disk or logged, and a parse error does not quote it. `@google/generative-ai` and `GEMINI_API_KEY` are gone. Prompts, response schema, checks and screens are unchanged; the PDF-layout fix and the week-to-date idea are not in this version.
+- `.gitignore` blocks key files (`*service-account*.json`, `credentials*.json`, `project-c9b51bf9-*.json`, `*.pem`, `*.key`, `.env.*` except `.env.example`, ...).
+- `npm test` swaps the SDK for a stand-in (`scripts/dev/loader/genai-stub.mjs`), because the real SDK signs in to Google before each call and that cannot be faked offline.
+
+**How it was checked**
+
+- `npm test`: all six files pass (156 checks, 7 new: Vertex project and location, credentials parsed, default model, temperature 0 with the JSON schema, the system prompt sent, safe messages for missing or broken credentials). `npm run build` passes. Not yet checked against the real Vertex AI: `GOOGLE_CREDENTIALS_JSON` was not in `.env.local` yet.

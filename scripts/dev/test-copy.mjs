@@ -1,7 +1,7 @@
 // Makes .accttest/: a copy of the app that signs in against the local stand-in (mock-supabase.mjs) instead of the
-// real Supabase, with a fake Gemini key. Run it again after changing app/ or lib/, then restart its dev server.
+// real Supabase, with fake Google Cloud credentials. Run it again after changing app/ or lib/, then restart its dev server.
 //
-//   node scripts/dev/test-copy.mjs            copy as it is (uploads would fail: the Gemini key is fake)
+//   node scripts/dev/test-copy.mjs            copy as it is (uploads would fail: the credentials are fake)
 //   node scripts/dev/test-copy.mjs --canned   uploads return fixed results instead (scripts/dev/canned-extract.js)
 //
 // .accttest/ is in .gitignore. Its .env.local holds test values only, never the real keys.
@@ -19,7 +19,8 @@ for (const name of ["app", "lib", "data", "jsconfig.json", "next.config.mjs", "p
 }
 fs.writeFileSync(
   path.join(copy, ".env.local"),
-  "GEMINI_API_KEY=test-not-a-real-key\nNEXT_PUBLIC_SUPABASE_URL=http://localhost:54399\nNEXT_PUBLIC_SUPABASE_ANON_KEY=test-anon-key\n",
+  'GOOGLE_CREDENTIALS_JSON={"type":"service_account","client_email":"test@example.test"}\n' +
+    "NEXT_PUBLIC_SUPABASE_URL=http://localhost:54399\nNEXT_PUBLIC_SUPABASE_ANON_KEY=test-anon-key\n",
 );
 if (process.argv.includes("--canned")) {
   fs.copyFileSync(new URL("./canned-extract.js", import.meta.url), path.join(copy, "lib", "extract.js"));

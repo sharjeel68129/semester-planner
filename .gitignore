@@ -12,3 +12,19 @@ context/
 # accuracy study (scripts/dev/study): course outlines, results, and unpacked older versions of lib/
 /study/
 /.study-versions/
+
+# Google Cloud credentials: never commit a key file. GOOGLE_CREDENTIALS_JSON lives only in .env.local and on Vercel.
+*service-account*.json
+*service_account*.json
+*-credentials*.json
+*_credentials*.json
+credentials*.json
+gcp-key*.json
+key.json
+keys/
+project-c9b51bf9-*.json
+*.pem
+*.p12
+*.key
+.env.*
+!.env.example
