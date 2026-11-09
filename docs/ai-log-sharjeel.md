@@ -863,3 +863,17 @@ I sent a screenshot of a 20-item checklist for finished websites and chose: buil
 **How it was checked**
 
 - `npm test`: all six files pass (156 checks, 7 new: Vertex project and location, credentials parsed, default model, temperature 0 with the JSON schema, the system prompt sent, safe messages for missing or broken credentials). `npm run build` passes. Not yet checked against the real Vertex AI: `GOOGLE_CREDENTIALS_JSON` was not in `.env.local` yet.
+
+## 9 Nov 2026: longer Gemini time limit for Vertex AI (fix to version 1, kind: general)
+
+**Prompt:** the first live upload on Vertex AI (AF1605.pdf) failed with "Gemini request failed (504)"; "approve" to commit the fix.
+
+**Why:** the new SDK sends the 30 s per-request limit to Vertex AI, which stops the model at that point and answers 504. `gemini-3.8-flash` needs longer than 30 s on a normal outline, and 504 was not treated as busy, so the upload failed at once. This is general, not fitted to a test: every outline goes through the same limit.
+
+**What was changed**
+
+- `lib/extract.js`: each model call gets 90 s instead of 30 s (the second round gets whatever time is left), and a 504 is treated like a busy model and tried again. Model, temperature, prompts, schema and screens are unchanged.
+
+**How it was checked**
+
+- `npm test`: all six files pass (150 checks, 3 new: a 504 hands over to the next try, an outline gets 90 s, copying a picture keeps its 60 s). Live check: AF1605.pdf on the site after this deploy.

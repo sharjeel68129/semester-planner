@@ -57,6 +57,15 @@ message = "";
 try { await readFileText("outline3.jpg", Buffer.from([0xff, 0xd8, 0xff, 0])); } catch (err) { message = err.message; }
 check("other Gemini error has status, not 'corrupt'", message === "outline3.jpg: Gemini request failed (400)");
 
+// Vertex AI stops at the time limit the SDK sends it and answers 504: that model is tried again later, the next one now.
+calls = [];
+replies = [{ status: 504, message: "Deadline expired before operation could complete." }, { status: 200, text: "COMP2020 Quiz Week 3" }];
+message = "";
+let copied = "";
+try { copied = await readFileText("slow.png", png); } catch (err) { message = err.message; }
+check("504 (Vertex time limit) hands over to the next model", copied === "COMP2020 Quiz Week 3" && calls.length === 2 && /model-b/.test(calls[1].url));
+check("copying a picture keeps its 60 s limit", calls[0].body.timeout > 59000 && calls[0].body.timeout <= 60000);
+
 replies = [{ status: 200, text: "   " }];
 message = "";
 try { await readFileText("blank.webp", Buffer.concat([Buffer.from("RIFF"), Buffer.alloc(4), Buffer.from("WEBP")])); } catch (err) { message = err.message; }
@@ -80,7 +89,9 @@ const model = {
   ],
 };
 replies = [{ status: 200, text: JSON.stringify(model) }];
+calls = [];
 const { events } = await extractEvents(outline, term);
+check("reading an outline gives the model 90 s", calls[0].body.timeout === 90000);
 const quiz = events.find((e) => e.title === "Quiz");
 const pres = events.find((e) => e.title === "Presentation");
 check("quiz in the lab gets Tue of week 5 and 14:30", quiz.suggestedDates[0] === "2026-09-29" && quiz.time === "14:30");
