@@ -28,3 +28,6 @@ project-c9b51bf9-*.json
 *.key
 .env.*
 !.env.example
+
+# Course files for DSAI1202 (kept in ../dsai1202-context; the repo is public)
+/DSAI1202_*
