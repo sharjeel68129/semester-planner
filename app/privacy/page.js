@@ -41,12 +41,18 @@ export default function Privacy() {
       <ul>
         <li>The file is read on our server to get its text. The file itself is not saved.</li>
         <li>
+          A file over 4 MB is too big to send to our server in one go, so your browser first puts it in a private folder
+          that only your account can open (Supabase storage). Our server reads it from there once and deletes it
+          straight away, whether or not the reading worked.
+        </li>
+        <li>
           A picture (.png, .jpg, .webp) or a scanned PDF has no text to read, so the whole file is sent to Google&rsquo;s
           Gemini AI service to copy the text out of it. Everything in the picture goes to Google, not only the outline.
         </li>
         <li>
-          The text is sent to Google&rsquo;s Gemini AI service, which picks out the events. Google handles that text
-          under its own terms, and may keep it or use it to improve its services.
+          The text is sent to Google&rsquo;s Gemini AI service, which picks out the events. A PDF that is mostly tables
+          (such as a timetable) is sent as the whole file too, so the AI can see how its columns are laid out. Google
+          handles what it receives under its own terms, and may keep it or use it to improve its services.
         </li>
         <li>Only the events that come back are saved to your account.</li>
       </ul>
@@ -60,7 +66,8 @@ export default function Privacy() {
       <h2>Who else handles your information</h2>
       <ul>
         <li>
-          <strong>Supabase</strong> holds accounts, saved events and settings.
+          <strong>Supabase</strong> holds accounts, saved events and settings, and for a few seconds any outline over 4 MB
+          while our server reads it.
         </li>
         <li>
           <strong>Brevo</strong> delivers the account emails (confirming your address, resetting your password,
@@ -72,8 +79,8 @@ export default function Privacy() {
           identify you.
         </li>
         <li>
-          <strong>Google</strong> receives the text of each outline you upload, and the whole file if it is a picture
-          or a scanned PDF, as described above.
+          <strong>Google</strong> receives the text of each outline you upload, and the whole file if it is a picture,
+          a scanned PDF or a PDF that is mostly tables, as described above.
         </li>
       </ul>
       <p>We do not sell your information or show advertising.</p>

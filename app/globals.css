@@ -1654,3 +1654,19 @@ blockquote {
     padding-bottom: 4.4rem;
   }
 }
+
+/* Flags from the week-to-date rules (lib/weeks.js), in plain words next to each event. */
+.flag-list { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.flag-list-compact { margin-top: 2px; }
+.flag {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  opacity: 0.85;
+}
+.flag-check { color: var(--check, #b45309); font-weight: 600; opacity: 1; }
+/* A session cancelled by a public holiday: still listed, so nothing is silently dropped, but greyed out. */
+.chip.chip-cancelled, .task.task-cancelled { opacity: 0.5; text-decoration: line-through; }
+.background-tip { margin-top: 6px; }

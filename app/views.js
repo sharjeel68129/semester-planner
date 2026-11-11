@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { needsReview } from "@/lib/review";
+import { FLAG_LABELS, REVIEW_FLAGS } from "@/lib/weeks";
 import { formatDate, monthGrid, today, weekDays } from "@/lib/dates";
 
 export const TYPE_LABELS = { class: "Class", deadline: "Deadline", quiz: "Quiz", exam: "Exam" };
@@ -17,6 +18,21 @@ export function CheckIcon() {
       <path d="M9 1.5 17 16H1L9 1.5Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
       <path d="M9 7v4M9 13.2v.6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
     </svg>
+  );
+}
+
+/** Every flag on an event, in plain words; ones that need a look are marked. Nothing is drawn for an event with none. */
+export function FlagList({ event, compact = false }) {
+  const flags = (event.flags || []).filter((flag) => FLAG_LABELS[flag] || flag === "REVIEW_EXAM_DATE");
+  if (flags.length === 0) return null;
+  return (
+    <span className={compact ? "flag-list flag-list-compact" : "flag-list"}>
+      {flags.map((flag) => (
+        <span key={flag} className={REVIEW_FLAGS.has(flag) || flag === "REVIEW_EXAM_DATE" ? "flag flag-check" : "flag"}>
+          {flag === "REVIEW_EXAM_DATE" ? "Exam date read from a picture: check it" : FLAG_LABELS[flag]}
+        </span>
+      ))}
+    </span>
   );
 }
 
@@ -50,9 +66,9 @@ function Chip({ event, index, suggested = false, onOpen, style }) {
   return (
     <button
       type="button"
-      className={`chip chip-${event.type}${suggested ? " chip-suggested" : ""}${flagged ? " chip-flagged" : ""}`}
+      className={`chip chip-${event.type}${suggested ? " chip-suggested" : ""}${flagged ? " chip-flagged" : ""}${event.status === "cancelled" ? " chip-cancelled" : ""}`}
       style={style}
-      title={`${name}${event.course ? `, ${event.course}` : ""}${suggested ? " (suggested date, not yet accepted)" : ""}`}
+      title={`${name}${event.course ? `, ${event.course}` : ""}${suggested ? " (suggested date, not yet accepted)" : ""}${event.status === "cancelled" ? " (cancelled: public holiday)" : ""}`}
       onClick={() => onOpen(index)}
     >
       {flagged && <CheckIcon />}
@@ -84,7 +100,7 @@ function ListRow({ event, index, onOpen, showCourse = true }) {
   const suggested = event.suggestedDates;
   return (
     <li>
-      <button type="button" className={flagged ? "task task-flagged" : "task"} onClick={() => onOpen(index)}>
+      <button type="button" className={`task${flagged ? " task-flagged" : ""}${event.status === "cancelled" ? " task-cancelled" : ""}`} onClick={() => onOpen(index)}>
         <span className={`chip chip-${event.type} task-type`}>{TYPE_LABELS[event.type]}</span>
         <span className="task-body">
           <span className="task-head">
@@ -97,6 +113,7 @@ function ListRow({ event, index, onOpen, showCourse = true }) {
             </span>
           )}
           {!flagged && !event.date && why && <span className="task-note">{why}</span>}
+          <FlagList event={event} compact />
         </span>
         {/* Not a warning: a date was worked out from the week number and waits for the student to accept it. */}
         {!flagged && (!event.date || suggested.length > 1) && suggested.length > 0 && (

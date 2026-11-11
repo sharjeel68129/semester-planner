@@ -23,10 +23,11 @@ Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Li
 | File | Job | Status |
 |---|---|---|
 | `lib/schema.js` | `Event` shape + `makeEvent` | done |
-| `lib/validate.js` | upload check: extension, magic bytes (pdf, docx, txt, png, jpg, webp), size/count caps | done |
+| `lib/validate.js` | upload check: extension, magic bytes (pdf, docx, txt, png, jpg, webp), size/count caps (4 MB direct, 50 MB through storage) | done |
 | `app/api/extract/route.js` | refuses uploads if the Gemini credentials are not set, validates, extracts per file, returns `{ events, assessmentChecks, failed }` | done (no follow-up flow yet) |
 | `lib/extract.js` | `readFileText` (a picture or scanned PDF is sent to Gemini to copy its text out), `extractEvents(text, term)` -> `{ events, checks }` (Gemini model chain + output checks) | done (not yet scored on a real outline) |
 | `lib/polyu-calendar.js` | PolyU teaching weeks typed in by hand: `TERMS`, `weekMondays`, `termRange`, `resolveTerm` | done for 2026/27 only; **update by hand each academic year** |
+| `lib/weeks.js`, `data/academic-calendar.js` | week-to-date rules (WEEK_TO_DATE_SPEC): `weekStart`, `dateOf`, `weekOf`, `holidayOn` (evening holidays), `resolve` (the model's timing kind -> a suggested date + flags), `FLAGS`, `FLAG_LABELS`, `REVIEW_FLAGS`; the calendar data is one file per academic year | done (29 spec cases in `checks/weeks.mjs`) |
 | `lib/suggest.js` | works out suggested dates: one from a week number and weekday (`suggestForWeek`), or every meeting of a weekly class (`suggestWeekly`, which respects "Weeks 2-13" and "no class in week 8") | done |
 | `lib/assess.js` | `checkAssessments(rows, events)`: do the assessments found add up to the outline's 100%? | done |
 | `data/course-assessments.json` | known grade splits per PolyU subject: 107 read from public Subject Description Forms (DSAI and COMP), plus any typed from real outlines. See `data/README.md` | done for two departments; **re-collect each academic year** |
@@ -34,7 +35,7 @@ Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Li
 | `scripts/collect-forms.mjs` | developer tool that builds the dataset from PolyU's forms by pattern matching, no AI; unreadable forms go to `data/forms-not-read.json` | done (each new department needs its own entry in `SOURCES`) |
 | `lib/reference.js` | `compareToReference(check)`: compares an outline's exam share (or every row, for outline entries) with the dataset | done (only checked on made-up outlines) |
 | `lib/calendar.js` | `toIcs(events, remindMinutes)` | done (not yet imported into a real calendar app) |
-| `lib/review.js` | `needsReview`, `canExport`, `mergeEvents(old, new, { partial })`, `expandWeekly`, `openChoices`, `chooseSection`, `courseKey`, `acceptSuggestions`, `preferDetailed`, `coursesWithoutClass`, `numberGaps` (Exercise 1-7 and 9-13: is 8 missing?) | done |
+| `lib/review.js` | `needsReview` (also review flags), `canExport` (never a cancelled session), `tidyDuplicates` (exact duplicates in one upload only), `mergeEvents(old, new, { partial })`, `expandWeekly`, `openChoices`, `chooseSection`, `courseKey`, `acceptSuggestions`, `preferDetailed`, `coursesWithoutClass`, `numberGaps` (Exercise 1-7 and 9-13: is 8 missing?) | done |
 | `lib/evaluate.js` | `score(predicted, truth)` | done (no truth file or runner script yet) |
 | `app/page.js` | picks the screen (landing or planner) | done |
 | `app/use-planner.js` | `usePlanner()`: who is signed in, with their events and settings loaded and saved; shared by both pages; reloads when another tab saves | done |
@@ -59,6 +60,7 @@ Next.js 16 (App Router), React 19, plain JavaScript, `@/` alias to repo root. Li
 | `lib/account.js` | browser Supabase client, `loadPlanner`, `saveEvents`, `saveSettings`, `deleteAccount`, `maskEmail` (the address as pages show it) | done |
 | `lib/account-server.js` | `getUser()` for route handlers | done (same caveat) |
 | `supabase/email-templates/` | the account emails (confirm signup, reset password, change email), sent by Supabase through Brevo SMTP; pasted into Supabase by hand, see its README | done (not yet received in a real inbox) |
+| `supabase/storage.sql` | private `outlines` bucket for files over 4 MB, each student only in their own folder; the server deletes each file after reading it | **run once by hand in Supabase** |
 | `supabase/schema.sql` | `planners` table (one row per user, `events` and `settings` jsonb) + row level security + `delete_my_account(password)` | the settings column and the delete function have **never been run on a real project** |
 
 ## Product rules (do not violate)

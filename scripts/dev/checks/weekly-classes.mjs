@@ -10,6 +10,7 @@ const { expandWeekly, needsReview } = await lib("review");
 const outline = `COMP1010
 Lecture L02 Mon 16:30-18:20
 Lab S01 Thu 16:30-18:20
+Lab S02 Thu 16:30-18:20 (Room B)
 Guest talk on 12 October 2026 at 14:00
 Assessment: Examination 100%`;
 const reply = {
@@ -18,7 +19,7 @@ const reply = {
   events: [
     { title: "Lecture L02 (Week 1)", course: "COMP1010", type: "class", date: "2026-08-31", time: "16:30", confidence: 0.9, sourceQuote: "Lecture L02 Mon 16:30-18:20", ambiguous: false, note: "", statedWeekday: "Mon" },
     { title: "Lab S01 - Week 1", course: "COMP1010", type: "class", date: "2026-09-03", time: "16:30", confidence: 0.9, sourceQuote: "Lab S01 Thu 16:30-18:20", ambiguous: false, note: "", statedWeekday: null },
-    { title: "Lab S02", course: "COMP1010", type: "class", date: null, time: "16:30", confidence: 0.9, sourceQuote: "Lab S01 Thu 16:30-18:20", ambiguous: false, note: "", statedWeekday: "Thu" },
+    { title: "Lab S02", course: "COMP1010", type: "class", date: null, time: "16:30", confidence: 0.9, sourceQuote: "Lab S02 Thu 16:30-18:20 (Room B)", ambiguous: false, note: "", statedWeekday: "Thu" },
     { title: "Final exam", course: "COMP1010", type: "exam", date: null, time: null, confidence: 0.9, sourceQuote: "Examination 100%", ambiguous: false, note: "" },
   ],
 };

@@ -14,29 +14,39 @@ import {
   numberGaps,
   openChoices,
   preferDetailed,
+  tidyDuplicates,
 } from "@/lib/review";
 import { makeEvent } from "@/lib/schema";
 import { suggestWeekly } from "@/lib/suggest";
 import { toIcs } from "@/lib/calendar";
-import { MAX_FILE_BYTES, MAX_FILES } from "@/lib/validate";
+import { MAX_FILE_BYTES, MAX_FILES, MAX_STORED_BYTES } from "@/lib/validate";
+import { storeLargeOutline } from "@/lib/account";
 import { addDays, addMonths, focusDate, formatDate, today } from "@/lib/dates";
 import { TERMS, resolveTerm, termRange } from "@/lib/polyu-calendar";
 import { VIEW_OPTIONS, describeReminders } from "@/lib/settings";
 import { CheckIcon, ListView, MonthView, WeekView, TYPE_LABELS, periodLabel } from "./views";
 import EventEditor from "./event-editor";
 import Breakdown from "./breakdown";
+import { askToNotify, notify, titleProgress } from "./background";
 
-const MAX_MB = MAX_FILE_BYTES / 1024 / 1024;
+const MAX_MB = MAX_STORED_BYTES / 1024 / 1024;
 
-/** Turn a server error into something a student can act on. */
+// A busy AI service usually clears within a minute, so a busy file is tried again after these waits (in seconds).
+const RETRY_WAITS = [15, 30];
+const isBusyError = (message) => /\((429|500|502|503|504)\)|busy|could not reach|timed out|ran out of time/i.test(message || "");
+
+/** Turn a server error into plain words a student can act on: no status codes or technical terms. */
 function explain(message) {
-  if (/daily limit/.test(message)) {
-    return "The AI service's free daily limit has been used up. It resets within a day; try again tomorrow.";
-  }
-  if (/\((429|503)\)/.test(message)) {
-    return "The AI service is busy right now. Wait a minute, then press the button again.";
-  }
-  return message || "Something went wrong. Try again.";
+  if (/daily limit/.test(message)) return "The AI has done its work for today. Try again tomorrow.";
+  if (isBusyError(message)) return "The AI was too busy to read this file, even after trying again. Upload it again in a few minutes.";
+  if (/split it/i.test(message)) return "This file is made of pictures and is too big for the AI to read. Split it into smaller files.";
+  if (/larger than|too large/i.test(message)) return "This file is too big. Files can be up to 50 MB.";
+  if (/large file|uploaded file/i.test(message)) return "The large file could not be uploaded. Try again.";
+  if (/corrupt|password/i.test(message)) return "This file could not be opened. It may be damaged or locked with a password.";
+  if (/no readable text/i.test(message)) return "No words could be read from this file. Check the picture is clear and the right way up.";
+  if (/unsupported|only \.pdf/i.test(message)) return "This kind of file is not supported. Use PDF, Word, text or a picture.";
+  if (/not valid JSON|not a list/i.test(message)) return "The AI gave an answer that did not make sense. Upload this file again.";
+  return "Something went wrong with this file. Upload it again.";
 }
 
 const WEEKDAY_OPTIONS = [
@@ -137,6 +147,35 @@ export default function Planner({ events, setEvents, settings, updateSettings, a
     hadEvents.current = list.length > 0;
   }, [events]);
 
+  /** Sends one file to be read. Returns { ok, data } or { ok: false, error, signedOut }. */
+  async function sendFile(file) {
+    const body = new FormData();
+    // Over the host's 4 MB request limit: the file goes to private storage first and only its place is sent.
+    if (file.size > MAX_FILE_BYTES) {
+      try {
+        body.set("stored", await storeLargeOutline(file));
+        body.set("name", file.name);
+      } catch (err) {
+        return { ok: false, error: String(err.message || err) };
+      }
+    } else {
+      body.set("files", file);
+    }
+    body.set("semester", semester);
+    body.set("weekOne", settings.weekOneMonday || "");
+    try {
+      const res = await fetch("/api/extract", { method: "POST", body });
+      // The host can answer before our route runs (too large, timed out), and then the reply is not JSON.
+      const data = await res.json().catch(() => ({}));
+      if (res.status === 401) return { ok: false, signedOut: true, error: data.error || "Sign in to upload outlines." };
+      if (res.ok) return { ok: true, data };
+      if (res.status === 413) return { ok: false, error: "too large for this server to accept" };
+      return { ok: false, error: data.error || `the server could not process it (${res.status})` };
+    } catch {
+      return { ok: false, error: "could not reach the server" };
+    }
+  }
+
   // One file per request: each stays under the host's size and time limits, and one bad file cannot sink the rest.
   async function onSubmit(e) {
     e.preventDefault();
@@ -151,35 +190,40 @@ export default function Planner({ events, setEvents, settings, updateSettings, a
     setFailed([]);
     setChecks([]);
     setLeftOut([]);
+    askToNotify();
     for (const [i, file] of files.entries()) {
       // Checked here as well as on the server, so a large file is not uploaded just to be refused.
-      if (file.size > MAX_FILE_BYTES) {
+      if (file.size > MAX_STORED_BYTES) {
         skipped.push({ file: file.name, error: `larger than ${MAX_MB} MB` });
         continue;
       }
-      setProgress(`Reading ${files.length === 1 ? "" : `${i + 1} of ${files.length}: `}${file.name}.`);
-      const body = new FormData();
-      body.set("files", file);
-      body.set("semester", semester);
-      body.set("weekOne", settings.weekOneMonday || "");
-      try {
-        const res = await fetch("/api/extract", { method: "POST", body });
-        // The host can answer before our route runs (too large, timed out), and then the reply is not JSON.
-        const data = await res.json().catch(() => ({}));
-        if (res.status === 401) {
-          setError(data.error || "Sign in to upload outlines.");
-          stopped = true;
-          break;
+      const count = files.length === 1 ? "" : `${i + 1} of ${files.length}: `;
+      titleProgress(`(${i + 1}/${files.length}) Reading…`);
+      let outcome = null;
+      // A busy AI is tried again after a short wait; anything else is reported straight away.
+      for (let attempt = 0; attempt <= RETRY_WAITS.length; attempt++) {
+        if (attempt > 0) {
+          for (let left = RETRY_WAITS[attempt - 1]; left > 0; left--) {
+            setProgress(`${count}${file.name}: the AI is busy, trying again in ${left} s.`);
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          }
         }
-        if (res.ok) results.push({ file: file.name, events: data.events, checks: data.assessmentChecks || [] });
-        else if (res.status === 413) skipped.push({ file: file.name, error: "too large for this server to accept" });
-        else skipped.push({ file: file.name, error: data.error || `the server could not process it (${res.status})` });
-      } catch {
-        skipped.push({ file: file.name, error: "could not reach the server; check your connection" });
+        setProgress(`Reading ${count}${file.name}${attempt > 0 ? ` (try ${attempt + 1} of ${RETRY_WAITS.length + 1})` : ""}.`);
+        outcome = await sendFile(file);
+        if (outcome.ok || outcome.signedOut || !isBusyError(outcome.error)) break;
       }
+      if (outcome.signedOut) {
+        setError(outcome.error);
+        stopped = true;
+        break;
+      }
+      if (outcome.ok) results.push({ file: file.name, events: outcome.data.events, checks: outcome.data.assessmentChecks || [] });
+      else skipped.push({ file: file.name, error: outcome.error });
     }
     // A short subject form and a detailed outline for the same course would list the same marks twice.
-    const { events: found, checks: checked, leftOut: duplicates } = preferDetailed(results);
+    const { events: detailed, checks: checked, leftOut: duplicates } = preferDetailed(results);
+    // The same item from two files (or a screenshot with no course code) is shown once; near matches stay apart.
+    const found = tidyDuplicates(detailed).events;
     // Merged in one go, so two outlines for the same course are not mistaken for an old and a new version.
     if (found.length > 0) setEvents((current) => mergeEvents(current || [], found));
     else if (skipped.length === 0 && !stopped) {
@@ -204,6 +248,21 @@ export default function Planner({ events, setEvents, settings, updateSettings, a
     if (Object.keys(read).length > 0) updateSettings({ breakdowns: { ...settings.breakdowns, ...read } });
     setProgress("");
     setLoading(false);
+    // Tell a student who switched tabs how it went, in the title and (if allowed) as a desktop notification.
+    const filesRead = results.length;
+    if (stopped) {
+      titleProgress("");
+    } else if (found.length > 0) {
+      titleProgress(skipped.length ? "⚠ Done, with problems" : "✓ Done");
+      notify(
+        skipped.length ? "Your calendar is ready, with problems" : "Your calendar is ready",
+        `${found.length} ${found.length === 1 ? "event" : "events"} found in ${filesRead} ${filesRead === 1 ? "file" : "files"}.` +
+          (skipped.length ? ` ${skipped.length} ${skipped.length === 1 ? "file" : "files"} could not be read.` : ""),
+      );
+    } else {
+      titleProgress("⚠ Not working");
+      notify("Nothing was added", skipped.length ? "The files could not be read. Open the planner to see why." : "No deadlines were found in these files.");
+    }
   }
 
   function changeEvent(index, patch) {
@@ -313,7 +372,13 @@ export default function Planner({ events, setEvents, settings, updateSettings, a
             {loading && (
               <p className="status-loading">
                 <span className="spinner" aria-hidden="true" />
-                {progress} This usually takes under a minute per file, and a few minutes when the AI service is busy.
+                {progress} This usually takes under a minute per file, and a few minutes when the AI is busy.
+              </p>
+            )}
+            {loading && (
+              <p className="hint background-tip">
+                You can leave this tab open in the background and keep working. The tab title shows how far it has got, and you
+                will get a notification when your calendar is ready or something goes wrong.
               </p>
             )}
           </div>

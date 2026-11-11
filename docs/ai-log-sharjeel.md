@@ -905,3 +905,29 @@ I sent a screenshot of a 20-item checklist for finished websites and chose: buil
 **How it was checked**
 
 - `npm test` passes (150 checks).
+
+## 11 Nov 2026: V2 fixes after Set A on V1 (kind: general, all five)
+
+**Prompt:** "how can we overcome the verccel limit? ... show that on the website and also tell users to idle it in the background for a better experience. like pomofocus.io, generate a desktop notification when the results are generated, or an error is faced. make sure the coding error or technical term is simplified ... do week to date spec from the folder. yes flag that. but no need to flag exam dates. unless a screenshot is provided. yes do read all types of variety of data. yes, give the AI the capability to merge duplicates to some extent. overfitting would lead to loss of data in reports." Approved: the Event shape change (flags, endDate, status) and keeping worked-out dates as suggestions.
+
+**Why (Set A on V1, 515 answer rows):** 66 Missed rows were files refused for being over 4 MB, 48 were files Gemini never read (504), 67 rows were right but not flagged, and duplicates ("COMP 1010", "No course given") made most of the 75 Extra rows.
+
+**What was changed**
+
+1. Busy AI: a file that fails because the AI is busy is tried again after 15 s and 30 s. Errors are in plain words ("The AI was too busy to read this file..."). The tab title shows progress ("(2/6) Reading…", "✓ Done", "⚠ Not working"), the page says the tab can be left in the background, and a desktop notification says when the calendar is ready or something went wrong (`app/background.js`).
+2. Files over 4 MB (up to 50 MB): the browser puts the file in a private Supabase Storage bucket in the student's own folder (`supabase/storage.sql`, run once by hand), the server reads it once and deletes it (`takeStoredOutline`). No service_role key. Privacy page updated. A picture-only PDF over 18 MB is refused with "split it into smaller files" (Vertex inline limit).
+3. Week-to-date spec: `data/academic-calendar.js` + `lib/weeks.js` (weekStart, dateOf, weekOf, holidayOn with evening holidays, resolve with all 11 flags). The model now names the kind of timing ("before_class", "end_of_week", ...) and code works out the date. Flags show next to each event in plain words; review flags (needs class time, only the week, wrong weekday/week/year, outside semester) mark the event for checking. Exams with no date are not flagged (DATE_TBA is information), unless the exam date was read from a picture. Holiday sessions are kept but greyed out and never exported. All 29 spec cases pass (`checks/weeks.mjs`), plus `checks/timing.mjs` with the V1 cases.
+4. Reading more layouts: PDF text keeps its rows and columns (" | " between cells, from the `feature/pdf-layout-text` branch), Word tables keep their rows (MM1031: 1 -> 40 table rows), and a timetable-like PDF is also sent as the file so the AI sees the columns. Only table-heavy PDFs are sent as files, so plain outlines stay fast.
+5. Duplicates, cautiously (`tidyDuplicates`): one spelling per course code; exact same title + course + date from two files kept once; a no-course item joined to the same-titled item of a course in the upload; with one course in the upload, items with no course get it. Near matches are left apart on purpose.
+
+**What the AI got wrong while building**
+
+- A shell heredoc dropped a `\b` from a regex and turned a `\n` into a real line break in a test; caught by the checks and fixed by hand.
+- The ported "same quote on two classes" rule flagged an old test whose made-up Lab S02 reused Lab S01's quote: the test data was wrong, as the layout branch had already found.
+- The first count of Ethan's totals after the flag changes broke the A26/A27 sub-totals; restored from a backup and recounted.
+
+**How it was checked**
+
+- `npm test`: 9 files, 214 checks pass (new: weeks 33, timing 11, duplicates 9, uploads +11). `npm run build` passes.
+- Screens on the local test copy with the seeded account: the background message and tab title during an upload, then every flag label, a greyed-out holiday class and "Download (0/6 events)".
+- Not yet checked: a real >4 MB upload (needs `supabase/storage.sql` run on the real project) and real Gemini answers with the new timing fields.

@@ -1,9 +1,10 @@
 "use client";
 import { useEffect, useId, useRef } from "react";
 import { needsReview } from "@/lib/review";
+import { REVIEW_FLAGS } from "@/lib/weeks";
 import { EVENT_TYPES } from "@/lib/schema";
 import { formatDate } from "@/lib/dates";
-import { CheckIcon, TYPE_LABELS } from "./views";
+import { CheckIcon, FlagList, TYPE_LABELS } from "./views";
 
 /**
  * The pop-up for one event: fix its date, time or type, and mark it as checked.
@@ -33,6 +34,12 @@ export default function EventEditor({ event, onChange, onExpand, onRemove, onClo
           <p className="hint">{[event.course, event.weight !== null && `${event.weight}% of the grade`].filter(Boolean).join(", ")}</p>
         )}
 
+        <FlagList event={event} />
+        {event.status === "cancelled" && (
+          <p className="editor-info">
+            <strong>Cancelled.</strong> {event.note || "This falls on a public holiday, so it will not happen that day."}
+          </p>
+        )}
         {flagged && (
           <p className="editor-check">
             <CheckIcon />
@@ -113,7 +120,7 @@ export default function EventEditor({ event, onChange, onExpand, onRemove, onClo
               type="button"
               className="button"
               disabled={!event.date}
-              onClick={() => onChange({ ambiguous: false, confidence: 1 })}
+              onClick={() => onChange({ ambiguous: false, confidence: 1, flags: (event.flags || []).filter((flag) => !REVIEW_FLAGS.has(flag) && flag !== "REVIEW_EXAM_DATE") })}
             >
               Mark as checked
             </button>

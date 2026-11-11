@@ -10,9 +10,27 @@ export async function readFileText(filename, buffer) {
   return buffer.toString("utf8");
 }
 
+export async function readFile(filename, buffer) {
+  return { text: buffer.toString("utf8"), fromPicture: false };
+}
+
 const e = (p) => makeEvent({ confidence: 0.9, sourceQuote: p.title, ...p });
 
 export async function extractEvents(text, term) {
+  // The week-to-date flags as they appear on screen (lib/weeks.js), for LEI1102-like and MM1041-like items.
+  if (text.includes("FLAGS")) {
+    return {
+      events: [
+        e({ title: "Digital Poster", course: "LEI1102", type: "deadline", weight: 20, flags: ["NEEDS_CLASS_TIME"], note: "Due 24 hours before the Week 6 class. This depends on your class time, which is not in the files." }),
+        e({ title: "Group Project", course: "MM1041", type: "deadline", weight: 30, flags: ["APPROXIMATE_DATE"], note: "Week 12. Only the week is given, not the day." }),
+        e({ title: "Essay Version 1", course: "MM1041", type: "deadline", time: "23:59", suggestedDates: ["2026-10-25"], flags: ["ASSUMED_TIME"], note: "Day before the Week 9 class." }),
+        e({ title: "Exam", course: "MM1041", type: "exam", weight: 40, flags: ["DATE_TBA"], endDate: "2026-12-18", note: "The exam period is 3 Dec to 18 Dec 2026." }),
+        e({ title: "Week 8 class", course: "MM1041", type: "class", date: "2026-10-19", time: "14:30", status: "cancelled", flags: ["CANCELLED_HOLIDAY"], note: "Cancelled: Day following Chung Yeung Festival is a public holiday, so there are no classes that day." }),
+        e({ title: "Weekly Class", course: "ENG4001", type: "class", date: "2025-09-03", time: "12:30", suggestedDates: ["2026-09-03"], flags: ["YEAR_SUSPECT"], note: "The year looks wrong for this semester; the outline probably means 2026-09-03." }),
+      ],
+      checks: [],
+    };
+  }
   if (text.includes("FORM")) {
     return {
       events: [e({ title: "Tests/assignments", course: "AMA1702", type: "deadline" }), e({ title: "Examination", course: "AMA1702", type: "exam" })],
