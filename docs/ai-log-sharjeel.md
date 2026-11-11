@@ -943,3 +943,9 @@ I sent a screenshot of a 20-item checklist for finished websites and chose: buil
 **Found on the preview:** ABCT1700's slides (36,000 characters as text) still failed after the file rule was fixed. Vercel's log: "gemini-3.8-flash did not answer (504) after 86733 ms" and Vertex's "Deadline expired": our own 90 s limit stopped the model while it was still working.
 
 **Changed:** `MODEL_TIMEOUT_MS` 90 s -> 140 s, `FIRST_MS` 150 s -> 200 s, `TOTAL_MS` 210 s -> 230 s (60 s picture copy + 230 s stays under Vercel's 300 s). Same model and temperature. `npm test` passes.
+
+## 11 Nov 2026: week-only items flagged; one AI try up to 190 s (kind: general)
+
+**Found on the preview:** MM1041's "Week 8" and "Week 12" deadlines were suggested on the class day (Mon 19 Oct, 16 Nov) with no flag, but the answer sheets flag every week-only item. ABCT1700 still timed out at 137 s.
+
+**Changed:** a week-only item always gets APPROXIMATE_DATE ("Only the week is given"), and the class day is still suggested when known (a small step past the spec, which gives no flag there). `MODEL_TIMEOUT_MS` 140 s -> 190 s. ABCT1700 is accepted as a limitation if it still times out: the AI is too slow on 36,000 characters of slides. `npm test` passes.

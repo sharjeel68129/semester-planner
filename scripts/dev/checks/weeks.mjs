@@ -39,7 +39,7 @@ const cases = [
 ];
 // A few more from the spec's phrase table.
 const extra = [
-  ["Week only, class day known", () => resolve({ kind: "week_only", week: 12 }, cls("Mon", "14:30")).start === "2026-11-16"],
+  ["Week only, class day known: that day, still flagged", () => { const r = resolve({ kind: "week_only", week: 12 }, cls("Mon", "14:30")); return r.start === "2026-11-16" && has(r, "APPROXIMATE_DATE"); }],
   ["Week only, class day unknown is the whole week", () => { const r = resolve({ kind: "week_only", week: 12 }, S1); return r.start === "2026-11-16" && r.end === "2026-11-22" && has(r, "APPROXIMATE_DATE"); }],
   ["Day before Week 9 class", () => { const r = resolve({ kind: "day_before_class", week: 9 }, cls("Wed", "10:30")); return r.start === "2026-10-27" && r.time === "23:59" && has(r, "ASSUMED_TIME"); }],
   ["One week after the last lecture", () => resolve({ kind: "after_last_class" }, { sem: "S1", lastClassDate: "2026-11-24" }).start === "2026-12-01"],

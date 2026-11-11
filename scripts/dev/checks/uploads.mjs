@@ -103,7 +103,7 @@ const model = {
 replies = [{ status: 200, text: JSON.stringify(model) }];
 calls = [];
 const { events } = await extractEvents(outline, term);
-check("reading an outline gives the model 140 s", calls[0].body.timeout === 140000);
+check("reading an outline gives the model 190 s", calls[0].body.timeout === 190000);
 const quiz = events.find((e) => e.title === "Quiz");
 const pres = events.find((e) => e.title === "Presentation");
 check("quiz in the lab gets Tue of week 5 and 14:30", quiz.suggestedDates[0] === "2026-09-29" && quiz.time === "14:30");

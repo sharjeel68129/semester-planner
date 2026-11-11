@@ -46,7 +46,7 @@ const poster = find("Digital Poster");
 check("LEI1102 poster with no class time: NEEDS_CLASS_TIME, needs checking", poster.flags.includes("NEEDS_CLASS_TIME") && needsReview(poster) && poster.suggestedDates.length === 0);
 check("LEI1102 essay with no class time: NEEDS_CLASS_TIME", find("Essay Version 1").flags.includes("NEEDS_CLASS_TIME"));
 const assignment = find("Individual Assignment");
-check("MM1041 week-only deadline uses the class day (Mon of week 8)", assignment.suggestedDates[0] === "2026-10-19" && !assignment.flags.includes("APPROXIMATE_DATE"));
+check("MM1041 week-only deadline: class day suggested (Mon of week 8) and flagged", assignment.suggestedDates[0] === "2026-10-19" && assignment.flags.includes("APPROXIMATE_DATE") && needsReview(assignment));
 check("a deadline on a holiday is not cancelled", assignment.status === "");
 const exam = find("Exam");
 check("exam with no date: DATE_TBA, exam period span, not flagged", exam.flags.includes("DATE_TBA") && exam.endDate === "2026-12-18" && !needsReview(exam));
