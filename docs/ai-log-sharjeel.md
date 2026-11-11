@@ -937,3 +937,9 @@ I sent a screenshot of a 20-item checklist for finished websites and chose: buil
 **Found on the preview:** A02 (ABCT1700 slides, 7.2 MB) uploaded through storage, then timed out three times. The "send a timetable PDF as the file" rule counted any 8 table-like lines, so slide decks went to Gemini as whole 7 MB PDFs, which was too slow.
 
 **Changed:** `wantsFile` sends the file only when the PDF is under 1.5 MB and at least a quarter of its lines are table rows. Measured on all 57 test PDFs: the timetables (EEE2103, ME29004, COMP1010 schedule, ME44008) still go as files; slides and long outlines (ABCT1700, AF1605) go as text only. `npm test` passes.
+
+## 11 Nov 2026: one AI try may take 140 s (kind: general)
+
+**Found on the preview:** ABCT1700's slides (36,000 characters as text) still failed after the file rule was fixed. Vercel's log: "gemini-3.8-flash did not answer (504) after 86733 ms" and Vertex's "Deadline expired": our own 90 s limit stopped the model while it was still working.
+
+**Changed:** `MODEL_TIMEOUT_MS` 90 s -> 140 s, `FIRST_MS` 150 s -> 200 s, `TOTAL_MS` 210 s -> 230 s (60 s picture copy + 230 s stays under Vercel's 300 s). Same model and temperature. `npm test` passes.

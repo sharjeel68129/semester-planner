@@ -4,7 +4,7 @@ import { accountsEnabled, getUser, takeStoredOutline } from "@/lib/account-serve
 import { resolveTerm } from "@/lib/polyu-calendar";
 
 export const runtime = "nodejs";
-// One outline is given up to 210 s (see lib/extract.js) when the models are busy, so ask the host for longer than its default.
+// One outline is given up to 230 s (see lib/extract.js) when the models are busy, so ask the host for longer than its default.
 export const maxDuration = 300;
 
 // The Google Cloud credentials live only on the server (process.env.GOOGLE_CREDENTIALS_JSON). Users never see or need them.
