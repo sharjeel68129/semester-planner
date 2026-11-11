@@ -931,3 +931,9 @@ I sent a screenshot of a 20-item checklist for finished websites and chose: buil
 - `npm test`: 9 files, 214 checks pass (new: weeks 33, timing 11, duplicates 9, uploads +11). `npm run build` passes.
 - Screens on the local test copy with the seeded account: the background message and tab title during an upload, then every flag label, a greyed-out holiday class and "Download (0/6 events)".
 - Not yet checked: a real >4 MB upload (needs `supabase/storage.sql` run on the real project) and real Gemini answers with the new timing fields.
+
+## 11 Nov 2026: V2 preview test found slides sent as files (kind: general)
+
+**Found on the preview:** A02 (ABCT1700 slides, 7.2 MB) uploaded through storage, then timed out three times. The "send a timetable PDF as the file" rule counted any 8 table-like lines, so slide decks went to Gemini as whole 7 MB PDFs, which was too slow.
+
+**Changed:** `wantsFile` sends the file only when the PDF is under 1.5 MB and at least a quarter of its lines are table rows. Measured on all 57 test PDFs: the timetables (EEE2103, ME29004, COMP1010 schedule, ME44008) still go as files; slides and long outlines (ABCT1700, AF1605) go as text only. `npm test` passes.
